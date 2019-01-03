@@ -1,4 +1,3 @@
-const { INSTRUCTION_SET } = require('./constants/instructionSet')
 let fs = require('fs')
 let filename = process.argv.slice(2)[0]
 let { RomBuffer } = require('./classes/RomBuffer')
@@ -9,7 +8,7 @@ let romBuffer = new RomBuffer(filename, fs)
 console.log('RomBuffer - dump')
 console.log(romBuffer.dump())
 
-let disassembler = new Disassembler(INSTRUCTION_SET)
+let disassembler = new Disassembler()
 let decodedInstruction = disassembler.disassemble(0x5434)
 
 console.log('\nDisassembler - disassemble')

@@ -1,11 +1,10 @@
-const { INSTRUCTION_SET } = require('./constants/instructionSet')
+const { INSTRUCTION_SET } = require('../constants/instructionSet')
 
 class Disassembler {
   disassemble(opcode) {
     let instruction = INSTRUCTION_SET.filter(
       instruction => (opcode & instruction.mask) === instruction.pattern
     )[0]
-    console.log(instruction)
 
     if (!instruction) {
       throw new Error('Invalid instruction')
