@@ -9,7 +9,7 @@ console.log('RomBuffer - dump')
 console.log(romBuffer.dump())
 
 let disassembler = new Disassembler()
-let decodedInstruction = disassembler.disassemble(0x5434)
+let decodedInstruction = disassembler.disassemble(0x8ab2)
 
 console.log('\nDisassembler - disassemble')
 console.log(decodedInstruction)

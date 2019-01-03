@@ -31,7 +31,8 @@ class Disassembler {
     for (let i = 0; i < data.length; i++) {
       let address = (i * 2).toString(16).padStart(6, '0')
       let opcode = data[i].toString(16).padStart(4, '0')
-      let operands = this.format(this.disassemble(data[i]))
+      // let operands = this.format(this.disassemble(data[i]))
+      let operands = ''
 
       lines.push(`${address} ${opcode} ${operands}`)
     }
