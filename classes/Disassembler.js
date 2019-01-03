@@ -1,10 +1,8 @@
-class Disassembler {
-  constructor(INSTRUCTION_SET) {
-    this.INSTRUCTION_SET = INSTRUCTION_SET
-  }
+const { INSTRUCTION_SET } = require('./constants/instructionSet')
 
+class Disassembler {
   disassemble(opcode) {
-    let instruction = this.INSTRUCTION_SET.filter(
+    let instruction = INSTRUCTION_SET.filter(
       instruction => (opcode & instruction.mask) === instruction.pattern
     )[0]
     console.log(instruction)
@@ -13,15 +11,9 @@ class Disassembler {
       throw new Error('Invalid instruction')
     }
 
-    let args =
-      instruction.arguments.length > 0
-        ? instruction.arguments.map(arg => (opcode & arg.mask) >> arg.shift)
-        : []
+    let args = instruction.arguments.map(arg => (opcode & arg.mask) >> arg.shift)
 
-    return {
-      instruction,
-      args,
-    }
+    return { instruction, args }
   }
 
   format(decodedInstruction) {

@@ -1,6 +1,5 @@
-const { INSTRUCTION_SET } = require('../constants/instructionSet')
 let { Disassembler } = require('../classes/Disassembler')
-let disassembler = new Disassembler(INSTRUCTION_SET)
+let disassembler = new Disassembler()
 
 test('test instruction 02: 00E0 - CLS', () => {
   expect(disassembler.disassemble(0x00e0).instruction).toHaveProperty('key', 2)
