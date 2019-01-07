@@ -204,3 +204,9 @@ test('test instruction 35: Fx65 - LD Vx, [I]', () => {
   expect(disassembler.disassemble(0xfa65).instruction).toHaveProperty('name', 'LD')
   expect(disassembler.disassemble(0xfa65).args).toHaveLength(2)
 })
+
+test('test data word', () => {
+  expect(disassembler.disassemble(0x5154).instruction).toHaveProperty('key', 36)
+  expect(disassembler.disassemble(0x5154).instruction).toHaveProperty('name', 'DW')
+  expect(disassembler.disassemble(0x5154).args).toHaveLength(1)
+})
