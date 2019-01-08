@@ -16,7 +16,7 @@ class Disassembler {
     // R = Register
     // K = Key
     // A = Address
-    // F = Fake
+    // V0 = V0
     // I, [I] = Implied
     // DT = Delay Timer
     // ST = Sount Timer
@@ -36,7 +36,7 @@ class Disassembler {
           args.push('0x' + arg.toString(16))
         } else if (
           types[i] === 'K' ||
-          types[i] === 'F' ||
+          types[i] === 'V0' ||
           types[i] === 'I' ||
           types[i] === '[I]' ||
           types[i] === 'DT' ||

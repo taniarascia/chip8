@@ -144,7 +144,7 @@ const INSTRUCTION_SET = [
     name: 'JP',
     mask: 0xf000,
     pattern: 0xb000,
-    arguments: [ { mask: 0x0000, shift: 0, type: 'F' }, { mask: 0x0fff, shift: 0, type: 'A' } ],
+    arguments: [ { mask: 0x0000, shift: 0, type: 'V0' }, { mask: 0x0fff, shift: 0, type: 'A' } ],
   },
   {
     key: 23,
