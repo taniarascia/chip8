@@ -118,13 +118,13 @@ test('test instruction 20: 9xy0 - SNE Vx, Vy', () => {
 test('test instruction 21: Annn - LD I, addr', () => {
   expect(disassembler.disassemble(0xa999).instruction).toHaveProperty('key', 21)
   expect(disassembler.disassemble(0xa999).instruction).toHaveProperty('name', 'LD')
-  expect(disassembler.disassemble(0xa999).args).toHaveLength(1)
+  expect(disassembler.disassemble(0xa999).args).toHaveLength(2)
 })
 
 test('test instruction 22: Bnnn - JP V0, addr', () => {
   expect(disassembler.disassemble(0xb999).instruction).toHaveProperty('key', 22)
   expect(disassembler.disassemble(0xb999).instruction).toHaveProperty('name', 'JP')
-  expect(disassembler.disassemble(0xb999).args).toHaveLength(1)
+  expect(disassembler.disassemble(0xb999).args).toHaveLength(2)
 })
 
 test('test instruction 23: Cxkk - RND Vx, byte', () => {
