@@ -32,8 +32,10 @@ class Disassembler {
       rawArgs.forEach((arg, i) => {
         if (types[i] === 'R') {
           args.push('V' + arg.toString(16))
-        } else if (types[i] === 'N' || types[i] === 'NN' || types[i] === 'A' || types[i] === 'NN') {
+        } else if (types[i] === 'N' || types[i] === 'A') {
           args.push('0x' + arg.toString(16))
+        } else if (types[i] === 'NN') {
+          args.push('0x' + arg.toString(16).padStart(2, '0'))
         } else if (
           types[i] === 'K' ||
           types[i] === 'V0' ||
