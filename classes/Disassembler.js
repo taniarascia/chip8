@@ -62,9 +62,9 @@ class Disassembler {
     let lines = data.map((code, i) => {
       let address = (i * 2).toString(16).padStart(6, '0')
       let opcode = code.toString(16).padStart(4, '0')
-      let operands = this.format(this.disassemble(code))
+      let instruction = this.format(this.disassemble(code))
 
-      return `${address}  ${opcode}  ${operands}`
+      return `${address}  ${opcode}  ${instruction}`
     })
 
     return lines.join('\n')
