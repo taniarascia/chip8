@@ -38,13 +38,12 @@ class CPU {
 
   run() {
     while (true) {
-      const opcode = this._fetch()
-
-      this.step(opcode)
+      this.step()
     }
   }
 
-  step(opcode) {
+  step() {
+    const opcode = this._fetch()
     let instruction = this._decode(opcode)
 
     console.log(opcode.toString(16).padStart(4, '0'))
