@@ -126,7 +126,7 @@ class CPU {
         break
       case 'ADD_VX_NN':
         // Set Vx = Vx + kk.
-        this.registers[args[0]] = this.registers[args[0]] + args[1] & 0xff
+        this.registers[args[0]] = (this.registers[args[0]] + args[1]) & 0xff
         this._next()
         break
       case 'LD_VX_VY':
@@ -166,7 +166,7 @@ class CPU {
       case 'SHR_VX_VY':
         // Set Vx = Vx SHR 1.
         this.registers[0xf] = this.registers[args[0]] & 1
-        this.registers[args[0]] >>= 1 & 0xff
+        this.registers[args[0]] >>= 1
         this._next()
         break
       case 'SUBN_VX_VY':
@@ -178,9 +178,9 @@ class CPU {
         break
       case 'SHL_VX_VY':
         // Set Vx = Vx SHL 1.
-        this.registers[0xf] = this.registers[args[0]] >> 7 & 0xff
+        this.registers[0xf] = this.registers[args[0]] >> 7
 
-        this.registers[args[0]] <<= 1
+        this.registers[args[0]] = (this.registers[args[0]] << 1) & 0xff
         this._next()
         break
       case 'SNE_VX_VY':
@@ -203,7 +203,7 @@ class CPU {
       case 'RND_VX_NN':
         // Set Vx = random byte AND kk.
         let random = Math.floor(Math.random() * 255)
-        this.registers[args[0]] = random & args[1]
+        this.registers[args[0]] = (random & args[1]) & 0xff
         this._next()
         break
       case 'DRW_VX_VY_N':
