@@ -1,14 +1,23 @@
 # Chip8
 
-## Testing
+## Todo
 
-### Manual
+- decode all instructions, console log the unknown ones
+- make tests for decoder
 
-```bash
-node temp.js roms/CONNECT4
+## Instructions
+
+```
+npm run start
 ```
 
-### Automated
+### Hexdump
+
+```
+npm run hexdump
+```
+
+## Automated Testing
 
 ```bash
 yarn test
