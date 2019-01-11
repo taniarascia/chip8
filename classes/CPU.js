@@ -73,7 +73,6 @@ class CPU {
   _execute(instruction) {
     const id = instruction.instruction.id
     const args = instruction.args
-    const K = 0
 
     switch (id) {
       case 'CLS':
@@ -152,9 +151,9 @@ class CPU {
         break
       case 'ADD_VX_VY':
         // Set Vx = Vx + Vy, set VF = carry.
-        this.registers[args[0]] = this.registers[args[0]] + this.registers[args[1]]
+        this.registers[args[0]] = ((this.registers[args[0]] + this.registers[args[1]]) & 0xff)
 
-        this.registers[0xf] = this.registers[args[0]] + this.registers[args[1]] > 0xff ? 1 : 0
+        this.registers[0xf] = (this.registers[args[0]] + this.registers[args[1]]) > 0xff ? 1 : 0
         this._next()
         break
       case 'SUB_VX_VY':
@@ -179,7 +178,7 @@ class CPU {
         break
       case 'SHL_VX_VY':
         // Set Vx = Vx SHL 1.
-        this.registers[0xf] = this.registers[args[0]] >> 4 === 1 ? 1 : 0
+        this.registers[0xf] = this.registers[args[0]] >> 7
 
         this.registers[args[0]] <<= 1
         this._next()
@@ -203,7 +202,7 @@ class CPU {
         break
       case 'RND_VX_NN':
         // Set Vx = random byte AND kk.
-        let random = (Math.random() * (255 - 0 + 1)) << 0
+        let random = Math.floor(Math.random() * 255)
         this.registers[args[0]] = random & args[1]
         this._next()
         break
@@ -214,8 +213,8 @@ class CPU {
         break
       case 'SKP_VX':
         // Skip next instruction if key with the value of Vx is pressed.
-        console.log('fixme')
-        if (K === this.registers[args[0]]) {
+        console.log('fixme 0')
+        if (0 === this.registers[args[0]]) {
           this._skip()
         } else {
           this._next()
@@ -223,8 +222,8 @@ class CPU {
         break
       case 'SKNP_VX':
         // Skip next instruction if key with the value of Vx is not pressed.
-        console.log('fixme')
-        if (K !== this.registers[args[0]]) {
+        console.log('fixme 0')
+        if (0 !== this.registers[args[0]]) {
           this._skip()
         } else {
           this._next()
@@ -237,8 +236,8 @@ class CPU {
         break
       case 'LD_VX_K':
         // Wait for a key press, store the value of the key in Vx.
-        console.log('fixme')
-        this.registers[args[0]] = args[1]
+        console.log('fixme 0')
+        this.registers[args[0]] = 0
         this._next()
         break
       case 'LD_DT_VX':
@@ -268,14 +267,14 @@ class CPU {
         break
       case 'LD_I_VX':
         // Store registers V0 through Vx in memory starting at location I.
-        for (let i = 0; i < args[0]; i++) {
+        for (let i = 0; i <= args[0]; i++) {
           this.memory[this.I + i] = this.registers[i]
         }
         this._next()
         break
       case 'LD_VX_I':
         // Read registers V0 through Vx from memory starting at location I.
-        for (let i = 0; i < args[0]; i++) {
+        for (let i = 0; i <= args[0]; i++) {
           this.registers[i] = this.memory[this.I + i]
         }
         this._next()
