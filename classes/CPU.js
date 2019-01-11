@@ -44,11 +44,11 @@ class CPU {
 
   step() {
     const opcode = this._fetch()
-    let instruction = this._decode(opcode)
+    const instruction = this._decode(opcode)
 
-    console.log(opcode.toString(16).padStart(4, '0'))
     console.log(
-      'PC: ' + this.PC.toString(16).padStart(4, '0') + ' ' + Disassembler.format(instruction)
+      'PC: ' + this.PC.toString(16).padStart(4, '0') + ' ' + Disassembler.format(instruction),
+      opcode.toString(16).padStart(4, '0')
     )
 
     this._execute(instruction)
@@ -73,6 +73,7 @@ class CPU {
   _execute(instruction) {
     const id = instruction.instruction.id
     const args = instruction.args
+    const K = 0
 
     switch (id) {
       case 'CLS':
@@ -153,16 +154,12 @@ class CPU {
         // Set Vx = Vx + Vy, set VF = carry.
         this.registers[args[0]] = this.registers[args[0]] + this.registers[args[1]]
 
-        this.registers[args[0]] + this.registers[args[1]] > 0xff
-          ? (this.registers[0xf] = 1)
-          : (this.registers[0xf] = 0)
+        this.registers[0xf] = this.registers[args[0]] + this.registers[args[1]] > 0xff ? 1 : 0
         this._next()
         break
       case 'SUB_VX_VY':
         // Set Vx = Vx - Vy, set VF = NOT borrow.
-        this.registers[args[0]] > this.registers[args[1]]
-          ? (this.registers[0xf] = 1)
-          : (this.registers[0xf] = 0)
+        this.registers[0xf] = this.registers[args[0]] > this.registers[args[1]] ? 1 : 0
 
         this.registers[args[0]] = this.registers[args[0]] - this.registers[args[1]]
         this._next()
@@ -175,23 +172,21 @@ class CPU {
         break
       case 'SUBN_VX_VY':
         // Set Vx = Vy - Vx, set VF = NOT borrow.
-        this.registers[args[1]] > this.registers[args[0]]
-          ? (this.registers[0xf] = 1)
-          : (this.registers[0xf] = 0)
+        this.registers[0xf] = this.registers[args[1]] > this.registers[args[0]] ? 1 : 0
 
         this.registers[args[0]] = this.registers[args[1]] - this.registers[args[0]]
         this._next()
         break
       case 'SHL_VX_VY':
         // Set Vx = Vx SHL 1.
-        this.registers[args[0]] >> 4 === 1 ? (this.registers[0xf] = 1) : (this.registers[0xf] = 0)
+        this.registers[0xf] = this.registers[args[0]] >> 4 === 1 ? 1 : 0
 
         this.registers[args[0]] = this.registers[args[0]] << 1
         this._next()
         break
       case 'SNE_VX_VY':
         // Skip next instruction if Vx != Vy.
-        if (this.registers[args[0]] !== args[1]) {
+        if (this.registers[args[0]] !== this.registers[args[1]]) {
           this._skip()
         } else {
           this._next()
@@ -219,13 +214,21 @@ class CPU {
         break
       case 'SKP_VX':
         // Skip next instruction if key with the value of Vx is pressed.
-        console.log('todo - key')
-        this._next()
+        console.log('fixme')
+        if (K === this.registers[args[0]]) {
+          this._skip()
+        } else {
+          this._next()
+        }
         break
       case 'SKNP_VX':
         // Skip next instruction if key with the value of Vx is not pressed.
-        console.log('todo - key')
-        this._next()
+        console.log('fixme')
+        if (K !== this.registers[args[0]]) {
+          this._skip()
+        } else {
+          this._next()
+        }
         break
       case 'LD_VX_DT':
         // Set Vx = delay timer value.
@@ -234,7 +237,8 @@ class CPU {
         break
       case 'LD_VX_K':
         // Wait for a key press, store the value of the key in Vx.
-        console.log('todo - key')
+        console.log('fixme')
+        this.registers[args[0]] = args[1]
         this._next()
         break
       case 'LD_DT_VX':
@@ -249,7 +253,7 @@ class CPU {
         break
       case 'ADD_I_VX':
         // Set I = I + Vx.
-        this.I = this.I + args[1]
+        this.I = this.I + this.registers[args[1]]
         this._next()
         break
       case 'LD_F_VX':
@@ -264,12 +268,16 @@ class CPU {
         break
       case 'LD_I_VX':
         // Store registers V0 through Vx in memory starting at location I.
-        console.log('todo - store registers')
+        for (let i = 0; i < args[0]; i++) {
+          this.memory[this.I + i] = this.registers[i]
+        }
         this._next()
         break
       case 'LD_VX_I':
         // Read registers V0 through Vx from memory starting at location I.
-        console.log('todo - read registers')
+        for (let i = 0; i < args[0]; i++) {
+          this.registers[i] = this.memory[this.I + i]
+        }
         this._next()
         break
       default:
