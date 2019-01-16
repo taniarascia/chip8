@@ -12,7 +12,7 @@
   "scripts": {
     "start": "node index.js roms/CONNECT4",
     "hexdump": "node hexdump roms/CONNECT4",
-    "test": "jest --coverage"
+    "test": "jest"
   },
   "devDependencies": {
     "jest": "^23.6.0"

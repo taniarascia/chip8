@@ -1,5 +1,7 @@
+const fs = require('fs')
+
 class RomBuffer {
-  constructor(filename, fs) {
+  constructor(filename) {
     this.data = []
 
     const buffer = fs.readFileSync(filename)

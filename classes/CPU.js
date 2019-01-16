@@ -38,17 +38,22 @@ class CPU {
 
   run() {
     while (true) {
-      this.step()
+      this._step()
     }
   }
 
-  step() {
+  test() {
+    this._step()
+  }
+
+  _step() {
     const opcode = this._fetch()
     const instruction = this._decode(opcode)
 
     console.log(
       'PC: ' + this.PC.toString(16).padStart(4, '0') + ' ' + Disassembler.format(instruction),
-      opcode.toString(16).padStart(4, '0')
+      opcode.toString(16).padStart(4, '0'),
+      instruction.instruction.id
     )
 
     this._execute(instruction)
