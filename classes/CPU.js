@@ -20,7 +20,7 @@ class CPU {
     this.ST = 0
     this.DT = 0
     this.I = 0
-    this.SP = 0
+    this.SP = -1
     this.PC = 0x200
   }
 
@@ -97,7 +97,7 @@ class CPU {
       case 'CALL_ADDR':
         // Call subroutine at nnn.
         this.SP++
-        this.stack[this.SP] = this.PC
+        this.stack[this.SP] = this.PC + 2
         this.PC = args[0]
         break
       case 'SE_VX_NN':
@@ -156,9 +156,9 @@ class CPU {
         break
       case 'ADD_VX_VY':
         // Set Vx = Vx + Vy, set VF = carry.
-        this.registers[args[0]] = this.registers[args[0]] + this.registers[args[1]]
-
         this.registers[0xf] = this.registers[args[0]] + this.registers[args[1]] > 0xff ? 1 : 0
+
+        this.registers[args[0]] = this.registers[args[0]] + this.registers[args[1]]
         this._next()
         break
       case 'SUB_VX_VY':
@@ -198,22 +198,26 @@ class CPU {
         break
       case 'LD_I_ADDR':
         // Set I = nnn.
-        this.I = instruction.args[0]
+        this.I = args[1]
         this._next()
         break
       case 'JP_V0_ADDR':
         // Jump to location nnn + V0.
-        this.PC = args[0] + this.registers[0]
+        this.PC = this.registers[0] + args[1]
         break
       case 'RND_VX_NN':
         // Set Vx = random byte AND kk.
-        let random = Math.floor(Math.random() * 255)
+        let random = Math.floor(Math.random() * 256)
         this.registers[args[0]] = random & args[1]
         this._next()
         break
       case 'DRW_VX_VY_N':
         // Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
-        console.log('todo - sprite')
+        // The interpreter reads n bytes from memory, starting at the address stored in I.
+        
+        console.log(this.registers[args[0]], this.registers[args[1]], args[2])
+
+        
         this._next()
         break
       case 'SKP_VX':
@@ -267,19 +271,29 @@ class CPU {
         break
       case 'LD_B_VX':
         // Store BCD representation of Vx in memory locations I, I+1, and I+2.
-        console.log('todo - BCD')
+        let x = this.registers[args[1]]
+        const a = Math.floor(x / 100)
+        x = x - a * 100
+        const b = Math.floor(x / 10)
+        x = x - b * 10
+        const c = Math.floor(x)
+
+        this.memory[this.I] = a
+        this.memory[this.I + 1] = b
+        this.memory[this.I + 2] = c
+
         this._next()
         break
       case 'LD_I_VX':
         // Store registers V0 through Vx in memory starting at location I.
-        for (let i = 0; i <= args[0]; i++) {
+        for (let i = 0; i <= args[1]; i++) {
           this.memory[this.I + i] = this.registers[i]
         }
         this._next()
         break
       case 'LD_VX_I':
         // Read registers V0 through Vx from memory starting at location I.
-        for (let i = 0; i <= args[0]; i++) {
+        for (let i = 0; i <= args[1]; i++) {
           this.registers[i] = this.memory[this.I + i]
         }
         this._next()

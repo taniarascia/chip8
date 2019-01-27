@@ -161,7 +161,7 @@ const INSTRUCTION_SET = [
   },
   {
     key: 22,
-    id: 'JP_VO_ADDR',
+    id: 'JP_V0_ADDR',
     name: 'JP',
     mask: 0xf000,
     pattern: 0xb000,

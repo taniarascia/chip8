@@ -135,10 +135,10 @@ test('test instruction 21: Annn - LD I, addr', () => {
 })
 
 test('test instruction 22: Bnnn - JP V0, addr', () => {
-  expect(Disassembler.disassemble(0xb999).instruction).toHaveProperty('id', 'JP_VO_ADDR')
-  expect(Disassembler.disassemble(0xb999).args).toHaveLength(2)
-  expect(Disassembler.disassemble(0xb999).args[0]).toBe(0)
-  expect(Disassembler.disassemble(0xb999).args[1]).toBe(0x999)
+  expect(Disassembler.disassemble(0xb400).instruction).toHaveProperty('id', 'JP_V0_ADDR')
+  expect(Disassembler.disassemble(0xb400).args).toHaveLength(2)
+  expect(Disassembler.disassemble(0xb400).args[0]).toBe(0)
+  expect(Disassembler.disassemble(0xb400).args[1]).toBe(0x400)
 })
 
 test('test instruction 23: Cxkk - RND Vx, byte', () => {
