@@ -17,5 +17,5 @@
   "devDependencies": {
     "jest": "^23.6.0"
   },
-  "license": "CC-BY-4.0"
+  "license": "MIT"
 }

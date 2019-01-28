@@ -1,10 +1,11 @@
 const { Disassembler } = require('./Disassembler')
+const { FONT_SET } = require('../constants/fontSet')
 
 class CPU {
   /**
    * Set or reset the state to initial values.
    *
-   * Memory - 4kb (4096 bytes) memory storage
+   * Memory - 4kb (4096 bytes) memory storage (8-bit)
    * Registers (16 * 8-bit) V0 through VF; VF is a flag
    * Stack (16 * 16-bit)
    * I - stores memory addresses
@@ -22,14 +23,20 @@ class CPU {
     this.I = 0
     this.SP = -1
     this.PC = 0x200
+    this.font = FONT_SET
   }
 
   load(romBuffer) {
     this.reset()
-
     const romData = romBuffer.data
     let memoryStart = 0x200
 
+    // 0-80 in memory is reserved for font set
+    for (let i = 0; i < this.font.length; i++) {
+      this.memory[i] = this.font[i]
+    }
+
+    // Place ROM data in memory starting at 0x200
     for (let i = 0; i < romData.length; i++) {
       this.memory[memoryStart + 2 * i] = romData[i] >> 8
       this.memory[memoryStart + 2 * i + 1] = romData[i] & 0x00ff
@@ -38,32 +45,30 @@ class CPU {
 
   run() {
     while (true) {
-      this._step()
+      this.step()
     }
   }
 
-  test() {
-    this._step()
-  }
-
-  _step() {
+  step() {
     const opcode = this._fetch()
     const instruction = this._decode(opcode)
 
-    console.log(
-      'PC: ' + this.PC.toString(16).padStart(4, '0') + ' ' + Disassembler.format(instruction),
-      opcode.toString(16).padStart(4, '0'),
-      instruction.instruction.id
-    )
+    // console.log(
+    //   'PC: ' + this.PC.toString(16).padStart(4, '0') + ' ' + Disassembler.format(instruction),
+    //   opcode.toString(16).padStart(4, '0'),
+    //   instruction.instruction.id
+    // )
 
     this._execute(instruction)
   }
 
-  _next() {
+  _nextInstruction() {
+    // Move forward two bytes
     this.PC = this.PC + 2
   }
 
-  _skip() {
+  _skipInstruction() {
+    // Move forward four bytes
     this.PC = this.PC + 4
   }
 
@@ -83,7 +88,7 @@ class CPU {
       case 'CLS':
         // Clear the display
         console.log('todo - CLS')
-        this._next()
+        this._nextInstruction()
         break
       case 'RET':
         // Return from a subroutine.
@@ -103,103 +108,103 @@ class CPU {
       case 'SE_VX_NN':
         // Skip next instruction if Vx = kk.
         if (this.registers[args[0]] === args[1]) {
-          this._skip()
+          this._skipInstruction()
         } else {
-          this._next()
+          this._nextInstruction()
         }
         break
       case 'SNE_VX_NN':
         // Skip next instruction if Vx != kk.
         if (this.registers[args[0]] !== args[1]) {
-          this._skip()
+          this._skipInstruction()
         } else {
-          this._next()
+          this._nextInstruction()
         }
         break
       case 'SE_VX_VY':
         // Skip next instruction if Vx = Vy.
         if (this.registers[args[0]] === this.registers[args[1]]) {
-          this._skip()
+          this._skipInstruction()
         } else {
-          this._next()
+          this._nextInstruction()
         }
         break
       case 'LD_VX_NN':
         // Set Vx = kk.
         this.registers[args[0]] = args[1]
-        this._next()
+        this._nextInstruction()
         break
       case 'ADD_VX_NN':
         // Set Vx = Vx + kk.
         this.registers[args[0]] = this.registers[args[0]] + args[1]
-        this._next()
+        this._nextInstruction()
         break
       case 'LD_VX_VY':
         // Set Vx = Vy.
         this.registers[args[0]] = this.registers[args[1]]
-        this._next()
+        this._nextInstruction()
         break
       case 'OR_VX_VY':
         // Set Vx = Vx OR Vy.
         this.registers[args[0]] |= this.registers[args[1]]
-        this._next()
+        this._nextInstruction()
         break
       case 'AND_VX_VY':
         // Set Vx = Vx AND Vy.
         this.registers[args[0]] &= this.registers[args[1]]
-        this._next()
+        this._nextInstruction()
         break
       case 'XOR_VX_VY':
         // Set Vx = Vx XOR Vy.
         this.registers[args[0]] ^= this.registers[args[1]]
-        this._next()
+        this._nextInstruction()
         break
       case 'ADD_VX_VY':
         // Set Vx = Vx + Vy, set VF = carry.
         this.registers[0xf] = this.registers[args[0]] + this.registers[args[1]] > 0xff ? 1 : 0
 
         this.registers[args[0]] = this.registers[args[0]] + this.registers[args[1]]
-        this._next()
+        this._nextInstruction()
         break
       case 'SUB_VX_VY':
         // Set Vx = Vx - Vy, set VF = NOT borrow.
         this.registers[0xf] = this.registers[args[0]] > this.registers[args[1]] ? 1 : 0
 
         this.registers[args[0]] = this.registers[args[0]] - this.registers[args[1]]
-        this._next()
+        this._nextInstruction()
         break
       case 'SHR_VX_VY':
         // Set Vx = Vx SHR 1.
         this.registers[0xf] = this.registers[args[0]] & 1
         this.registers[args[0]] >>= 1
-        this._next()
+        this._nextInstruction()
         break
       case 'SUBN_VX_VY':
         // Set Vx = Vy - Vx, set VF = NOT borrow.
         this.registers[0xf] = this.registers[args[1]] > this.registers[args[0]] ? 1 : 0
 
         this.registers[args[0]] = this.registers[args[1]] - this.registers[args[0]]
-        this._next()
+        this._nextInstruction()
         break
       case 'SHL_VX_VY':
         // Set Vx = Vx SHL 1.
         this.registers[0xf] = this.registers[args[0]] >> 7
 
         this.registers[args[0]] = this.registers[args[0]] << 1
-        this._next()
+        this._nextInstruction()
         break
       case 'SNE_VX_VY':
         // Skip next instruction if Vx != Vy.
         if (this.registers[args[0]] !== this.registers[args[1]]) {
-          this._skip()
+          this._skipInstruction()
         } else {
-          this._next()
+          this._nextInstruction()
         }
         break
       case 'LD_I_ADDR':
         // Set I = nnn.
         this.I = args[1]
-        this._next()
+        this._nextInstruction()
         break
       case 'JP_V0_ADDR':
         // Jump to location nnn + V0.
@@ -209,65 +214,68 @@ class CPU {
         // Set Vx = random byte AND kk.
         let random = Math.floor(Math.random() * 256)
         this.registers[args[0]] = random & args[1]
-        this._next()
+        this._nextInstruction()
         break
       case 'DRW_VX_VY_N':
         // Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
         // The interpreter reads n bytes from memory, starting at the address stored in I.
-        
+
+        for (let i = 0; i <= args[2]; i++) {
+          console.log(this.memory[i])
+        }
+
         console.log(this.registers[args[0]], this.registers[args[1]], args[2])
 
-        
-        this._next()
+        this._nextInstruction()
         break
       case 'SKP_VX':
         // Skip next instruction if key with the value of Vx is pressed.
         console.log('fixme 0')
         if (0 === this.registers[args[0]]) {
-          this._skip()
+          this._skipInstruction()
         } else {
-          this._next()
+          this._nextInstruction()
         }
         break
       case 'SKNP_VX':
         // Skip next instruction if key with the value of Vx is not pressed.
         console.log('fixme 0')
         if (0 !== this.registers[args[0]]) {
-          this._skip()
+          this._skipInstruction()
         } else {
-          this._next()
+          this._nextInstruction()
         }
         break
       case 'LD_VX_DT':
         // Set Vx = delay timer value.
         this.registers[args[0]] = this.DT
-        this._next()
+        this._nextInstruction()
         break
       case 'LD_VX_K':
         // Wait for a key press, store the value of the key in Vx.
         console.log('fixme 0')
         this.registers[args[0]] = 0
-        this._next()
+        this._nextInstruction()
         break
       case 'LD_DT_VX':
         // Set delay timer = Vx.
         this.DT = this.registers[args[1]]
-        this._next()
+        this._nextInstruction()
         break
       case 'LD_ST_VX':
         // Set sound timer = Vx.
         this.ST = this.registers[args[1]]
-        this._next()
+        this._nextInstruction()
         break
       case 'ADD_I_VX':
         // Set I = I + Vx.
         this.I = this.I + this.registers[args[1]]
-        this._next()
+        this._nextInstruction()
         break
       case 'LD_F_VX':
         // Set I = location of sprite for digit Vx.
-        console.log('todo - I = sprite Vx')
-        this._next()
+        this.I = this.registers[args[1]] * 5
+        this._nextInstruction()
         break
       case 'LD_B_VX':
         // Store BCD representation of Vx in memory locations I, I+1, and I+2.
@@ -282,21 +290,21 @@ class CPU {
         this.memory[this.I + 1] = b
         this.memory[this.I + 2] = c
 
-        this._next()
+        this._nextInstruction()
         break
       case 'LD_I_VX':
         // Store registers V0 through Vx in memory starting at location I.
         for (let i = 0; i <= args[1]; i++) {
           this.memory[this.I + i] = this.registers[i]
         }
-        this._next()
+        this._nextInstruction()
         break
       case 'LD_VX_I':
         // Read registers V0 through Vx from memory starting at location I.
         for (let i = 0; i <= args[1]; i++) {
           this.registers[i] = this.memory[this.I + i]
         }
-        this._next()
+        this._nextInstruction()
         break
       default:
         // Data word
