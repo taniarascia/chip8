@@ -4,6 +4,24 @@ A Chip-8 emulator written in JavaScript (Node.js).
 
 > [Chip-8](https://en.wikipedia.org/wiki/CHIP-8) is a simple, interpreted, programming language which was first used on some do-it-yourself computer systems in the late 1970s and early 1980s.
 
+Chip8.js is an ongoing project by Tania Rascia to write a Chip-8 emulator in JavaScript. The main motivation is to learn lower level programming concepts, detailed [here](#concepts), and to increase familiarity with the JavaScript and the Node.js environment.
+
+## Table of Contents
+
+- [Concepts](#concepts)
+- [Installation](#installation)
+- [Instructions](#instructions)
+  - [Load ROM](#load-rom)
+  - [View hex dump](#view-hex-dump)
+- [Project Structure](#project-structure)
+- [Documentation](#documentation)
+- [Automated Testing](#automated-testing)
+  - [Instruction tests](#instruction-tests)
+  - [CPU tests](#cpu-tests)
+- [Todos](#todos)
+- [Acknowlegdements](#acknowledgements)
+- [License](#license)
+
 ## Concepts
 
 Concepts I learned while writing this program:
@@ -37,7 +55,7 @@ yarn
 
 Chip-8 compatible ROMs can be saved in the `roms/` directory. A copy of *Connect 4* is shipped with Chip8.js (at `roms/CONNECT4`) for example and testing purposes.
 
-### Load ROM (`yarn start`)
+### Load ROM
 
 Create a ROM buffer of a ROM and load the data into the CPU. Execute the program.
 
@@ -45,7 +63,7 @@ Create a ROM buffer of a ROM and load the data into the CPU. Execute the program
 yarn start roms/<ROM>
 ```
 
-### View hex dump (`yarn hexdump`)
+### View hex dump
 
 View a 16-bit hex dump of a ROM. (View more information on [bits, bytes, bases, and hex dumps](https://www.taniarascia.com/bits-bytes-bases-and-a-hex-dump-javascript/)).
 
@@ -59,7 +77,16 @@ The output will look something like this (using `CONNECT4` as an example).
 000000 121a 434f 4e4e 4543 5434 2062 7920 4461
 000010 7669 6420 5749 4e54 4552 a2bb f665 a2b4
 000020 f655 6900 6801 6b00 6d0f 6e1f a2a5 600d
-...
+000030 6132 6200 d02f d12f 720f 321e 1234 d021
+000040 d121 7201 600a a29f d021 d121 a29f dde1
+000050 fc0a dde1 4c05 127e 3c04 126a 7bff 7dfb
+000060 3d0a 127a 6b06 6d2d 127a 3c06 1298 7b01
+000070 7d05 3d32 127a 6b00 6d0f dde1 1250 a2b4
+000080 fb1e f065 40fc 1298 8a00 70fb f055 8983
+000090 a29e 3900 a2a1 dda4 a29f dde1 1250 60f0
+0000a0 f060 9090 6080 8080 8080 8080 8080 8080
+0000b0 8080 8080 1a1a 1a1a 1a1a 1a1a 1a1a 1a1a
+0000c0 1a1a
 ```
 
 ## Project Structure
@@ -90,6 +117,8 @@ chip8/
   README.md
   yarn.lock
 ```
+
+## Documentation
 
 ## Automated Testing
 
