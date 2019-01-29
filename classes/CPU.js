@@ -23,7 +23,7 @@ class CPU {
     this.I = 0
     this.SP = -1
     this.PC = 0x200
-    this.font = FONT_SET
+    this.halted = false
   }
 
   load(romBuffer) {
@@ -32,8 +32,8 @@ class CPU {
     let memoryStart = 0x200
 
     // 0-80 in memory is reserved for font set
-    for (let i = 0; i < this.font.length; i++) {
-      this.memory[i] = this.font[i]
+    for (let i = 0; i < FONT_SET.length; i++) {
+      this.memory[i] = FONT_SET[i]
     }
 
     // Place ROM data in memory starting at 0x200
@@ -53,11 +53,11 @@ class CPU {
     const opcode = this._fetch()
     const instruction = this._decode(opcode)
 
-    // console.log(
-    //   'PC: ' + this.PC.toString(16).padStart(4, '0') + ' ' + Disassembler.format(instruction),
-    //   opcode.toString(16).padStart(4, '0'),
-    //   instruction.instruction.id
-    // )
+    console.log(
+      'PC: ' + this.PC.toString(16).padStart(4, '0') + ' ' + Disassembler.format(instruction),
+      opcode.toString(16).padStart(4, '0'),
+      instruction.instruction.id
+    )
 
     this._execute(instruction)
   }
@@ -219,12 +219,22 @@ class CPU {
       case 'DRW_VX_VY_N':
         // Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
         // The interpreter reads n bytes from memory, starting at the address stored in I.
+        let sprite = ''
 
-        for (let i = 0; i <= args[2]; i++) {
-          console.log(this.memory[i])
+        for (let i = 0; i < args[2]; i++) {
+          let line = this.memory[this.I + i]
+
+          for (let position = 7; position >= 0; position--) {
+            if (line & (1 << position)) {
+              sprite += '█'
+            } else {
+              sprite += ' '
+            }
+          }
+          sprite += '\n'
         }
 
-        console.log(this.registers[args[0]], this.registers[args[1]], args[2])
+        console.log(sprite)
 
         this._nextInstruction()
         break

@@ -2,23 +2,26 @@
 
 ## Todo
 
-- decode all instructions, console log the unknown ones
-- make tests for decoder
+- Draw sprites
+- Test font set
 
 ## Instructions
 
-```
-npm run start
+### Load a ROM
+
+```bash
+yarn start
 ```
 
-### Hexdump
+### View hexdump
 
-```
-npm run hexdump
+```bash
+yarn hexdump
 ```
 
 ## Automated Testing
 
 ```bash
 yarn test
+yarn test --coverage
 ```
