@@ -4,9 +4,30 @@ A Chip-8 emulator written in JavaScript (Node.js).
 
 > [Chip-8](https://en.wikipedia.org/wiki/CHIP-8) is a simple, interpreted, programming language which was first used on some do-it-yourself computer systems in the late 1970s and early 1980s.
 
+## Concepts
+
+Concepts I learned while writing this program:
+
+- The base system: specifically base 2 (binary), base 10 (decimal), base 16 (hexadecimal), how they interact with each other and the concept of abstract numbers in programming
+- Bits, nibbles, bytes, ASCII encoding, and big and little endian values
+- Bitwise operators - AND (`&`), OR (`|`), XOR (`^`), left shift (`<<`), right shift (`>>`) and how to use them for masking, setting, and testing values
+- Using the Node built-in file system ([fs](https://www.npmjs.com/package/fs))
+- The concept of a raw data buffer and how to work with it, how to convert an 8-bit buffer to a 16-bit big endian array
+- Writing and understanding a 8-bit and 16-bit hex dump
+- How to disassemble and decode an opcode into instructions a CPU can use
+- How a CPU can utilize memory, stack, program counters, stack pointers, memory addresses, and registers
+- How a CPU implements fetch, decode, execute
+
+Articles I wrote based on aforementioned concepts: 
+
+- [Understanding Bits, Bytes, Bases, and Writing a Hex Dump in JavaScript (Node)](https://www.taniarascia.com/bits-bytes-bases-and-a-hex-dump-javascript/)
+- In progress: bitwise operators, masking, testing, and setting values.
+
 ## Installation
 
-This guide assumes you already have [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/en/) installed. The only dependency of Chip8.js is [jest](https://jestjs.io/) for testing. Run `yarn` to install.
+> This guide assumes you already have [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/en/) installed. 
+
+The only dependency of Chip8.js is [jest](https://jestjs.io/) for testing. Run `yarn` to install.
 
 ```bash
 yarn
@@ -14,9 +35,9 @@ yarn
 
 ## Instructions
 
-Chip-8 compatible ROMs should be saved in the `roms/` directory. A copy of *Connect 4* is shipped with Chip8.js at `roms/CONNECT4` for example and testing purposes.
+Chip-8 compatible ROMs can be saved in the `roms/` directory. A copy of *Connect 4* is shipped with Chip8.js (at `roms/CONNECT4`) for example and testing purposes.
 
-### Load a ROM
+### Load ROM (`yarn start`)
 
 Create a ROM buffer of a ROM and load the data into the CPU. Execute the program.
 
@@ -24,9 +45,9 @@ Create a ROM buffer of a ROM and load the data into the CPU. Execute the program
 yarn start roms/<ROM>
 ```
 
-### View hex dump
+### View hex dump (`yarn hexdump`)
 
-View a 16-bit hex dump of a ROM.
+View a 16-bit hex dump of a ROM. (View more information on [bits, bytes, bases, and hex dumps](https://www.taniarascia.com/bits-bytes-bases-and-a-hex-dump-javascript/)).
 
 ```bash
 yarn hexdump roms/<ROM>
@@ -62,15 +83,15 @@ Chip8.js has two suites of unit tests:
 
 The [instruction tests](tests/instructions.test.js) cover the `INSTRUCTION_SET` found in `constants/instructionSet.js`. Each instruction has:
 
-- a `key`: for internal use
-- an `id`: for a unique name
-- a `name`: for the type of instruction)
-- a `mask`: to filter out arguments from instruction signifiers)
-- a `pattern`: to match the mask to the specific instruction pattern
+- A `key`: for internal use
+- An `id`: for a unique name
+- A `name`: for the type of instruction)
+- A `mask`: to filter out arguments from instruction signifiers)
+- A `pattern`: to match the mask to the specific instruction pattern
 - `arguments`, each of which contain:
-  - a `mask`: to filter the nibble(s) to arguments
-  - a `shift`: to shift it by location
-  - a `type`: to signify the type of argument
+  - A `mask`: to filter the nibble(s) to arguments
+  - A `shift`: to shift it by location
+  - A `type`: to signify the type of argument
 
 #### constants/instructionSet.js (instruction 06)
 
@@ -87,9 +108,9 @@ The [instruction tests](tests/instructions.test.js) cover the `INSTRUCTION_SET` 
 
 Each unit test checks an opcode to an instruction and tests:
 
-- the unique `id` to ensure the correct instruction is running for the mask/pattern
-- the number of arguments
-- the value of the arguments
+- The unique `id` to ensure the correct instruction is running for the mask/pattern
+- The number of arguments
+- The value of the arguments
 
 #### tests/instructions.test.js (test 06)
 
@@ -125,8 +146,8 @@ case 'SE_VX_NN':
 
 Each CPU test:
 
-- loads a `RomBuffer` containing the data of a single opcode
-- sets up the state to make the instruction testable (if necessary)
+- Loads a `RomBuffer` containing the data of a single opcode
+- Sets up the state to make the instruction testable (if necessary)
 - Executes the `step` method
 - Tests all possible outcomes of an instruction and state updates
 

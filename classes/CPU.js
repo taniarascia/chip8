@@ -9,7 +9,7 @@ class CPU {
    * Registers (16 * 8-bit) V0 through VF; VF is a flag
    * Stack (16 * 16-bit)
    * I - stores memory addresses
-   * ST - Sount Timer (8-bit)
+   * ST - Sound Timer (8-bit)
    * DT - Delay Timer (8-bit)
    * PC - Program Counter (8-bit) stores currently executing address
    * SP - Stack Pointer (8-bit) points at topost level of stack
