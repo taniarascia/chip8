@@ -1,7 +1,7 @@
 {
   "name": "chip8",
   "version": "0.1.0",
-  "description": "A chip8 emulator written in JavaScript",
+  "description": "A Chip-8 emulator written in JavaScript (Node.js).",
   "author": {
     "name": "Tania Rascia",
     "email": "me@taniarascia.com",
@@ -10,8 +10,9 @@
   "repository": "github:taniarascia/chip8",
   "bugs": "https://github.com/taniarascia/chip8/issues",
   "scripts": {
-    "start": "node index.js roms/CONNECT4",
-    "hexdump": "node hexdump roms/CONNECT4",
+    "start": "node index.js",
+    "hexdump": "node scripts/hexdump",
+    "example": "node index.js roms/CONNECT4",
     "test": "jest"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-const { CPU } = require('./classes/CPU')
+const { CPU } = require('../classes/CPU')
 const cpu = new CPU()
 
 for (let i = 0; i <= 80; i = i + 5) {
