@@ -62,6 +62,35 @@ The output will look something like this (using `CONNECT4` as an example).
 ...
 ```
 
+## Project Structure
+
+The source code is contained in the `classes/` and `constants/` directories. Chip8.js comes with a single ROM, a few helper scripts, and unit tests.
+
+```bash
+chip8/
+  classes/
+      CPU.js
+      Disassembler.js
+      RomBuffer.js
+  constants/
+      fontSet.js
+      instructionSet.js
+  roms/
+      CONNECT4
+  scripts/
+      hexdump.js
+      <more>
+  tests/
+      cpu.test.js
+      instructions.test.js
+  .gitignore
+  index.js
+  LICENSE
+  package.json
+  README.md
+  yarn.lock
+```
+
 ## Automated Testing
 
 The unit tests for Chip8.js use the Jest testing framework. You can run all test suites with or without displaying coverage.
@@ -170,7 +199,7 @@ test('test cpu 06: 3xkk - SE Vx, byte', () => {
 })
 ```
 
-## Todo List
+## Todos
 
 - [ ] Check for halts, throw errors and reset
 - [ ] Begin I/O
@@ -184,3 +213,5 @@ test('test cpu 06: 3xkk - SE Vx, byte', () => {
 ## License
 
 The code is open source and available under the [MIT License](LICENSE).
+
+Written by [Tania Rascia](https://www.taniarascia.com).
