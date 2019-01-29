@@ -6,9 +6,7 @@ A Chip-8 emulator written in JavaScript (Node.js).
 
 ## Installation
 
-> This guide assumes you already have [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/en/) installed.
-
-The only dependency of Chip8.js is [jest](https://jestjs.io/) for testing. Run `yarn` to install.
+This guide assumes you already have [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/en/) installed. The only dependency of Chip8.js is [jest](https://jestjs.io/) for testing. Run `yarn` to install.
 
 ```bash
 yarn
@@ -16,9 +14,7 @@ yarn
 
 ## Instructions
 
-Chip-8 compatible ROMs should be saved in the `roms/` directory. 
-
-A copy of *Connect 4* is shipped with Chip8.js at `roms/CONNECT4` for example and testing purposes.
+Chip-8 compatible ROMs should be saved in the `roms/` directory. A copy of *Connect 4* is shipped with Chip8.js at `roms/CONNECT4` for example and testing purposes.
 
 ### Load a ROM
 
