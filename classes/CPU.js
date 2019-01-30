@@ -310,12 +310,12 @@ class CPU {
         break
       case 'LD_F_VX':
         // Set I = location of sprite for digit Vx.
-        this.I = this.registers[args[1]] * 5
-
-        if (this.I > 75) {
+        if (this.registers[args[1]] < 0 || this.registers[args[1]] > 0xf) {
           this.halted = true
           throw new Error('Invalid')
         }
+
+        this.I = this.registers[args[1]] * 5
         this._nextInstruction()
         break
       case 'LD_B_VX':
