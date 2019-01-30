@@ -310,7 +310,7 @@ class CPU {
         break
       case 'LD_F_VX':
         // Set I = location of sprite for digit Vx.
-        if (this.I > 4095 - this.registers[args[1]] * 5) {
+        if (this.I > 4095 - args[1] * 5) {
           this.halted = true
           throw new Error('Memory error')
         }
@@ -364,7 +364,8 @@ class CPU {
         break
       default:
         // Data word
-        throw new Error(args[0] + ' not a valid instruction')
+        this.halted = true
+        throw new Error('Illegal instruction')
     }
   }
 }
