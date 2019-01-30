@@ -4,17 +4,14 @@ A Chip-8 emulator written in JavaScript (Node.js).
 
 > [Chip-8](https://en.wikipedia.org/wiki/CHIP-8) is a simple, interpreted, programming language which was first used on some do-it-yourself computer systems in the late 1970s and early 1980s.
 
-Chip8.js is an ongoing project by Tania Rascia to write a Chip-8 emulator in JavaScript. The main motivation is to learn lower level programming concepts, detailed [here](#concepts), and to increase familiarity with the JavaScript and the Node.js environment.
-
 ## Table of Contents
 
-- [Concepts](#concepts)
+- [Motivation](#concepts)
 - [Installation](#installation)
 - [Usage](#usage)
   - [Load ROM](#load-rom)
   - [View hex dump](#view-hex-dump)
-- [Project Structure](#project-structure)
-- [Documentation](#documentation)
+- [Reference](#reference)
 - [Automated Testing](#automated-testing)
   - [Instruction tests](#instruction-tests)
   - [CPU tests](#cpu-tests)
@@ -22,9 +19,11 @@ Chip8.js is an ongoing project by Tania Rascia to write a Chip-8 emulator in Jav
 - [Acknowlegdements](#acknowledgements)
 - [License](#license)
 
-## Concepts
+## Motivation
 
-Concepts I learned while writing this program:
+Chip8.js is an ongoing project to write a Chip-8 emulator in JavaScript. The main motivation is to learn lower level programming concepts, detailed [here](#concepts), and to increase familiarity with the Node.js environment. 
+
+Here are some of the concepts I learned while writing this program:
 
 - The base system: specifically base 2 (binary), base 10 (decimal), base 16 (hexadecimal), how they interact with each other and the concept of abstract numbers in programming
 - Bits, nibbles, bytes, ASCII encoding, and big and little endian values
@@ -34,9 +33,9 @@ Concepts I learned while writing this program:
 - Writing and understanding a 8-bit and 16-bit hex dump
 - How to disassemble and decode an opcode into instructions a CPU can use
 - How a CPU can utilize memory, stack, program counters, stack pointers, memory addresses, and registers
-- How a CPU implements fetch, decode, execute
+- How a CPU implements fetch, decode, and execute
 
-Articles I wrote based on aforementioned concepts: 
+And here are some articles I wrote based on those concepts:
 
 - [Understanding Bits, Bytes, Bases, and Writing a Hex Dump in JavaScript (Node)](https://www.taniarascia.com/bits-bytes-bases-and-a-hex-dump-javascript/)
 - In progress: bitwise operators, masking, testing, and setting values.
@@ -45,16 +44,17 @@ Articles I wrote based on aforementioned concepts:
 
 > This guide assumes you already have [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/en/) installed. 
 
-You can add the package directly from the [chip8js](https://www.npmjs.com/package/chip8js) npm package.
+You can add the module directly from the [chip8js](https://www.npmjs.com/package/chip8js) npm package.
 
 ```bash
 yarn add chip8js
 # npm i --save chip8js
 ```
 
-In Node.js:
+And require the `RomBuffer` and `CPU` classes.
 
 ```js
+// index.js
 const { RomBuffer, CPU } = require('chip8js')
 ```
 
@@ -93,50 +93,12 @@ The output will look something like this (using `CONNECT4` as an example).
 000010 7669 6420 5749 4e54 4552 a2bb f665 a2b4
 000020 f655 6900 6801 6b00 6d0f 6e1f a2a5 600d
 000030 6132 6200 d02f d12f 720f 321e 1234 d021
-000040 d121 7201 600a a29f d021 d121 a29f dde1
-000050 fc0a dde1 4c05 127e 3c04 126a 7bff 7dfb
-000060 3d0a 127a 6b06 6d2d 127a 3c06 1298 7b01
-000070 7d05 3d32 127a 6b00 6d0f dde1 1250 a2b4
-000080 fb1e f065 40fc 1298 8a00 70fb f055 8983
-000090 a29e 3900 a2a1 dda4 a29f dde1 1250 60f0
-0000a0 f060 9090 6080 8080 8080 8080 8080 8080
-0000b0 8080 8080 1a1a 1a1a 1a1a 1a1a 1a1a 1a1a
-0000c0 1a1a
+...
 ```
 
-## Project Structure
+## Reference
 
-The source code is contained in the `classes/` and `constants/` directories. Chip8.js comes with a single ROM, a few helper scripts, and unit tests.
-
-```bash
-chip8/
-  classes/
-      CPU.js
-      Disassembler.js
-      RomBuffer.js
-  constants/
-      fontSet.js
-      instructionSet.js
-  roms/
-      CONNECT4
-  scripts/
-      hexdump.js
-      <more>
-  tests/
-      cpu.test.js
-      instructions.test.js
-  .gitignore
-
-  index.js
-  LICENSE
-  package.json
-  README.md
-  yarn.lock
-```
-
-## Documentation
-
-In progress.
+Documentation of classes in progress.
 
 ## Automated Testing
 
@@ -169,9 +131,8 @@ The [instruction tests](tests/instructions.test.js) cover the `INSTRUCTION_SET` 
   - A `shift`: to shift it by location
   - A `type`: to signify the type of argument
 
-#### constants/instructionSet.js (instruction 06)
-
 ```js
+// constants/instructionSet.js (instruction 06)
 {
   key: 6,
   id: 'SE_VX_NN',
@@ -188,9 +149,8 @@ Each unit test checks an opcode to an instruction and tests:
 - The number of arguments
 - The value of the arguments
 
-#### tests/instructions.test.js (test 06)
-
 ```js
+// tests/instructions.test.js (test 06)
 test('test instruction 06: 3xkk - SE Vx, byte', () => {
   expect(Disassembler.disassemble(0x3abb).instruction).toHaveProperty('id', 'SE_VX_NN')
   expect(Disassembler.disassemble(0x3abb).args).toHaveLength(2)
@@ -207,9 +167,8 @@ The CPU decodes the opcode and returns the instruction object from `constants/in
 
 In the below example, the instruction is skipping an instruction if `Vx === kk`, otherwise it's going to the next instruction as usual.
 
-#### classes/CPU.js (instruction 06)
-
 ```js
+// classes/CPU.js (instruction 06)
 case 'SE_VX_NN':
   // Skip next instruction if Vx = kk.
   if (this.registers[args[0]] === args[1]) {
@@ -229,9 +188,8 @@ Each CPU test:
 
 In this example, the instruction can either be skipped or not skipped depending on the arguments, and both cases are tested.
 
-#### tests/cpu.test.js (test 06)
-
 ```js
+// tests/cpu.test.js (test 06)
 test('test cpu 06: 3xkk - SE Vx, byte', () => {
   cpu.load({ data: [0x3abb] })
   cpu.step()
@@ -257,8 +215,10 @@ test('test cpu 06: 3xkk - SE Vx, byte', () => {
 - [Cowgod's Chip-8 Technical Reference](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#8xy3), made by Thomas P. Greene
 - [CHIP-8 - Wikipedia](https://en.wikipedia.org/wiki/CHIP-8)
 
+## Author
+
+I'm Tania Rascia. I write articles and tutorials about programming on [my website](https://www.taniarascia.com).
+
 ## License
 
 The code is open source and available under the [MIT License](LICENSE).
-
-Written by [Tania Rascia](https://www.taniarascia.com).
