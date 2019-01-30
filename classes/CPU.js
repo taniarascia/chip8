@@ -50,6 +50,11 @@ class CPU {
   }
 
   step() {
+    if (this.halted) {
+      throw new Error(
+        'A problem has been detected and Chip-8 has been shut down to prevent damage to your computer.'
+      )
+    }
     const opcode = this._fetch()
     const instruction = this._decode(opcode)
 
@@ -92,6 +97,11 @@ class CPU {
         break
       case 'RET':
         // Return from a subroutine.
+        if (this.SP < 0 || this.SP >= 16) {
+          this.halted = true
+          throw new Error('Stack error')
+        }
+
         this.PC = this.stack[this.SP]
         this.SP--
         break
@@ -101,6 +111,11 @@ class CPU {
         break
       case 'CALL_ADDR':
         // Call subroutine at nnn.
+        if (this.SP > 14) {
+          this.halted = true
+          throw new Error('Stack error')
+        }
+
         this.SP++
         this.stack[this.SP] = this.PC + 2
         this.PC = args[0]
@@ -289,6 +304,11 @@ class CPU {
         break
       case 'LD_B_VX':
         // Store BCD representation of Vx in memory locations I, I+1, and I+2.
+        if (this.I > 4093) {
+          this.halted = true
+          throw new Error('Memory error')
+        }
+
         let x = this.registers[args[1]]
         const a = Math.floor(x / 100)
         x = x - a * 100
@@ -304,6 +324,10 @@ class CPU {
         break
       case 'LD_I_VX':
         // Store registers V0 through Vx in memory starting at location I.
+        if (this.I > 4095 - args[1]) {
+          this.halted = true
+          throw new Error('Memory error')
+        }
         for (let i = 0; i <= args[1]; i++) {
           this.memory[this.I + i] = this.registers[i]
         }
@@ -311,6 +335,10 @@ class CPU {
         break
       case 'LD_VX_I':
         // Read registers V0 through Vx from memory starting at location I.
+        if (this.I > 4095 - args[1]) {
+          this.halted = true
+          throw new Error('Memory error')
+        }
         for (let i = 0; i <= args[1]; i++) {
           this.registers[i] = this.memory[this.I + i]
         }
