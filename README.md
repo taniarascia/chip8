@@ -1,4 +1,4 @@
-# Chip8.js
+# Chip8.js [![Build Status](https://travis-ci.org/taniarascia/chip8.svg?branch=master)](https://travis-ci.org/taniarascia/chip8) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 A Chip-8 emulator written in JavaScript (Node.js).
 
@@ -10,7 +10,7 @@ Chip8.js is an ongoing project by Tania Rascia to write a Chip-8 emulator in Jav
 
 - [Concepts](#concepts)
 - [Installation](#installation)
-- [Instructions](#instructions)
+- [Usage](#usage)
   - [Load ROM](#load-rom)
   - [View hex dump](#view-hex-dump)
 - [Project Structure](#project-structure)
@@ -45,13 +45,28 @@ Articles I wrote based on aforementioned concepts:
 
 > This guide assumes you already have [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/en/) installed. 
 
-The only dependency of Chip8.js is [jest](https://jestjs.io/) for testing. Run `yarn` to install.
+You can add the package directly from the [chip8js](https://www.npmjs.com/package/chip8js) npm package.
 
 ```bash
+yarn add chip8js
+# npm i --save chip8js
+```
+
+In Node.js:
+
+```js
+const { RomBuffer, CPU } = require('chip8js')
+```
+
+Or you can clone the repo. The only dependency of Chip8.js is [jest](https://jestjs.io/) for testing. Run `yarn` to install.
+
+```bash
+git clone git@github.com:taniarascia/chip8.git
+cd chip8
 yarn
 ```
 
-## Instructions
+## Usage
 
 Chip-8 compatible ROMs can be saved in the `roms/` directory. A copy of *Connect 4* is shipped with Chip8.js (at `roms/CONNECT4`) for example and testing purposes.
 
@@ -111,6 +126,7 @@ chip8/
       cpu.test.js
       instructions.test.js
   .gitignore
+
   index.js
   LICENSE
   package.json
