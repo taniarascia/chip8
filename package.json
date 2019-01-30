@@ -13,7 +13,7 @@
   "scripts": {
     "start": "node index.js",
     "hexdump": "node scripts/hexdump",
-    "example": "node index.js roms/CONNECT4",
+    "example": "node scripts/run roms/CONNECT4",
     "test": "jest"
   },
   "devDependencies": {

@@ -96,6 +96,12 @@ The output will look something like this (using `CONNECT4` as an example).
 ...
 ```
 
+### Run example ROM
+
+```
+yarn example
+```
+
 ## Reference
 
 In progress.
