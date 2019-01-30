@@ -6,7 +6,7 @@ A Chip-8 emulator written in JavaScript (Node.js).
 
 ## Table of Contents
 
-- [Motivation](#concepts)
+- [Motivation](#motivation)
 - [Installation](#installation)
 - [Usage](#usage)
   - [Load ROM](#load-rom)
@@ -21,7 +21,7 @@ A Chip-8 emulator written in JavaScript (Node.js).
 
 ## Motivation
 
-Chip8.js is an ongoing project to write a Chip-8 emulator in JavaScript. The main motivation is to learn lower level programming concepts, detailed [here](#concepts), and to increase familiarity with the Node.js environment. 
+Chip8.js is an ongoing project to write a Chip-8 emulator in JavaScript. The main motivation is to learn lower level programming concepts and to increase familiarity with the Node.js environment. 
 
 Here are some of the concepts I learned while writing this program:
 
@@ -98,7 +98,7 @@ The output will look something like this (using `CONNECT4` as an example).
 
 ## Reference
 
-Documentation of classes in progress.
+In progress.
 
 ## Automated Testing
 
@@ -132,7 +132,8 @@ The [instruction tests](tests/instructions.test.js) cover the `INSTRUCTION_SET` 
   - A `type`: to signify the type of argument
 
 ```js
-// constants/instructionSet.js (instruction 06)
+// constants/instructionSet.js
+
 {
   key: 6,
   id: 'SE_VX_NN',
@@ -150,7 +151,8 @@ Each unit test checks an opcode to an instruction and tests:
 - The value of the arguments
 
 ```js
-// tests/instructions.test.js (test 06)
+// tests/instructions.test.js
+
 test('test instruction 06: 3xkk - SE Vx, byte', () => {
   expect(Disassembler.disassemble(0x3abb).instruction).toHaveProperty('id', 'SE_VX_NN')
   expect(Disassembler.disassemble(0x3abb).args).toHaveLength(2)
@@ -168,7 +170,8 @@ The CPU decodes the opcode and returns the instruction object from `constants/in
 In the below example, the instruction is skipping an instruction if `Vx === kk`, otherwise it's going to the next instruction as usual.
 
 ```js
-// classes/CPU.js (instruction 06)
+// classes/CPU.js
+
 case 'SE_VX_NN':
   // Skip next instruction if Vx = kk.
   if (this.registers[args[0]] === args[1]) {
@@ -189,7 +192,8 @@ Each CPU test:
 In this example, the instruction can either be skipped or not skipped depending on the arguments, and both cases are tested.
 
 ```js
-// tests/cpu.test.js (test 06)
+// tests/cpu.test.js
+
 test('test cpu 06: 3xkk - SE Vx, byte', () => {
   cpu.load({ data: [0x3abb] })
   cpu.step()
@@ -217,7 +221,7 @@ test('test cpu 06: 3xkk - SE Vx, byte', () => {
 
 ## Author
 
-I'm Tania Rascia. I write articles and tutorials about programming on [my website](https://www.taniarascia.com).
+I'm [Tania Rascia](https://www.taniarascia.com). I write articles and tutorials about programming.
 
 ## License
 
