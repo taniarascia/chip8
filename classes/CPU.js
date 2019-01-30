@@ -28,13 +28,14 @@ class CPU {
 
   load(romBuffer) {
     this.reset()
-    const romData = romBuffer.data
-    let memoryStart = 0x200
 
     // 0-80 in memory is reserved for font set
     for (let i = 0; i < FONT_SET.length; i++) {
       this.memory[i] = FONT_SET[i]
     }
+
+    const romData = romBuffer.data
+    let memoryStart = 0x200
 
     // Place ROM data in memory starting at 0x200
     for (let i = 0; i < romData.length; i++) {
@@ -309,6 +310,11 @@ class CPU {
         break
       case 'LD_F_VX':
         // Set I = location of sprite for digit Vx.
+        if (this.I > 4095 - this.registers[args[1]] * 5) {
+          this.halted = true
+          throw new Error('Memory error')
+        }
+
         this.I = this.registers[args[1]] * 5
         this._nextInstruction()
         break
@@ -358,7 +364,7 @@ class CPU {
         break
       default:
         // Data word
-        console.log(args[0])
+        throw new Error(args[0] + ' not a valid instruction')
     }
   }
 }
