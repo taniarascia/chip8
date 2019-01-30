@@ -120,6 +120,8 @@ chip8/
 
 ## Documentation
 
+In progress.
+
 ## Automated Testing
 
 The unit tests for Chip8.js use the Jest testing framework. You can run all test suites with or without displaying coverage.

@@ -1,5 +1,5 @@
 {
-  "name": "chip8",
+  "name": "chip8js",
   "version": "0.1.0",
   "description": "A Chip-8 emulator written in JavaScript (Node.js).",
   "author": {
@@ -7,6 +7,7 @@
     "email": "me@taniarascia.com",
     "url": "https://www.taniarascia.com"
   },
+  "main": "index.js",
   "repository": "github:taniarascia/chip8",
   "bugs": "https://github.com/taniarascia/chip8/issues",
   "scripts": {
