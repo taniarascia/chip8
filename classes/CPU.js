@@ -69,25 +69,20 @@ class CPU {
 
   _nextInstruction() {
     // Move forward two bytes
-    if (this.PC > 4092) {
-      this.halted = true
-      throw new Error('Memory error')
-    }
-
     this.PC = this.PC + 2
   }
 
   _skipInstruction() {
     // Move forward four bytes
-    if (this.PC > 4090) {
-      this.halted = true
-      throw new Error('Memory error')
-    }
-
     this.PC = this.PC + 4
   }
 
   _fetch() {
+    if (this.PC > 4093) {
+      this.halted = true
+      throw new Error('Memory error')
+    }
+
     return (this.memory[this.PC] << 8) | (this.memory[this.PC + 1] << 0)
   }
 
