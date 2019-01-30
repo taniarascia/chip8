@@ -69,11 +69,21 @@ class CPU {
 
   _nextInstruction() {
     // Move forward two bytes
+    if (this.PC > 4091) {
+      this.halted = true
+      throw new Error('Memory error')
+    }
+
     this.PC = this.PC + 2
   }
 
   _skipInstruction() {
     // Move forward four bytes
+    if (this.PC > 4089) {
+      this.halted = true
+      throw new Error('Memory error')
+    }
+
     this.PC = this.PC + 4
   }
 
@@ -97,7 +107,7 @@ class CPU {
         break
       case 'RET':
         // Return from a subroutine.
-        if (this.SP < 0 || this.SP >= 16) {
+        if (this.SP < 0) {
           this.halted = true
           throw new Error('Stack error')
         }
@@ -234,6 +244,11 @@ class CPU {
       case 'DRW_VX_VY_N':
         // Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
         // The interpreter reads n bytes from memory, starting at the address stored in I.
+        if (this.I > 4095 - args[2]) {
+          this.halted = true
+          throw new Error('Memory error')
+        }
+
         let sprite = ''
 
         for (let i = 0; i < args[2]; i++) {
@@ -328,6 +343,7 @@ class CPU {
           this.halted = true
           throw new Error('Memory error')
         }
+
         for (let i = 0; i <= args[1]; i++) {
           this.memory[this.I + i] = this.registers[i]
         }
@@ -339,6 +355,7 @@ class CPU {
           this.halted = true
           throw new Error('Memory error')
         }
+
         for (let i = 0; i <= args[1]; i++) {
           this.registers[i] = this.memory[this.I + i]
         }
