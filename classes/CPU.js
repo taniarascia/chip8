@@ -78,7 +78,7 @@ class CPU {
   }
 
   _fetch() {
-    if (this.PC > 4093) {
+    if (this.PC > 4094) {
       this.halted = true
       throw new Error('Memory error')
     }
