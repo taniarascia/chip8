@@ -240,7 +240,7 @@ class CPU {
       case 'DRW_VX_VY_N':
         // Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
         // The interpreter reads n bytes from memory, starting at the address stored in I.
-        if (this.I > 4096 - args[2]) {
+        if (this.I > 4095 - args[2]) {
           this.halted = true
           throw new Error('Memory out of bounds.')
         }
@@ -340,7 +340,7 @@ class CPU {
         break
       case 'LD_I_VX':
         // Store registers V0 through Vx in memory starting at location I.
-        if (this.I > 4096 - args[1]) {
+        if (this.I > 4095 - args[1]) {
           this.halted = true
           throw new Error('Memory out of bounds.')
         }
@@ -352,7 +352,7 @@ class CPU {
         break
       case 'LD_VX_I':
         // Read registers V0 through Vx from memory starting at location I.
-        if (this.I > 4096 - args[0]) {
+        if (this.I > 4095 - args[0]) {
           this.halted = true
           throw new Error('Memory out of bounds.')
         }
