@@ -81,7 +81,7 @@ class CPU {
   _fetch() {
     if (this.PC > 4094) {
       this.halted = true
-      throw new Error('Memory error')
+      throw new Error('Memory out of bounds.')
     }
 
     return (this.memory[this.PC] << 8) | (this.memory[this.PC + 1] << 0)
@@ -105,7 +105,7 @@ class CPU {
         // Return from a subroutine.
         if (this.SP < 0) {
           this.halted = true
-          throw new Error('Stack error')
+          throw new Error('Stack underflow.')
         }
 
         this.PC = this.stack[this.SP]
@@ -117,9 +117,9 @@ class CPU {
         break
       case 'CALL_ADDR':
         // Call subroutine at nnn.
-        if (this.SP > 14) {
+        if (this.SP > 13) {
           this.halted = true
-          throw new Error('Stack error')
+          throw new Error('Stack overflow.')
         }
 
         this.SP++
@@ -242,7 +242,7 @@ class CPU {
         // The interpreter reads n bytes from memory, starting at the address stored in I.
         if (this.I > 4095 - args[2]) {
           this.halted = true
-          throw new Error('Memory error')
+          throw new Error('Memory out of bounds.')
         }
 
         let sprite = ''
@@ -266,7 +266,7 @@ class CPU {
         break
       case 'SKP_VX':
         // Skip next instruction if key with the value of Vx is pressed.
-        console.log('fixme 0')
+        console.log('todo fixme 0')
         if (0 === this.registers[args[0]]) {
           this._skipInstruction()
         } else {
@@ -275,7 +275,7 @@ class CPU {
         break
       case 'SKNP_VX':
         // Skip next instruction if key with the value of Vx is not pressed.
-        console.log('fixme 0')
+        console.log('todo fixme 0')
         if (0 !== this.registers[args[0]]) {
           this._skipInstruction()
         } else {
@@ -289,7 +289,7 @@ class CPU {
         break
       case 'LD_VX_K':
         // Wait for a key press, store the value of the key in Vx.
-        console.log('fixme 0')
+        console.log('todo fixme 0')
         this.registers[args[0]] = 0
         this._nextInstruction()
         break
@@ -310,9 +310,9 @@ class CPU {
         break
       case 'LD_F_VX':
         // Set I = location of sprite for digit Vx.
-        if (this.registers[args[1]] < 0 || this.registers[args[1]] > 0xf) {
+        if (this.registers[args[1]] > 0xf) {
           this.halted = true
-          throw new Error('Invalid')
+          throw new Error('Invalid digit.')
         }
 
         this.I = this.registers[args[1]] * 5
@@ -322,7 +322,7 @@ class CPU {
         // Store BCD representation of Vx in memory locations I, I+1, and I+2.
         if (this.I > 4093) {
           this.halted = true
-          throw new Error('Memory error')
+          throw new Error('Memory out of bounds.')
         }
 
         let x = this.registers[args[1]]
@@ -342,7 +342,7 @@ class CPU {
         // Store registers V0 through Vx in memory starting at location I.
         if (this.I > 4095 - args[1]) {
           this.halted = true
-          throw new Error('Memory error')
+          throw new Error('Memory out of bounds.')
         }
 
         for (let i = 0; i <= args[1]; i++) {
@@ -352,9 +352,9 @@ class CPU {
         break
       case 'LD_VX_I':
         // Read registers V0 through Vx from memory starting at location I.
-        if (this.I > 4095 - args[1]) {
+        if (this.I > 4095 - args[0]) {
           this.halted = true
-          throw new Error('Memory error')
+          throw new Error('Memory out of bounds.')
         }
 
         for (let i = 0; i <= args[1]; i++) {
@@ -365,7 +365,7 @@ class CPU {
       default:
         // Data word
         this.halted = true
-        throw new Error('Illegal instruction')
+        throw new Error('Illegal instruction.')
     }
   }
 }

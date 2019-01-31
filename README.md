@@ -216,8 +216,17 @@ test('test cpu 06: 3xkk - SE Vx, byte', () => {
 
 ## Todos
 
-- [ ] Check for halts, throw errors and reset
+- [x] Tests: Errors: 8
+  - [x] RET
+  - [x] CALL_ADDR
+  - [x] DRW_VX_VY_N
+  - [x] LD_F_VX
+  - [x] LD_B_VX
+  - [x] LD_I_VX
+  - [x] LD_VX_I
+  - [x] DW
 - [ ] Begin I/O
+
 
 ## Acknowledgements
 
@@ -227,7 +236,7 @@ test('test cpu 06: 3xkk - SE Vx, byte', () => {
 
 ## Author
 
-I'm [Tania Rascia](https://www.taniarascia.com). I write articles and tutorials about programming.
+- [Tania Rascia](https://www.taniarascia.com)
 
 ## License
 
