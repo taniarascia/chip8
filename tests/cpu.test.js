@@ -2,7 +2,16 @@ describe('CPU tests', () => {
   const { CPU } = require('../classes/CPU')
   const cpu = new CPU()
 
-  test.skip('test cpu 02: CLS', () => {})
+  test('CPU does not execute after halting', () => {
+    cpu.load({ data: [ 5154 ] })
+    cpu.halted = true
+
+    expect(() => {
+      cpu.step()
+    }).toThrowError()
+  })
+
+  // test.skip('test cpu 02: CLS', () => {})
 
   test('test cpu 03: RET', () => {
     cpu.load({ data: [ 0x00ee ] })
