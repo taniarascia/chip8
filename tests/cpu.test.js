@@ -14,13 +14,11 @@ describe('CPU tests', () => {
     expect(cpu.SP).toBe(0x1)
 
     cpu.load({ data: [ 0x00ee ] })
-
-    try {
+    const cpuStep = () => {
       cpu.step()
-      expect(true).toBe(false)
-    } catch (error) {
-      expect(error.message).toBe('Stack underflow.')
     }
+
+    expect(cpuStep).toThrowError('Stack underflow.')
   })
 
   test('test cpu 04: 1nnn - JP addr', () => {
@@ -40,14 +38,13 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x062)
 
     cpu.load({ data: [ 0x2062 ] })
-    cpu.SP = 14
+    cpu.SP = 15
 
-    try {
+    const cpuStep = () => {
       cpu.step()
-      expect(true).toBe(false)
-    } catch (error) {
-      expect(error.message).toBe('Stack overflow.')
     }
+
+    expect(cpuStep).toThrowError('Stack overflow.')
   })
 
   test('test cpu 06: 3xkk - SE Vx, byte', () => {
@@ -251,12 +248,11 @@ describe('CPU tests', () => {
     cpu.load({ data: [ 0xdab5 ] })
     cpu.I = 4091
 
-    try {
+    const cpuStep = () => {
       cpu.step()
-      expect(true).toBe(false)
-    } catch (error) {
-      expect(error.message).toBe('Memory out of bounds.')
     }
+
+    expect(cpuStep).toThrowError('Memory out of bounds.')
     // todo: passing test
   })
 
@@ -335,12 +331,11 @@ describe('CPU tests', () => {
     cpu.load({ data: [ 0xfa29 ] })
     cpu.registers[0xa] = 16
 
-    try {
+    const cpuStep = () => {
       cpu.step()
-      expect(true).toBe(false)
-    } catch (error) {
-      expect(error.message).toBe('Invalid digit.')
     }
+
+    expect(cpuStep).toThrowError('Invalid digit.')
 
     cpu.load({ data: [ 0xfa29 ] })
     cpu.registers[0xa] = 0xa
@@ -369,12 +364,11 @@ describe('CPU tests', () => {
     cpu.registers[0xa] = 0x7b
     cpu.I = 4094
 
-    try {
+    const cpuStep = () => {
       cpu.step()
-      expect(true).toBe(false)
-    } catch (error) {
-      expect(error.message).toBe('Memory out of bounds.')
     }
+
+    expect(cpuStep).toThrowError('Memory out of bounds.')
   })
 
   test('test cpu 34: Fx55 - LD [I], Vx', () => {
@@ -394,12 +388,11 @@ describe('CPU tests', () => {
     cpu.load({ data: [ 0xfb55 ] })
     cpu.I = 4085
 
-    try {
+    const cpuStep = () => {
       cpu.step()
-      expect(true).toBe(false)
-    } catch (error) {
-      expect(error.message).toBe('Memory out of bounds.')
     }
+
+    expect(cpuStep).toThrowError('Memory out of bounds.')
   })
 
   test('test cpu 35: Fx65 - LD Vx, [I]', () => {
@@ -419,22 +412,20 @@ describe('CPU tests', () => {
     cpu.load({ data: [ 0xfa65 ] })
     cpu.I = 4086
 
-    try {
+    const cpuStep = () => {
       cpu.step()
-      expect(true).toBe(false)
-    } catch (error) {
-      expect(error.message).toBe('Memory out of bounds.')
     }
+
+    expect(cpuStep).toThrowError('Memory out of bounds.')
   })
 
   test('test data word', () => {
     cpu.load({ data: [ 0x5154 ] })
 
-    try {
+    const cpuStep = () => {
       cpu.step()
-      expect(true).toBe(false)
-    } catch (error) {
-      expect(error.message).toBe('Illegal instruction.')
     }
+
+    expect(cpuStep).toThrowError('Illegal instruction.')
   })
 })
