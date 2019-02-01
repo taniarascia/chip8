@@ -1,4 +1,5 @@
 const { Disassembler } = require('./Disassembler')
+const { Interface } = require('./Interface')
 const { FONT_SET } = require('../constants/fontSet')
 
 class CPU {
@@ -18,6 +19,7 @@ class CPU {
     this.memory = new Uint8Array(4096)
     this.registers = new Uint8Array(16)
     this.stack = new Uint16Array(16)
+    this.interface = Interface
     this.ST = 0
     this.DT = 0
     this.I = 0
@@ -45,9 +47,18 @@ class CPU {
   }
 
   run() {
-    while (true) {
+    setInterval(() => {
       this.step()
-    }
+    }, 3)
+
+    setInterval(() => {
+      this.tick()
+    }, 16)
+  }
+
+  tick() {
+    if (this.DT > 0) this.DT--
+    if (this.ST > 0) this.ST--
   }
 
   step() {

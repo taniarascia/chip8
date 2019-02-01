@@ -225,7 +225,7 @@ test('test cpu 06: 3xkk - SE Vx, byte', () => {
   - [x] LD_I_VX
   - [x] LD_VX_I
   - [x] DW
-- [ ] Begin I/O
+- [ ] Create Interface Classes
 
 
 ## Acknowledgements
