@@ -1,8 +1,10 @@
 const { Disassembler } = require('./Disassembler')
-const { Interface } = require('./Interface')
 const { FONT_SET } = require('../constants/fontSet')
 
 class CPU {
+  constructor(cpuInterface) {
+    this.interface = cpuInterface
+  }
   /**
    * Set or reset the state to initial values.
    *
@@ -19,7 +21,6 @@ class CPU {
     this.memory = new Uint8Array(4096)
     this.registers = new Uint8Array(16)
     this.stack = new Uint16Array(16)
-    this.interface = Interface
     this.ST = 0
     this.DT = 0
     this.I = 0
@@ -46,19 +47,18 @@ class CPU {
     }
   }
 
-  run() {
-    setInterval(() => {
-      this.step()
-    }, 3)
-
-    setInterval(() => {
-      this.tick()
-    }, 16)
-  }
-
   tick() {
-    if (this.DT > 0) this.DT--
-    if (this.ST > 0) this.ST--
+    if (this.DT > 0) {
+      this.DT--
+    } else {
+      console.log('fixme')
+    }
+
+    if (this.ST > 0) {
+      this.ST--
+    } else {
+      console.log('fixme')
+    }
   }
 
   step() {
@@ -277,7 +277,7 @@ class CPU {
         break
       case 'SKP_VX':
         // Skip next instruction if key with the value of Vx is pressed.
-        console.log('todo fixme 0')
+        console.log('fixme 0')
         if (0 === this.registers[args[0]]) {
           this._skipInstruction()
         } else {
@@ -286,7 +286,7 @@ class CPU {
         break
       case 'SKNP_VX':
         // Skip next instruction if key with the value of Vx is not pressed.
-        console.log('todo fixme 0')
+        console.log('fixme 0')
         if (0 !== this.registers[args[0]]) {
           this._skipInstruction()
         } else {
@@ -300,7 +300,7 @@ class CPU {
         break
       case 'LD_VX_K':
         // Wait for a key press, store the value of the key in Vx.
-        console.log('todo fixme 0')
+        console.log('fixme 0')
         this.registers[args[0]] = 0
         this._nextInstruction()
         break

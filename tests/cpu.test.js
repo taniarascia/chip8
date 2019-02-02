@@ -1,14 +1,16 @@
 describe('CPU tests', () => {
   const { CPU } = require('../classes/CPU')
-  const cpu = new CPU()
+  const cpu = new CPU(null)
 
   test('CPU does not execute after halting', () => {
-    cpu.load({ data: [ 5154 ] })
+    cpu.load({ data: 0x0000 })
     cpu.halted = true
 
     expect(() => {
       cpu.step()
-    }).toThrowError()
+    }).toThrowError(
+      'A problem has been detected and Chip-8 has been shut down to prevent damage to your computer.'
+    )
   })
 
   // test.skip('test cpu 02: CLS', () => {})
@@ -246,9 +248,7 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x2 + 0x300)
   })
 
-  test.skip('test cpu 23: Cxkk - RND Vx, byte', () => {
-    // untestable
-  })
+  // test.skip('test cpu 23: Cxkk - RND Vx, byte', () => {})
 
   test('test cpu 24: Dxyn - DRW Vx, Vy, nibble', () => {
     cpu.load({ data: [ 0xdab5 ] })
