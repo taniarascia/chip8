@@ -1,6 +1,6 @@
 {
   "name": "chip8js",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A Chip-8 emulator written in JavaScript (Node.js).",
   "author": {
     "name": "Tania Rascia",
@@ -19,7 +19,13 @@
   "devDependencies": {
     "jest": "^23.6.0"
   },
-  "keywords": [ "chip8", "chip8-emulator", "chip-8", "node", "javascript" ],
+  "keywords": [
+    "chip8",
+    "chip8-emulator",
+    "chip-8",
+    "node",
+    "javascript"
+  ],
   "license": "MIT",
   "private": false
 }
