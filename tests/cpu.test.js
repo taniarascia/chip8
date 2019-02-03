@@ -1,6 +1,8 @@
 describe('CPU tests', () => {
   const { CPU } = require('../classes/CPU')
-  const cpu = new CPU(null)
+  const { MockCpuInterface } = require('../classes/interfaces/MockCpuInterface')
+  const cpuInterface = new MockCpuInterface()
+  const cpu = new CPU(cpuInterface)
 
   test('CPU does not execute after halting', () => {
     cpu.load({ data: 0x0000 })
@@ -13,9 +15,9 @@ describe('CPU tests', () => {
     )
   })
 
-  // test.skip('test cpu 02: CLS', () => {})
+  // test.skip('02: CLS', () => {})
 
-  test('test cpu 03: RET', () => {
+  test('03: RET', () => {
     cpu.load({ data: [ 0x00ee ] })
     cpu.SP = 2
     cpu.stack[2] = 0xf
@@ -31,14 +33,14 @@ describe('CPU tests', () => {
     }).toThrowError('Stack underflow.')
   })
 
-  test('test cpu 04: 1nnn - JP addr', () => {
+  test('04: 1nnn - JP_ADDR', () => {
     cpu.load({ data: [ 0x1333 ] })
     cpu.step()
 
     expect(cpu.PC).toBe(0x333)
   })
 
-  test('test cpu 05: 2nnn - CALL addr', () => {
+  test('05: 2nnn - CALL_ADDR', () => {
     cpu.load({ data: [ 0x2062 ] })
     const PC = cpu.PC
     cpu.step()
@@ -55,7 +57,7 @@ describe('CPU tests', () => {
     }).toThrowError('Stack overflow.')
   })
 
-  test('test cpu 06: 3xkk - SE Vx, byte', () => {
+  test('06: 3xkk - SE_VX_NN', () => {
     cpu.load({ data: [ 0x3abb ] })
     cpu.step()
 
@@ -68,7 +70,7 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x204)
   })
 
-  test('test cpu 07: 4xkk - SNE Vx, byte', () => {
+  test('07: 4xkk - SNE_VX_NN', () => {
     cpu.load({ data: [ 0x4acc ] })
     cpu.step()
 
@@ -81,7 +83,7 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x202)
   })
 
-  test('test cpu 08: 5xy0 - SE Vx, Vy', () => {
+  test('08: 5xy0 - SE_VX_VY', () => {
     cpu.load({ data: [ 0x5ab0 ] })
     cpu.step()
 
@@ -94,7 +96,7 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x202)
   })
 
-  test('test cpu 09: 6xkk - LD Vx, byte', () => {
+  test('09: 6xkk - LD_VX_NN', () => {
     cpu.load({ data: [ 0x6abb ] })
     cpu.registers[0xa] = 0x10
     cpu.step()
@@ -102,7 +104,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xa]).toBe(0xbb)
   })
 
-  test('test cpu 10: 7xkk - ADD Vx, byte', () => {
+  test('10: 7xkk - ADD_VX_NN', () => {
     cpu.load({ data: [ 0x7abb ] })
     cpu.registers[0xa] = 0x10
     cpu.step()
@@ -110,7 +112,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xa]).toBe(0x10 + 0xbb)
   })
 
-  test('test cpu 11: 8xy0 - LD Vx, Vy', () => {
+  test('11: 8xy0 - LD_VX_VY', () => {
     cpu.load({ data: [ 0x8ab0 ] })
     cpu.registers[0xb] = 0x8
     cpu.step()
@@ -118,7 +120,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xa]).toBe(0x8)
   })
 
-  test('test cpu 12: 8xy1 - OR Vx, Vy', () => {
+  test('12: 8xy1 - OR_VX_VY', () => {
     cpu.load({ data: [ 0x8ab1 ] })
     cpu.registers[0xa] = 0x3
     cpu.registers[0xb] = 0x4
@@ -127,7 +129,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xa]).toBe(0x7)
   })
 
-  test('test cpu 13: 8xy2 - AND Vx, Vy', () => {
+  test('13: 8xy2 - AND_VX_VY', () => {
     cpu.load({ data: [ 0x8ab2 ] })
     cpu.registers[0xa] = 0x3
     cpu.registers[0xb] = 0x4
@@ -136,7 +138,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xa]).toBe(0)
   })
 
-  test('test cpu 14: 8xy3 - XOR Vx, Vy', () => {
+  test('14: 8xy3 - XOR_VX_VY', () => {
     cpu.load({ data: [ 0x8ab3 ] })
     cpu.registers[0xa] = 0x3
     cpu.registers[0xb] = 0x3
@@ -145,7 +147,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xa]).toBe(0)
   })
 
-  test('test cpu 15: 8xy4 - ADD Vx, Vy', () => {
+  test('15: 8xy4 - ADD_VX_VY', () => {
     cpu.load({ data: [ 0x8ab4 ] })
     cpu.registers[0xa] = 0x3
     cpu.registers[0xb] = 0x4
@@ -163,7 +165,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xf]).toBe(1)
   })
 
-  test('test cpu 16: 8xy5 - SUB Vx, Vy', () => {
+  test('16: 8xy5 - SUB_VX_VY', () => {
     cpu.load({ data: [ 0x8ab5 ] })
     cpu.registers[0xa] = 0x4
     cpu.registers[0xb] = 0x2
@@ -181,7 +183,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xf]).toBe(0)
   })
 
-  test('test cpu 17: 8xy6 - SHR Vx {, Vy}', () => {
+  test('17: 8xy6 - SHR_VX_VY', () => {
     cpu.load({ data: [ 0x8ab6 ] })
     cpu.registers[0xa] = 0x3
     cpu.step()
@@ -190,7 +192,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xf]).toBe(1)
   })
 
-  test('test cpu 18: 8xy7 - SUBN Vx, Vy', () => {
+  test('18: 8xy7 - SUBN_VX_VY', () => {
     cpu.load({ data: [ 0x8ab7 ] })
     cpu.registers[0xa] = 0x3
     cpu.registers[0xb] = 0x2
@@ -208,7 +210,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xf]).toBe(1)
   })
 
-  test('test cpu 19: 8xyE - SHL Vx, {, Vy}', () => {
+  test('19: 8xyE - SHL_VX_VY', () => {
     cpu.load({ data: [ 0x8abe ] })
     cpu.registers[0xa] = 0x3
     cpu.step()
@@ -217,7 +219,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xf]).toBe(0)
   })
 
-  test('test cpu 20: 9xy0 - SNE Vx, Vy', () => {
+  test('20: 9xy0 - SNE_VX_VY', () => {
     cpu.load({ data: [ 0x9ab0 ] })
     cpu.registers[0xa] = 0x3
     cpu.registers[0xb] = 0x4
@@ -233,14 +235,14 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x202)
   })
 
-  test('test cpu 21: Annn - LD I, addr', () => {
+  test('21: Annn - LD_I_ADDR', () => {
     cpu.load({ data: [ 0xa999 ] })
     cpu.step()
 
     expect(cpu.I).toBe(0x999)
   })
 
-  test('test cpu 22: Bnnn - JP V0, addr', () => {
+  test('22: Bnnn - JP_V0_ADDR', () => {
     cpu.load({ data: [ 0xb300 ] })
     cpu.registers[0] = 0x2
     cpu.step()
@@ -248,9 +250,9 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x2 + 0x300)
   })
 
-  // test.skip('test cpu 23: Cxkk - RND Vx, byte', () => {})
+  // test('23: Cxkk - RND_VX_NN', () => {}
 
-  test('test cpu 24: Dxyn - DRW Vx, Vy, nibble', () => {
+  test('24: Dxyn - DRW_VX_VY_N', () => {
     cpu.load({ data: [ 0xdab5 ] })
     cpu.I = 4091
 
@@ -260,7 +262,7 @@ describe('CPU tests', () => {
     // todo: passing test
   })
 
-  test('test cpu 25: Ex9E - SKP Vx', () => {
+  test('25: Ex9E - SKP_VX', () => {
     // todo
     cpu.load({ data: [ 0xea9e ] })
     cpu.registers[0xa] = 0
@@ -275,7 +277,7 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x202)
   })
 
-  test('test cpu 26: ExA1 - SKNP Vx', () => {
+  test('26: ExA1 - SKNP_VX', () => {
     // todo
     cpu.load({ data: [ 0xeba1 ] })
     cpu.registers[0xb] = 0
@@ -290,7 +292,7 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x204)
   })
 
-  test('test cpu 27: Fx07 - LD Vx, DT', () => {
+  test('27: Fx07 - LD_VX_DT', () => {
     cpu.load({ data: [ 0xfa07 ] })
     cpu.DT = 0xf
     cpu.step()
@@ -298,7 +300,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xa]).toBe(0xf)
   })
 
-  test('test cpu 28: Fx0A - LD Vx, K', () => {
+  test('28: Fx0A - LD_VX_K', () => {
     // todo
     cpu.load({ data: [ 0xfb0a ] })
     cpu.step()
@@ -306,7 +308,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xb]).toBe(0)
   })
 
-  test('test cpu 29: Fx15 - LD DT, Vx', () => {
+  test('29: Fx15 - LD_DT_VX', () => {
     cpu.load({ data: [ 0xfb15 ] })
     cpu.registers[0xb] = 0xf
     cpu.step()
@@ -314,7 +316,7 @@ describe('CPU tests', () => {
     expect(cpu.DT).toBe(0xf)
   })
 
-  test('test cpu 30: Fx18 - LD ST, Vx', () => {
+  test('30: Fx18 - LD_ST_VX', () => {
     cpu.load({ data: [ 0xfa18 ] })
     cpu.registers[0xa] = 0xf
     cpu.step()
@@ -322,7 +324,7 @@ describe('CPU tests', () => {
     expect(cpu.ST).toBe(0xf)
   })
 
-  test('test cpu 31: Fx1E - ADD I, Vx', () => {
+  test('31: Fx1E - ADD_I_VX', () => {
     cpu.load({ data: [ 0xfa1e ] })
     cpu.I = 0xe
     cpu.registers[0xa] = 0xf
@@ -331,7 +333,7 @@ describe('CPU tests', () => {
     expect(cpu.I).toBe(0xe + 0xf)
   })
 
-  test('test cpu 32: Fx29 - LD F, Vx', () => {
+  test('32: Fx29 - LD_F_VX', () => {
     cpu.load({ data: [ 0xfa29 ] })
     cpu.registers[0xa] = 16
 
@@ -352,7 +354,7 @@ describe('CPU tests', () => {
     cpu.step()
   })
 
-  test('test cpu 33: Fx33 - LD B, Vx', () => {
+  test('33: Fx33 - LD_B_VX', () => {
     cpu.load({ data: [ 0xfa33 ] })
     cpu.registers[0xa] = 0x7b
     cpu.I = 0x300
@@ -371,7 +373,7 @@ describe('CPU tests', () => {
     }).toThrowError('Memory out of bounds.')
   })
 
-  test('test cpu 34: Fx55 - LD [I], Vx', () => {
+  test('34: Fx55 - LD_I_VX', () => {
     cpu.load({ data: [ 0xfb55 ] })
     cpu.I = 0x400
 
@@ -393,7 +395,7 @@ describe('CPU tests', () => {
     }).toThrowError('Memory out of bounds.')
   })
 
-  test('test cpu 35: Fx65 - LD Vx, [I]', () => {
+  test('35: Fx65 - LD_VX_I', () => {
     cpu.load({ data: [ 0xfa65 ] })
     cpu.I = 0x400
 
@@ -415,7 +417,7 @@ describe('CPU tests', () => {
     }).toThrowError('Memory out of bounds.')
   })
 
-  test('test data word', () => {
+  test('DW', () => {
     cpu.load({ data: [ 0x5154 ] })
 
     expect(() => {

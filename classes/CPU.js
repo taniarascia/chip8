@@ -27,6 +27,7 @@ class CPU {
     this.SP = -1
     this.PC = 0x200
     this.halted = false
+    this.key = null // todo
   }
 
   load(romBuffer) {
@@ -57,7 +58,7 @@ class CPU {
     if (this.ST > 0) {
       this.ST--
     } else {
-      console.log('fixme')
+      this.interface.enableSound()
     }
   }
 
@@ -109,7 +110,7 @@ class CPU {
     switch (id) {
       case 'CLS':
         // Clear the display
-        console.log('todo - CLS')
+        this.interface.clearDisplay()
         this._nextInstruction()
         break
       case 'RET':
@@ -272,13 +273,16 @@ class CPU {
         }
 
         console.log(sprite)
+        // todo some sort of loop probably
+        // plus collision
+        this.interface.drawPixel(args[0], args[1], true)
 
         this._nextInstruction()
         break
       case 'SKP_VX':
         // Skip next instruction if key with the value of Vx is pressed.
-        console.log('fixme 0')
-        if (0 === this.registers[args[0]]) {
+        // not sure what getKeys will return - test getKeys.includes(Vx)?
+        if (this.interface.getKeys() === this.registers[args[0]]) {
           this._skipInstruction()
         } else {
           this._nextInstruction()
@@ -286,8 +290,7 @@ class CPU {
         break
       case 'SKNP_VX':
         // Skip next instruction if key with the value of Vx is not pressed.
-        console.log('fixme 0')
-        if (0 !== this.registers[args[0]]) {
+        if (this.interface.getKeys() !== this.registers[args[0]]) {
           this._skipInstruction()
         } else {
           this._nextInstruction()
@@ -300,8 +303,7 @@ class CPU {
         break
       case 'LD_VX_K':
         // Wait for a key press, store the value of the key in Vx.
-        console.log('fixme 0')
-        this.registers[args[0]] = 0
+        this.registers[args[0]] = this.interface.waitKey()
         this._nextInstruction()
         break
       case 'LD_DT_VX':

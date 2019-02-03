@@ -1,10 +1,10 @@
 const filename = process.argv.slice(2)[0]
 const { CPU } = require('../classes/CPU')
 const { RomBuffer } = require('../classes/RomBuffer')
-const { NcursesCpuInterface } = require('../classes/interfaces/NcursesCpuInterface')
-const ncursesCI = new NcursesCpuInterface()
+const { MockCpuInterface } = require('../classes/interfaces/MockCpuInterface')
+const cpuInterface = new MockCpuInterface()
 
-const cpu = new CPU(ncursesCI)
+const cpu = new CPU(cpuInterface)
 const romBuffer = new RomBuffer(filename)
 
 cpu.load(romBuffer)

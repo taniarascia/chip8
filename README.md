@@ -226,7 +226,13 @@ test('test cpu 06: 3xkk - SE Vx, byte', () => {
   - [x] LD_VX_I
   - [x] DW
 - [ ] Create Interface Classes
-
+  - [x] Create abstract CPU interface class
+  - [x] Create derived CPU interface classes
+  - [ ] Write draw method 
+  - [ ] Write DRW_VX_VY_N in CPU
+  - [ ] Write clear method
+  - [ ] Write CLS in CPU
+- [ ] Set up displays
 
 ## Acknowledgements
 
