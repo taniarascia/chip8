@@ -253,17 +253,22 @@ describe('CPU tests', () => {
   // test('23: Cxkk - RND_VX_NN', () => {}
 
   test('24: Dxyn - DRW_VX_VY_N', () => {
-    cpu.load({ data: [ 0xdab5 ] })
+    cpu.load({ data: [ 0xd005 ] })
     cpu.I = 4091
 
     expect(() => {
       cpu.step()
     }).toThrowError('Memory out of bounds.')
-    // todo: passing test
+
+    cpu.load({ data: [ 0xd005 ] })
+    cpu.step()
+
+    expect(cpuInterface.display[0][0]).toBe(1)
+    expect(cpuInterface.display[1][1]).toBe(0)
+    expect(cpu.registers[0xf]).toBe(0)
   })
 
-  test('25: Ex9E - SKP_VX', () => {
-    // todo
+  test.skip('25: Ex9E - SKP_VX', () => {
     cpu.load({ data: [ 0xea9e ] })
     cpu.registers[0xa] = 0
     cpu.step()
@@ -277,7 +282,7 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x202)
   })
 
-  test('26: ExA1 - SKNP_VX', () => {
+  test.skip('26: ExA1 - SKNP_VX', () => {
     // todo
     cpu.load({ data: [ 0xeba1 ] })
     cpu.registers[0xb] = 0
@@ -348,10 +353,10 @@ describe('CPU tests', () => {
     expect(cpu.I).toBe(0xa * 5)
 
     // todo print a to console for now
-    cpu.load({ data: [ 0xfa29, 0xdab5 ] })
-    cpu.registers[0xa] = 0xa
-    cpu.step()
-    cpu.step()
+    // cpu.load({ data: [ 0xfa29, 0xdab5 ] })
+    // cpu.registers[0xa] = 0xa
+    // cpu.step()
+    // cpu.step()
   })
 
   test('33: Fx33 - LD_B_VX', () => {

@@ -1,25 +1,62 @@
 const { CpuInterface } = require('./CpuInterface')
 
 class MockCpuInterface extends CpuInterface {
-  // temporary derived class
+  // Temporary derived class
+  constructor() {
+    super()
+    // Temporary 8x5 display
+    this.display = [
+      [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+      [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+      [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+      [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+      [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+    ]
+  }
 
-  clearDisplay() {}
+  showDisplay() {
+    // Temporary display
+    let grid = '--------\n'
+    this.display.forEach((row, x) => {
+      row.forEach((col, y) => {
+        grid += this.display[x][y]
+      })
+      grid += '\n'
+    })
+    grid += '--------\n'
+
+    console.log(grid)
+  }
+
+  clearDisplay() {
+    console.log('screen is cleared')
+  }
 
   waitKey() {
+    // Will return one key
     return 0
   }
 
   getKeys() {
-    return 0
+    // Will return bitmask of all keys set
+    return 0b0000000000011101 // 0, 2, 3, 4 example
   }
 
-  drawPixel() {
-    return true
+  drawPixel(x, y, value) {
+    // Will XOR value to position x, y
+    // If collision, will return true
+    this.display[x][y] ^= value
+
+    return this.display[x][y] ^ value // collision
   }
 
-  enableSound() {}
+  enableSound() {
+    console.log('sound is enabled')
+  }
 
-  disableSound() {}
+  disableSound() {
+    console.log('sound is disabled')
+  }
 }
 
 module.exports = {

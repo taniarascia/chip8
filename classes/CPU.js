@@ -27,7 +27,6 @@ class CPU {
     this.SP = -1
     this.PC = 0x200
     this.halted = false
-    this.key = null // todo
   }
 
   load(romBuffer) {
@@ -56,9 +55,12 @@ class CPU {
     }
 
     if (this.ST > 0) {
+      // The sound timer is active whenever the sound timer register (ST) is non-zero.
+      this.interface.enableSound() // or when does this get enabled?
       this.ST--
     } else {
-      this.interface.enableSound()
+      // When ST reaches zero, the sound timer deactivates.
+      this.interface.disableSound()
     }
   }
 
@@ -257,31 +259,30 @@ class CPU {
           throw new Error('Memory out of bounds.')
         }
 
-        let sprite = ''
-
+        // The interpreter reads n bytes from memory, starting at the address stored in I.
         for (let i = 0; i < args[2]; i++) {
           let line = this.memory[this.I + i]
-
-          for (let position = 7; position >= 0; position--) {
-            if (line & (1 << position)) {
-              sprite += '█'
+          // Each byte is a line of eight pixels
+          for (let position = 0; position < 8; position++) {
+            // Get the byte to set by position
+            let value = line & (1 << (7 - position)) ? 1 : 0
+            // If this causes any pixels to be erased, VF is set to 1, otherwise it is set to 0.
+            if (this.interface.drawPixel(args[0] + i, args[1] + position, value)) {
+              // this is probably wrong - it's setting VF based on each pixel, not each sprite
+              this.registers[0xf] = 1
             } else {
-              sprite += ' '
+              this.registers[0xf] = 0
             }
           }
-          sprite += '\n'
         }
 
-        console.log(sprite)
-        // todo some sort of loop probably
-        // plus collision
-        this.interface.drawPixel(args[0], args[1], true)
+        this.interface.showDisplay() // temp
 
         this._nextInstruction()
         break
       case 'SKP_VX':
         // Skip next instruction if key with the value of Vx is pressed.
-        // not sure what getKeys will return - test getKeys.includes(Vx)?
+        // todo
         if (this.interface.getKeys() === this.registers[args[0]]) {
           this._skipInstruction()
         } else {
@@ -290,6 +291,7 @@ class CPU {
         break
       case 'SKNP_VX':
         // Skip next instruction if key with the value of Vx is not pressed.
+        // todo
         if (this.interface.getKeys() !== this.registers[args[0]]) {
           this._skipInstruction()
         } else {
