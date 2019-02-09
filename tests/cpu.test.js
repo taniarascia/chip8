@@ -252,7 +252,7 @@ describe('CPU tests', () => {
 
   // test('23: Cxkk - RND_VX_NN', () => {}
 
-  test('24: Dxyn - DRW_VX_VY_N', () => {
+  test.only('24: Dxyn - DRW_VX_VY_N', () => {
     cpu.load({ data: [ 0xd005 ] })
     cpu.I = 4091
 
@@ -260,15 +260,59 @@ describe('CPU tests', () => {
       cpu.step()
     }).toThrowError('Memory out of bounds.')
 
-    cpu.load({ data: [ 0xd005 ] })
+    cpu.load({ data: [ 0xd125 ] })
+    cpu.registers[1] = 1
+    cpu.registers[2] = 1
     cpu.step()
-
-    expect(cpuInterface.display[0][0]).toBe(1)
-    expect(cpuInterface.display[1][1]).toBe(0)
+    cpu.interface.showDisplay()
+    expect(cpuInterface.display[1][1]).toBe(1)
+    expect(cpuInterface.display[2][1]).toBe(1)
+    expect(cpuInterface.display[3][1]).toBe(1)
+    expect(cpuInterface.display[4][1]).toBe(1)
+    expect(cpuInterface.display[2][1]).toBe(1)
+    expect(cpuInterface.display[2][2]).toBe(0)
+    expect(cpuInterface.display[2][3]).toBe(0)
+    expect(cpuInterface.display[2][4]).toBe(1)
+    expect(cpuInterface.display[3][1]).toBe(1)
+    expect(cpuInterface.display[3][2]).toBe(0)
+    expect(cpuInterface.display[3][3]).toBe(0)
+    expect(cpuInterface.display[3][4]).toBe(1)
+    expect(cpuInterface.display[4][1]).toBe(1)
+    expect(cpuInterface.display[4][2]).toBe(0)
+    expect(cpuInterface.display[4][3]).toBe(0)
+    expect(cpuInterface.display[4][4]).toBe(1)
+    expect(cpuInterface.display[5][1]).toBe(1)
+    expect(cpuInterface.display[5][1]).toBe(1)
+    expect(cpuInterface.display[5][1]).toBe(1)
+    expect(cpuInterface.display[5][1]).toBe(1)
     expect(cpu.registers[0xf]).toBe(0)
+
+    cpu.load({ data: [ 0xd125 ] })
+    cpu.registers[1] = 1
+    cpu.registers[2] = 1
+    cpu.step()
+    cpu.interface.showDisplay()
+    expect(cpuInterface.display[1][1]).toBe(0)
+    expect(cpuInterface.display[2][1]).toBe(0)
+    expect(cpuInterface.display[3][1]).toBe(0)
+    expect(cpuInterface.display[4][1]).toBe(0)
+    expect(cpuInterface.display[2][1]).toBe(0)
+    expect(cpuInterface.display[2][4]).toBe(0)
+    expect(cpuInterface.display[3][1]).toBe(0)
+    expect(cpuInterface.display[3][4]).toBe(0)
+    expect(cpuInterface.display[4][1]).toBe(0)
+    expect(cpuInterface.display[4][4]).toBe(0)
+    expect(cpuInterface.display[5][1]).toBe(0)
+    expect(cpuInterface.display[5][1]).toBe(0)
+    expect(cpuInterface.display[5][1]).toBe(0)
+    expect(cpuInterface.display[5][1]).toBe(0)
+    expect(cpu.registers[0xf]).toBe(1)
+
+    // todo: add overlap test
   })
 
   test.skip('25: Ex9E - SKP_VX', () => {
+    // todo
     cpu.load({ data: [ 0xea9e ] })
     cpu.registers[0xa] = 0
     cpu.step()
@@ -306,7 +350,7 @@ describe('CPU tests', () => {
   })
 
   test('28: Fx0A - LD_VX_K', () => {
-    // todo
+    // todo tick
     cpu.load({ data: [ 0xfb0a ] })
     cpu.step()
 
@@ -314,6 +358,7 @@ describe('CPU tests', () => {
   })
 
   test('29: Fx15 - LD_DT_VX', () => {
+    // todo tick
     cpu.load({ data: [ 0xfb15 ] })
     cpu.registers[0xb] = 0xf
     cpu.step()
@@ -322,6 +367,7 @@ describe('CPU tests', () => {
   })
 
   test('30: Fx18 - LD_ST_VX', () => {
+    // todo tick
     cpu.load({ data: [ 0xfa18 ] })
     cpu.registers[0xa] = 0xf
     cpu.step()

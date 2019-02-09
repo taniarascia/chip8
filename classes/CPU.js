@@ -1,5 +1,7 @@
 const { Disassembler } = require('./Disassembler')
 const { FONT_SET } = require('../constants/fontSet')
+const DISPLAY_WIDTH = 64
+const DISPLAY_HEIGHT = 32
 
 class CPU {
   constructor(cpuInterface) {
@@ -27,6 +29,7 @@ class CPU {
     this.SP = -1
     this.PC = 0x200
     this.halted = false
+    this.soundEnabled = false
   }
 
   load(romBuffer) {
@@ -50,17 +53,17 @@ class CPU {
   tick() {
     if (this.DT > 0) {
       this.DT--
-    } else {
-      console.log('fixme')
     }
 
     if (this.ST > 0) {
       // The sound timer is active whenever the sound timer register (ST) is non-zero.
-      this.interface.enableSound() // or when does this get enabled?
       this.ST--
     } else {
       // When ST reaches zero, the sound timer deactivates.
-      this.interface.disableSound()
+      if (this.soundEnabled) {
+        this.interface.disableSound()
+        this.soundEnabled = false
+      }
     }
   }
 
@@ -259,6 +262,8 @@ class CPU {
           throw new Error('Memory out of bounds.')
         }
 
+        this.registers[0xf] = 0
+
         // The interpreter reads n bytes from memory, starting at the address stored in I.
         for (let i = 0; i < args[2]; i++) {
           let line = this.memory[this.I + i]
@@ -267,23 +272,19 @@ class CPU {
             // Get the byte to set by position
             let value = line & (1 << (7 - position)) ? 1 : 0
             // If this causes any pixels to be erased, VF is set to 1, otherwise it is set to 0.
-            if (this.interface.drawPixel(args[0] + i, args[1] + position, value)) {
-              // this is probably wrong - it's setting VF based on each pixel, not each sprite
+            let x = (this.registers[args[0]] + position) % DISPLAY_WIDTH
+            let y = (this.registers[args[1]] + i) % DISPLAY_HEIGHT
+            if (this.interface.drawPixel(x, y, value)) {
               this.registers[0xf] = 1
-            } else {
-              this.registers[0xf] = 0
             }
           }
         }
-
-        this.interface.showDisplay() // temp
 
         this._nextInstruction()
         break
       case 'SKP_VX':
         // Skip next instruction if key with the value of Vx is pressed.
-        // todo
-        if (this.interface.getKeys() === this.registers[args[0]]) {
+        if (this.interface.getKeys() & (1 << this.registers[args[0]])) {
           this._skipInstruction()
         } else {
           this._nextInstruction()
@@ -291,8 +292,7 @@ class CPU {
         break
       case 'SKNP_VX':
         // Skip next instruction if key with the value of Vx is not pressed.
-        // todo
-        if (this.interface.getKeys() !== this.registers[args[0]]) {
+        if (!(this.interface.getKeys() & (1 << this.registers[args[0]]))) {
           this._skipInstruction()
         } else {
           this._nextInstruction()
@@ -316,6 +316,10 @@ class CPU {
       case 'LD_ST_VX':
         // Set sound timer = Vx.
         this.ST = this.registers[args[1]]
+        if (this.ST > 0) {
+          this.soundEnabled = true
+          this.interface.enableSound()
+        }
         this._nextInstruction()
         break
       case 'ADD_I_VX':

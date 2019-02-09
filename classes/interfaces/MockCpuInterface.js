@@ -5,13 +5,16 @@ class MockCpuInterface extends CpuInterface {
   constructor() {
     super()
     // Temporary 8x5 display
-    this.display = [
-      [ 0, 0, 0, 0, 0, 0, 0, 0 ],
-      [ 0, 0, 0, 0, 0, 0, 0, 0 ],
-      [ 0, 0, 0, 0, 0, 0, 0, 0 ],
-      [ 0, 0, 0, 0, 0, 0, 0, 0 ],
-      [ 0, 0, 0, 0, 0, 0, 0, 0 ],
-    ]
+
+    this.soundEnabled = false
+    this.display = []
+
+    for (let j = 0; j < 32; j++) {
+      this.display.push([])
+      for (let i = 0; i < 64; i++) {
+        this.display[j].push(0)
+      }
+    }
   }
 
   showDisplay() {
@@ -34,7 +37,7 @@ class MockCpuInterface extends CpuInterface {
 
   waitKey() {
     // Will return one key
-    return 0
+    return 5
   }
 
   getKeys() {
@@ -45,17 +48,19 @@ class MockCpuInterface extends CpuInterface {
   drawPixel(x, y, value) {
     // Will XOR value to position x, y
     // If collision, will return true
-    this.display[x][y] ^= value
+    const collision = this.display[y][x] & value
 
-    return this.display[x][y] ^ value // collision
+    this.display[y][x] ^= value
+
+    return collision
   }
 
   enableSound() {
-    console.log('sound is enabled')
+    this.soundEnabled = true
   }
 
   disableSound() {
-    console.log('sound is disabled')
+    this.soundEnabled = false
   }
 }
 
