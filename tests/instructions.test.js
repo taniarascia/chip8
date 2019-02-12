@@ -1,4 +1,4 @@
-describe('Instructions tests', () => {
+describe('Instruction set tests', () => {
   const { Disassembler } = require('../classes/Disassembler')
 
   test('02: 00E0 - CLS', () => {
