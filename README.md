@@ -11,7 +11,6 @@ A Chip-8 emulator written in JavaScript (Node.js).
 - [Usage](#usage)
   - [Load ROM](#load-rom)
   - [View hex dump](#view-hex-dump)
-- [Reference](#reference)
 - [Automated Testing](#automated-testing)
   - [Instruction tests](#instruction-tests)
   - [CPU tests](#cpu-tests)
@@ -101,10 +100,6 @@ The output will look something like this (using `CONNECT4` as an example).
 ```
 yarn example
 ```
-
-## Reference
-
-In progress.
 
 ## Automated Testing
 
@@ -225,14 +220,12 @@ test('test cpu 06: 3xkk - SE Vx, byte', () => {
   - [x] LD_I_VX
   - [x] LD_VX_I
   - [x] DW
-- [ ] Create Interface Classes
+- [x] Create Interface Class
   - [x] Create abstract CPU interface class
   - [x] Create derived CPU interface classes
-  - [ ] Write draw method 
-  - [ ] Write DRW_VX_VY_N in CPU
-  - [ ] Write clear method
-  - [ ] Write CLS in CPU
-- [ ] Set up displays
+  - [x] Write draw method 
+  - [x] Write DRW_VX_VY_N in CPU
+  - [ ] Test 24, 25, 26, 28, 29, 30
 
 ## Acknowledgements
 
@@ -246,4 +239,4 @@ test('test cpu 06: 3xkk - SE Vx, byte', () => {
 
 ## License
 
-The code is open source and available under the [MIT License](LICENSE).
+This project is open source and available under the [MIT License](LICENSE).

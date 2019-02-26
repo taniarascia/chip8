@@ -252,7 +252,7 @@ describe('CPU tests', () => {
 
   // test('23: Cxkk - RND_VX_NN', () => {}
 
-  test.only('24: Dxyn - DRW_VX_VY_N', () => {
+  test('24: Dxyn - DRW_VX_VY_N', () => {
     cpu.load({ data: [ 0xd005 ] })
     cpu.I = 4091
 
@@ -354,7 +354,7 @@ describe('CPU tests', () => {
     cpu.load({ data: [ 0xfb0a ] })
     cpu.step()
 
-    expect(cpu.registers[0xb]).toBe(0)
+    expect(cpu.registers[0xb]).toBe(5)
   })
 
   test('29: Fx15 - LD_DT_VX', () => {
