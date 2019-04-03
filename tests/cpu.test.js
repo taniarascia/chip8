@@ -4,10 +4,11 @@ describe('CPU tests', () => {
   const cpuInterface = new MockCpuInterface()
   const cpu = new CPU(cpuInterface)
 
-  test('CPU does not execute after halting', () => {
+  test('CPU should not execute after halting', () => {
     cpu.load({ data: 0x0000 })
     cpu.halted = true
 
+    // BSOD on halted program
     expect(() => {
       cpu.step()
     }).toThrowError(
@@ -15,17 +16,19 @@ describe('CPU tests', () => {
     )
   })
 
-  // test.skip('02: CLS', () => {})
+  // test.skip('CLS', () => {})
 
-  test('03: RET', () => {
+  test('RET: Program counter should be set to stack pointer, then decrement stack pointer', () => {
     cpu.load({ data: [0x00ee] })
-    cpu.SP = 2
-    cpu.stack[2] = 0xf
+    cpu.SP = 0x2
+    cpu.stack[0x2] = 0xf
     cpu.step()
 
     expect(cpu.PC).toBe(0xf)
     expect(cpu.SP).toBe(0x1)
+  })
 
+  test('RET: CPU should halt if stack pointer is set to 0', () => {
     cpu.load({ data: [0x00ee] })
 
     expect(() => {
@@ -33,22 +36,25 @@ describe('CPU tests', () => {
     }).toThrowError('Stack underflow.')
   })
 
-  test('04: 1nnn - JP_ADDR', () => {
+  test('JP_ADDR (1nnn): Program counter should be set to address in argument', () => {
     cpu.load({ data: [0x1333] })
     cpu.step()
 
     expect(cpu.PC).toBe(0x333)
   })
 
-  test('05: 2nnn - CALL_ADDR', () => {
+  test('CALL_ADDR (2nnn): Stack pointer should increment, program counter should be set to address in argument', () => {
     cpu.load({ data: [0x2062] })
+    // Set PC to retain original value
     const PC = cpu.PC
     cpu.step()
 
     expect(cpu.SP).toBe(0)
     expect(cpu.stack[cpu.SP]).toBe(PC + 2)
     expect(cpu.PC).toBe(0x062)
+  })
 
+  test('CALL_ADDR (2nnn): CPU should halt if stack pointer is set to 15', () => {
     cpu.load({ data: [0x2062] })
     cpu.SP = 15
 
@@ -57,12 +63,14 @@ describe('CPU tests', () => {
     }).toThrowError('Stack overflow.')
   })
 
-  test('06: 3xkk - SE_VX_NN', () => {
+  test('SE_VX_NN (3xkk): Program counter should increment by two bytes if register X is not equal to nn argument', () => {
     cpu.load({ data: [0x3abb] })
     cpu.step()
 
     expect(cpu.PC).toBe(0x202)
+  })
 
+  test('SE_VX_NN (3xkk): Program counter should increment by four bytes if register X is equal to nn argument', () => {
     cpu.load({ data: [0x3abb] })
     cpu.registers[0xa] = 0xbb
     cpu.step()
@@ -70,12 +78,14 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x204)
   })
 
-  test('07: 4xkk - SNE_VX_NN', () => {
+  test('SNE_VX_NN (4xkk): Program counter should increment by four bytes if register X is not equal to nn argument', () => {
     cpu.load({ data: [0x4acc] })
     cpu.step()
 
     expect(cpu.PC).toBe(0x204)
+  })
 
+  test('SNE_VX_NN (4xkk): Program counter should increment by two bytes if register X is not equal to nn argument', () => {
     cpu.load({ data: [0x4acc] })
     cpu.registers[0xa] = 0xcc
     cpu.step()
@@ -254,7 +264,7 @@ describe('CPU tests', () => {
   // test('23: Cxkk - RND_VX_NN', () => {}
 
   test('24: Dxyn - DRW_VX_VY_N', () => {
-    cpu.load({ data: [ 0xd005 ] })
+    cpu.load({ data: [0xd005] })
     cpu.I = 4091
 
     expect(() => {
