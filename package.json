@@ -27,5 +27,8 @@
     "javascript"
   ],
   "license": "MIT",
-  "private": false
+  "private": false,
+  "dependencies": {
+    "blessed": "^0.1.81"
+  }
 }

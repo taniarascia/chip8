@@ -1,8 +1,13 @@
 const { CpuInterface } = require('./CpuInterface')
+const blessed = require('blessed')
 
 class TerminalCpuInterface extends CpuInterface {
   constructor() {
     super()
+
+    this.blessed = blessed
+    this.screen = blessed.screen()
+    this.screen.title = 'Chip8.js'
 
     this.soundEnabled = false
     this.display = []
