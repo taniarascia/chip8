@@ -120,7 +120,7 @@ Chip8.js has two suites of unit tests:
 
 ### Instruction tests
 
-The [instruction tests](tests/instructions.test.js) cover the `INSTRUCTION_SET` found in `constants/instructionSet.js`. Each instruction has:
+The [instruction tests](tests/instructions.test.js) cover the `INSTRUCTION_SET` found in `data/instructionSet.js`. Each instruction has:
 
 - A `key`: for internal use
 - An `id`: for a unique name
@@ -133,7 +133,7 @@ The [instruction tests](tests/instructions.test.js) cover the `INSTRUCTION_SET` 
   - A `type`: to signify the type of argument
 
 ```js
-// constants/instructionSet.js
+// data/instructionSet.js
 
 {
   key: 6,
@@ -166,7 +166,7 @@ There are 35 instruction tests for 35 opcodes (the first instruction, `CLS`, is 
 
 ### CPU tests
 
-The CPU decodes the opcode and returns the instruction object from `constants/instructionSet.js`. Each instruction performs a specific, unique action in the `case`. The [CPU tests](tests/cpu.test.js) test the state of the CPU after an executing an instruction.
+The CPU decodes the opcode and returns the instruction object from `data/instructionSet.js`. Each instruction performs a specific, unique action in the `case`. The [CPU tests](tests/cpu.test.js) test the state of the CPU after an executing an instruction.
 
 In the below example, the instruction is skipping an instruction if `Vx === nn`, otherwise it's going to the next instruction as usual.
 

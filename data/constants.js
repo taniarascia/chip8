@@ -1,0 +1,7 @@
+const DISPLAY_WIDTH = 64
+const DISPLAY_HEIGHT = 32
+
+module.exports = {
+  DISPLAY_WIDTH,
+  DISPLAY_HEIGHT,
+}

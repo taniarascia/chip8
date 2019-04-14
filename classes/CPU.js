@@ -1,7 +1,6 @@
 const { Disassembler } = require('./Disassembler')
-const { FONT_SET } = require('../constants/fontSet')
-const DISPLAY_WIDTH = 64
-const DISPLAY_HEIGHT = 32
+const { FONT_SET } = require('../data/fontSet')
+const { DISPLAY_HEIGHT, DISPLAY_WIDTH } = require('../data/constants')
 
 class CPU {
   constructor(cpuInterface) {
@@ -87,14 +86,15 @@ class CPU {
     // Decode the opcode and get an object with the instruction and arguments
     const instruction = this._decode(opcode)
 
-    console.log(
-      'PC: ' + this.PC.toString(16).padStart(4, '0') + ' ' + Disassembler.format(instruction),
-      opcode.toString(16).padStart(4, '0'),
-      instruction.instruction.id
-    )
+    // console.log(
+    //   'PC: ' + this.PC.toString(16).padStart(4, '0') + ' ' + Disassembler.format(instruction),
+    //   opcode.toString(16).padStart(4, '0'),
+    //   instruction.instruction.id
+    // )
 
     // Execute code based on the instruction set
     this._execute(instruction)
+    this.interface.screen.render()
   }
 
   _nextInstruction() {

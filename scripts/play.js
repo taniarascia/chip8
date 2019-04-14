@@ -7,8 +7,14 @@ const cpuInterface = new TerminalCpuInterface()
 const cpu = new CPU(cpuInterface)
 const romBuffer = new RomBuffer(filename)
 
-cpu.load(romBuffer)
+// cpu.load({ data: [0xd125] })
+// this.I = 0
+// cpu.registers[0x1] = 1
+// cpu.registers[0x2] = 1
+// cpu.step()
+// cpu.interface.showDisplay()
 
+cpu.load(romBuffer)
 setInterval(() => {
   cpu.step()
 }, 3)

@@ -1,4 +1,4 @@
-const { INSTRUCTION_SET } = require('../constants/instructionSet')
+const { INSTRUCTION_SET } = require('../data/instructionSet')
 
 class Disassembler {
   static disassemble(opcode) {
