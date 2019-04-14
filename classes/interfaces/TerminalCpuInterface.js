@@ -65,12 +65,12 @@ class TerminalCpuInterface extends CpuInterface {
       },
     })
 
+    this.screen.render()
+
     return collision
   }
 
-  showDisplay() {
-    this.screen.render()
-  }
+  showDisplay() {}
 
   enableSound() {}
 

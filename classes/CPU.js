@@ -94,7 +94,6 @@ class CPU {
 
     // Execute code based on the instruction set
     this._execute(instruction)
-    this.interface.screen.render()
   }
 
   _nextInstruction() {
