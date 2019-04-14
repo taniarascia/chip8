@@ -47,7 +47,7 @@ You can add the module directly from the [chip8js](https://www.npmjs.com/package
 
 ```bash
 yarn add chip8js
-# npm i --save chip8js
+# npm i chip8js
 ```
 
 And require the `RomBuffer` and `CPU` classes.
