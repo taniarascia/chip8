@@ -166,7 +166,7 @@ class CPU {
         break
 
       case 'SE_VX_NN':
-        // Skip next instruction if Vx = kk.
+        // Skip next instruction if Vx = nn.
         if (this.registers[args[0]] === args[1]) {
           this._skipInstruction()
         } else {
@@ -175,7 +175,7 @@ class CPU {
         break
 
       case 'SNE_VX_NN':
-        // Skip next instruction if Vx != kk.
+        // Skip next instruction if Vx != nn.
         if (this.registers[args[0]] !== args[1]) {
           this._skipInstruction()
         } else {
@@ -193,13 +193,13 @@ class CPU {
         break
 
       case 'LD_VX_NN':
-        // Set Vx = kk.
+        // Set Vx = nn.
         this.registers[args[0]] = args[1]
         this._nextInstruction()
         break
 
       case 'ADD_VX_NN':
-        // Set Vx = Vx + kk.
+        // Set Vx = Vx + nn.
         this.registers[args[0]] = this.registers[args[0]] + args[1]
         this._nextInstruction()
         break
@@ -288,7 +288,7 @@ class CPU {
         break
 
       case 'RND_VX_NN':
-        // Set Vx = random byte AND kk.
+        // Set Vx = random byte AND nn.
         let random = Math.floor(Math.random() * 256)
         this.registers[args[0]] = random & args[1]
         this._nextInstruction()

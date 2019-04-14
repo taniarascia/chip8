@@ -20,7 +20,7 @@ A Chip-8 emulator written in JavaScript (Node.js).
 
 ## Motivation
 
-Chip8.js is an ongoing project to write a Chip-8 emulator in JavaScript. The main motivation is to learn lower level programming concepts and to increase familiarity with the Node.js environment. 
+Chip8.js is an ongoing project to write a Chip-8 emulator in JavaScript. The main motivation is to learn lower level programming concepts and to increase familiarity with the Node.js environment.
 
 Here are some of the concepts I learned while writing this program:
 
@@ -41,7 +41,7 @@ And here are some articles I wrote based on those concepts:
 
 ## Installation
 
-> This guide assumes you already have [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/en/) installed. 
+> This guide assumes you already have [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/en/) installed.
 
 You can add the module directly from the [chip8js](https://www.npmjs.com/package/chip8js) npm package.
 
@@ -67,7 +67,7 @@ yarn
 
 ## Usage
 
-Chip-8 compatible ROMs can be saved in the `roms/` directory. A copy of *Connect 4* is shipped with Chip8.js (at `roms/CONNECT4`) for example and testing purposes.
+Chip-8 compatible ROMs can be saved in the `roms/` directory. A copy of _Connect 4_ is shipped with Chip8.js (at `roms/CONNECT4`) for example and testing purposes.
 
 ### Load ROM
 
@@ -154,7 +154,7 @@ Each unit test checks an opcode to an instruction and tests:
 ```js
 // tests/instructions.test.js
 
-test('test instruction 06: 3xkk - SE Vx, byte', () => {
+test('6: Expect disassembler to match opcode 3xnn to instruction SE_VX_NN', () => {
   expect(Disassembler.disassemble(0x3abb).instruction).toHaveProperty('id', 'SE_VX_NN')
   expect(Disassembler.disassemble(0x3abb).args).toHaveLength(2)
   expect(Disassembler.disassemble(0x3abb).args[0]).toBe(0xa)
@@ -168,13 +168,13 @@ There are 35 instruction tests for 35 opcodes (the first instruction, `CLS`, is 
 
 The CPU decodes the opcode and returns the instruction object from `constants/instructionSet.js`. Each instruction performs a specific, unique action in the `case`. The [CPU tests](tests/cpu.test.js) test the state of the CPU after an executing an instruction.
 
-In the below example, the instruction is skipping an instruction if `Vx === kk`, otherwise it's going to the next instruction as usual.
+In the below example, the instruction is skipping an instruction if `Vx === nn`, otherwise it's going to the next instruction as usual.
 
 ```js
 // classes/CPU.js
 
 case 'SE_VX_NN':
-  // Skip next instruction if Vx = kk.
+  // Skip next instruction if Vx = nn.
   if (this.registers[args[0]] === args[1]) {
     this._skipInstruction()
   } else {
@@ -195,12 +195,14 @@ In this example, the instruction can either be skipped or not skipped depending 
 ```js
 // tests/cpu.test.js
 
-test('test cpu 06: 3xkk - SE Vx, byte', () => {
+test('6: SE_VX_NN (3xnn) - Program counter should increment by two bytes if register x is not equal to nn argument', () => {
   cpu.load({ data: [0x3abb] })
   cpu.step()
 
   expect(cpu.PC).toBe(0x202)
+})
 
+test('6: SE_VX_NN (3xnn) - Program counter should increment by four bytes if register x is equal to nn argument', () => {
   cpu.load({ data: [0x3abb] })
   cpu.registers[0xa] = 0xbb
   cpu.step()
@@ -211,21 +213,12 @@ test('test cpu 06: 3xkk - SE Vx, byte', () => {
 
 ## Todos
 
-- [x] Tests: Errors: 8
-  - [x] RET
-  - [x] CALL_ADDR
-  - [x] DRW_VX_VY_N
-  - [x] LD_F_VX
-  - [x] LD_B_VX
-  - [x] LD_I_VX
-  - [x] LD_VX_I
-  - [x] DW
-- [x] Create Interface Class
-  - [x] Create abstract CPU interface class
-  - [x] Create derived CPU interface classes
-  - [x] Write draw method 
-  - [x] Write DRW_VX_VY_N in CPU
-  - [ ] Test 24, 25, 26, 28, 29, 30
+- [ ] test 24, 25, 26, 28, 29, 30
+- [ ] blessed I/O
+- [ ] web I/O
+- [ ] libui I/O
+- [ ] convert to TypeScript
+- [ ] write an assembler
 
 ## Acknowledgements
 

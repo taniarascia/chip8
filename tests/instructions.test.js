@@ -23,14 +23,14 @@ describe('Instruction set tests', () => {
     expect(Disassembler.disassemble(0x2062).args[0]).toBe(0x062)
   })
 
-  test('6: Expect disassembler to match opcode 3xkk to instruction SE_VX_NN', () => {
+  test('6: Expect disassembler to match opcode 3xnn to instruction SE_VX_NN', () => {
     expect(Disassembler.disassemble(0x3abb).instruction).toHaveProperty('id', 'SE_VX_NN')
     expect(Disassembler.disassemble(0x3abb).args).toHaveLength(2)
     expect(Disassembler.disassemble(0x3abb).args[0]).toBe(0xa)
     expect(Disassembler.disassemble(0x3abb).args[1]).toBe(0xbb)
   })
 
-  test('7: Expect disassembler to match opcode 4xkk to instruction SNE_VX_NN', () => {
+  test('7: Expect disassembler to match opcode 4xnn to instruction SNE_VX_NN', () => {
     expect(Disassembler.disassemble(0x4acc).instruction).toHaveProperty('id', 'SNE_VX_NN')
     expect(Disassembler.disassemble(0x4acc).args).toHaveLength(2)
     expect(Disassembler.disassemble(0x4acc).args[0]).toBe(0xa)
@@ -44,14 +44,14 @@ describe('Instruction set tests', () => {
     expect(Disassembler.disassemble(0x5ab0).args[1]).toBe(0xb)
   })
 
-  test('9: Expect disassembler to match opcode 6xkk to instruction LD_VX_NN', () => {
+  test('9: Expect disassembler to match opcode 6xnn to instruction LD_VX_NN', () => {
     expect(Disassembler.disassemble(0x6abb).instruction).toHaveProperty('id', 'LD_VX_NN')
     expect(Disassembler.disassemble(0x6abb).args).toHaveLength(2)
     expect(Disassembler.disassemble(0x6abb).args[0]).toBe(0xa)
     expect(Disassembler.disassemble(0x6abb).args[1]).toBe(0xbb)
   })
 
-  test('10: Expect disassembler to match opcode 7xkk to instruction ADD_VX_NN', () => {
+  test('10: Expect disassembler to match opcode 7xnn to instruction ADD_VX_NN', () => {
     expect(Disassembler.disassemble(0x7abb).instruction).toHaveProperty('id', 'ADD_VX_NN')
     expect(Disassembler.disassemble(0x7abb).args).toHaveLength(2)
     expect(Disassembler.disassemble(0x7abb).args[0]).toBe(0xa)
@@ -142,7 +142,7 @@ describe('Instruction set tests', () => {
     expect(Disassembler.disassemble(0xb400).args[1]).toBe(0x400)
   })
 
-  test('23: Expect disassembler to match opcode Cxkk to instruction RND_VX_NN', () => {
+  test('23: Expect disassembler to match opcode Cxnn to instruction RND_VX_NN', () => {
     expect(Disassembler.disassemble(0xcabb).instruction).toHaveProperty('id', 'RND_VX_NN')
     expect(Disassembler.disassemble(0xcabb).args).toHaveLength(2)
     expect(Disassembler.disassemble(0xcabb).args[0]).toBe(0xa)

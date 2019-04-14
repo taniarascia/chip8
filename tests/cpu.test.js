@@ -16,9 +16,9 @@ describe('CPU tests', () => {
     )
   })
 
-  // test.skip('CLS', () => {})
+  // test.skip('2: CLS', () => {})
 
-  test('RET: Program counter should be set to stack pointer, then decrement stack pointer', () => {
+  test('3: RET (00ee) - Program counter should be set to stack pointer, then decrement stack pointer', () => {
     cpu.load({ data: [0x00ee] })
     cpu.SP = 0x2
     cpu.stack[0x2] = 0xf
@@ -28,7 +28,7 @@ describe('CPU tests', () => {
     expect(cpu.SP).toBe(0x1)
   })
 
-  test('RET: CPU should halt if stack pointer is set to 0', () => {
+  test('3: RET (00ee) - CPU should halt if stack pointer is set to 0', () => {
     cpu.load({ data: [0x00ee] })
 
     expect(() => {
@@ -36,14 +36,14 @@ describe('CPU tests', () => {
     }).toThrowError('Stack underflow.')
   })
 
-  test('JP_ADDR (1nnn): Program counter should be set to address in argument', () => {
+  test('4: JP_ADDR (1nnn) - Program counter should be set to address in argument', () => {
     cpu.load({ data: [0x1333] })
     cpu.step()
 
     expect(cpu.PC).toBe(0x333)
   })
 
-  test('CALL_ADDR (2nnn): Stack pointer should increment, program counter should be set to address in argument', () => {
+  test('5: CALL_ADDR (2nnn) - Stack pointer should increment, program counter should be set to address in argument', () => {
     cpu.load({ data: [0x2062] })
     // Set PC to retain original value
     const PC = cpu.PC
@@ -54,7 +54,7 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x062)
   })
 
-  test('CALL_ADDR (2nnn): CPU should halt if stack pointer is set to 15', () => {
+  test('5: CALL_ADDR (2nnn) - CPU should halt if stack pointer is set to 15', () => {
     cpu.load({ data: [0x2062] })
     cpu.SP = 15
 
@@ -63,14 +63,14 @@ describe('CPU tests', () => {
     }).toThrowError('Stack overflow.')
   })
 
-  test('SE_VX_NN (3xkk): Program counter should increment by two bytes if register X is not equal to nn argument', () => {
+  test('6: SE_VX_NN (3xnn) - Program counter should increment by two bytes if register x is not equal to nn argument', () => {
     cpu.load({ data: [0x3abb] })
     cpu.step()
 
     expect(cpu.PC).toBe(0x202)
   })
 
-  test('SE_VX_NN (3xkk): Program counter should increment by four bytes if register X is equal to nn argument', () => {
+  test('6: SE_VX_NN (3xnn) - Program counter should increment by four bytes if register x is equal to nn argument', () => {
     cpu.load({ data: [0x3abb] })
     cpu.registers[0xa] = 0xbb
     cpu.step()
@@ -78,14 +78,14 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x204)
   })
 
-  test('SNE_VX_NN (4xkk): Program counter should increment by four bytes if register X is not equal to nn argument', () => {
+  test('7: SNE_VX_NN (4xnn) - Program counter should increment by four bytes if register x is not equal to nn argument', () => {
     cpu.load({ data: [0x4acc] })
     cpu.step()
 
     expect(cpu.PC).toBe(0x204)
   })
 
-  test('SNE_VX_NN (4xkk): Program counter should increment by two bytes if register X is not equal to nn argument', () => {
+  test('7: SNE_VX_NN (4xnn) - Program counter should increment by two bytes if register x is equal to nn argument', () => {
     cpu.load({ data: [0x4acc] })
     cpu.registers[0xa] = 0xcc
     cpu.step()
@@ -93,20 +93,25 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x202)
   })
 
-  test('08: 5xy0 - SE_VX_VY', () => {
+  test('8: SE_VX_VY (5xy0) - Program counter should increment by four if register x is equal to register y', () => {
     cpu.load({ data: [0x5ab0] })
+    cpu.registers[0xa] = 0x5
+    cpu.registers[0xb] = 0x5
     cpu.step()
 
     expect(cpu.PC).toBe(0x204)
+  })
 
+  test('8: SE_VX_VY (5xy0) - Program counter should increment by two if register x is not equal to register y', () => {
     cpu.load({ data: [0x5ab0] })
     cpu.registers[0xa] = 0x5
+    cpu.registers[0xa] = 0x6
     cpu.step()
 
     expect(cpu.PC).toBe(0x202)
   })
 
-  test('09: 6xkk - LD_VX_NN', () => {
+  test('9: LD_VX_NN (6xnn) - Register x should be set to the value of argument nn', () => {
     cpu.load({ data: [0x6abb] })
     cpu.registers[0xa] = 0x10
     cpu.step()
@@ -114,7 +119,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xa]).toBe(0xbb)
   })
 
-  test('10: 7xkk - ADD_VX_NN', () => {
+  test('10: ADD_VX_NN (7xnn) - Register x should be set to the value of register x plus argument nn', () => {
     cpu.load({ data: [0x7abb] })
     cpu.registers[0xa] = 0x10
     cpu.step()
@@ -122,7 +127,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xa]).toBe(0x10 + 0xbb)
   })
 
-  test('11: 8xy0 - LD_VX_VY', () => {
+  test('11: LD_VX_VY (8xy0) - Register x should be set to the value of register y', () => {
     cpu.load({ data: [0x8ab0] })
     cpu.registers[0xb] = 0x8
     cpu.step()
@@ -130,34 +135,37 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xa]).toBe(0x8)
   })
 
-  test('12: 8xy1 - OR_VX_VY', () => {
+  test('12: OR_VX_VY (8xy1) - Register x should be set to the value of register x OR register y', () => {
     cpu.load({ data: [0x8ab1] })
     cpu.registers[0xa] = 0x3
     cpu.registers[0xb] = 0x4
     cpu.step()
 
+    expect(0x3 | 0x4).toBe(0x7)
     expect(cpu.registers[0xa]).toBe(0x7)
   })
 
-  test('13: 8xy2 - AND_VX_VY', () => {
+  test('13: AND_VX_VY (8xy2) - Register x should be set to the value of register x AND register y', () => {
     cpu.load({ data: [0x8ab2] })
     cpu.registers[0xa] = 0x3
     cpu.registers[0xb] = 0x4
     cpu.step()
 
+    expect(0x3 & 0x4).toBe(0)
     expect(cpu.registers[0xa]).toBe(0)
   })
 
-  test('14: 8xy3 - XOR_VX_VY', () => {
+  test('14: XOR_VX_VY (8xy3) - Register x should be set to the value of register x XOR register y', () => {
     cpu.load({ data: [0x8ab3] })
     cpu.registers[0xa] = 0x3
     cpu.registers[0xb] = 0x3
     cpu.step()
 
+    expect(0x3 ^ 0x3).toBe(0)
     expect(cpu.registers[0xa]).toBe(0)
   })
 
-  test('15: 8xy4 - ADD_VX_VY', () => {
+  test('15: ADD_VX_VY (8xy4) - Register x should be set to the value of the sum of register x and register y (VF with no carry)', () => {
     cpu.load({ data: [0x8ab4] })
     cpu.registers[0xa] = 0x3
     cpu.registers[0xb] = 0x4
@@ -165,7 +173,9 @@ describe('CPU tests', () => {
 
     expect(cpu.registers[0xa]).toBe(0x7)
     expect(cpu.registers[0xf]).toBe(0)
+  })
 
+  test('15: ADD_VX_VY (8xy4) - Register x should be set to the value of the sum of register x and register y (VF with carry)', () => {
     cpu.load({ data: [0x8ab4] })
     cpu.registers[0xa] = 0xff
     cpu.registers[0xb] = 0xff
@@ -175,7 +185,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xf]).toBe(1)
   })
 
-  test('16: 8xy5 - SUB_VX_VY', () => {
+  test('16: SUB_VX_VY (8xy5) - Register x should be set to the difference of register x and register y (VF with carry)', () => {
     cpu.load({ data: [0x8ab5] })
     cpu.registers[0xa] = 0x4
     cpu.registers[0xb] = 0x2
@@ -183,7 +193,9 @@ describe('CPU tests', () => {
 
     expect(cpu.registers[0xa]).toBe(2)
     expect(cpu.registers[0xf]).toBe(1)
+  })
 
+  test('16: SUB_VX_VY (8xy5) - Register x should be set to the difference of register x and register y (VF with no carry)', () => {
     cpu.load({ data: [0x8ab5] })
     cpu.registers[0xa] = 0x2
     cpu.registers[0xb] = 0x3
@@ -193,7 +205,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xf]).toBe(0)
   })
 
-  test('17: 8xy6 - SHR_VX_VY', () => {
+  test('17: SHR_VX_VY (8xy6) - Shift register x right 1 (AKA divide x by 2). Set VF to 1 if least significant bit of register x is 1', () => {
     cpu.load({ data: [0x8ab6] })
     cpu.registers[0xa] = 0x3
     cpu.step()
@@ -202,7 +214,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xf]).toBe(1)
   })
 
-  test('18: 8xy7 - SUBN_VX_VY', () => {
+  test('18: SUBN_VX_VY (8xy7) - Set register x to the difference of register y and register x (VF with no carry)', () => {
     cpu.load({ data: [0x8ab7] })
     cpu.registers[0xa] = 0x3
     cpu.registers[0xb] = 0x2
@@ -210,7 +222,9 @@ describe('CPU tests', () => {
 
     expect(cpu.registers[0xa]).toBe(255)
     expect(cpu.registers[0xf]).toBe(0)
+  })
 
+  test('18: SUBN_VX_VY (8xy7) - Set register x to the difference of register y and register x (VF with carry)', () => {
     cpu.load({ data: [0x8ab7] })
     cpu.registers[0xa] = 0x2
     cpu.registers[0xb] = 0x3
@@ -220,7 +234,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xf]).toBe(1)
   })
 
-  test('19: 8xyE - SHL_VX_VY', () => {
+  test('19: SHL_VX_VY (8xyE) - Shift register x left one (AKA multiply by 2). Set VF to 1 if least significant bit of register x is 1', () => {
     cpu.load({ data: [0x8abe] })
     cpu.registers[0xa] = 0x3
     cpu.step()
@@ -229,14 +243,16 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xf]).toBe(0)
   })
 
-  test('20: 9xy0 - SNE_VX_VY', () => {
+  test('20: SNE_VX_VY (9xy0) - Program counter should increment by four bytes if register x is not equal to register y', () => {
     cpu.load({ data: [0x9ab0] })
     cpu.registers[0xa] = 0x3
     cpu.registers[0xb] = 0x4
     cpu.step()
 
     expect(cpu.PC).toBe(0x204)
+  })
 
+  test('20: SNE_VX_VY (9xy0) - Program counter should increment by two bytes if register x is equal to register y', () => {
     cpu.load({ data: [0x9ab0] })
     cpu.registers[0xa] = 0x3
     cpu.registers[0xb] = 0x3
@@ -245,14 +261,14 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x202)
   })
 
-  test('21: Annn - LD_I_ADDR', () => {
+  test('21: LD_I_ADDR (Annn) - I should be set to the value of argument nnn', () => {
     cpu.load({ data: [0xa999] })
     cpu.step()
 
     expect(cpu.I).toBe(0x999)
   })
 
-  test('22: Bnnn - JP_V0_ADDR', () => {
+  test('22: JP_V0_ADDR (Bnnn) - Program counter should be set to the sum of V0 and argument nnn', () => {
     cpu.load({ data: [0xb300] })
     cpu.registers[0] = 0x2
     cpu.step()
@@ -260,20 +276,21 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x2 + 0x300)
   })
 
-  // Can't seed/test random number
-  // test('23: Cxkk - RND_VX_NN', () => {}
+  // 23: RND_VX_NN (Cxnn) Can't seed/test random number
 
-  test('24: Dxyn - DRW_VX_VY_N', () => {
+  test('24: DRW_VX_VY_N (Dxyn) - CPU should halt if I + argument nn exceed 4095', () => {
     cpu.load({ data: [0xd005] })
     cpu.I = 4091
 
     expect(() => {
       cpu.step()
     }).toThrowError('Memory out of bounds.')
+  })
 
+  test('24: DRW_VX_VY_N (Dxyn) - n byte sprite should be disiplayed at coordinates in register x, register y', () => {
     cpu.load({ data: [0xd125] })
-    cpu.registers[1] = 1
-    cpu.registers[2] = 1
+    cpu.registers[0x1] = 1
+    cpu.registers[0x2] = 1
     cpu.step()
     cpu.interface.showDisplay()
     expect(cpuInterface.display[1][1]).toBe(1)
@@ -296,11 +313,14 @@ describe('CPU tests', () => {
     expect(cpuInterface.display[5][1]).toBe(1)
     expect(cpuInterface.display[5][1]).toBe(1)
     expect(cpuInterface.display[5][1]).toBe(1)
+
+    // No pixels were erased (no collision)
     expect(cpu.registers[0xf]).toBe(0)
 
+    // This test relies on the previous one, to erase the previous values with collisions
     cpu.load({ data: [0xd125] })
-    cpu.registers[1] = 1
-    cpu.registers[2] = 1
+    cpu.registers[0x1] = 1
+    cpu.registers[0x2] = 1
     cpu.step()
     cpu.interface.showDisplay()
     expect(cpuInterface.display[1][1]).toBe(0)
@@ -317,34 +337,38 @@ describe('CPU tests', () => {
     expect(cpuInterface.display[5][1]).toBe(0)
     expect(cpuInterface.display[5][1]).toBe(0)
     expect(cpuInterface.display[5][1]).toBe(0)
-    expect(cpu.registers[0xf]).toBe(1)
 
-    // todo: add overlap test
+    // All pixels were erased (collision)
+    expect(cpu.registers[0xf]).toBe(1)
   })
 
-  test.skip('25: Ex9E - SKP_VX', () => {
-    // todo
+  test('25: SKP_VX (Ex9E) - Program counter should increment by four bytes if key with value of register x is selected', () => {
     cpu.load({ data: [0xea9e] })
-    cpu.registers[0xa] = 0
+    cpu.registers[0xa] = 4
+    // Mock CPU interface keys 0, 2, 3, 4 selected
     cpu.step()
 
     expect(cpu.PC).toBe(0x204)
+  })
 
+  test('25: SKP_VX (Ex9E) - Program counter should increment by two bytes if key with value of register x is not selected', () => {
     cpu.load({ data: [0xea9e] })
     cpu.registers[0xa] = 1
+    // Mock CPU interface does not have 1 selected
     cpu.step()
 
     expect(cpu.PC).toBe(0x202)
   })
 
-  test.skip('26: ExA1 - SKNP_VX', () => {
-    // todo
+  test('26: SKNP_VX (ExA1) - Program counter should increment by two bytes if value of register x is a selected key', () => {
     cpu.load({ data: [0xeba1] })
-    cpu.registers[0xb] = 0
+    cpu.registers[0xb] = 4
     cpu.step()
 
     expect(cpu.PC).toBe(0x202)
+  })
 
+  test('26: SKNP_VX (ExA1) - Program counter should increment by four bytes if value of register x is not a selected key', () => {
     cpu.load({ data: [0xea9e] })
     cpu.registers[0xb] = 1
     cpu.step()
@@ -352,7 +376,7 @@ describe('CPU tests', () => {
     expect(cpu.PC).toBe(0x204)
   })
 
-  test('27: Fx07 - LD_VX_DT', () => {
+  test('27: LD_VX_DT (Fx07) - Register x should be set to the value of DT (delay timer)', () => {
     cpu.load({ data: [0xfa07] })
     cpu.DT = 0xf
     cpu.step()
@@ -360,7 +384,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xa]).toBe(0xf)
   })
 
-  test('28: Fx0A - LD_VX_K', () => {
+  test('28: LD_VX_K (Fx0A) - ', () => {
     // todo tick
     cpu.load({ data: [0xfb0a] })
     cpu.step()
@@ -368,7 +392,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xb]).toBe(5)
   })
 
-  test('29: Fx15 - LD_DT_VX', () => {
+  test('29: LD_DT_VX (Fx15) - ', () => {
     // todo tick
     cpu.load({ data: [0xfb15] })
     cpu.registers[0xb] = 0xf
@@ -377,7 +401,7 @@ describe('CPU tests', () => {
     expect(cpu.DT).toBe(0xf)
   })
 
-  test('30: Fx18 - LD_ST_VX', () => {
+  test('30: LD_ST_VX (Fx18) - ', () => {
     // todo tick
     cpu.load({ data: [0xfa18] })
     cpu.registers[0xa] = 0xf
@@ -386,7 +410,7 @@ describe('CPU tests', () => {
     expect(cpu.ST).toBe(0xf)
   })
 
-  test('31: Fx1E - ADD_I_VX', () => {
+  test('31: ADD_I_VX (Fx1E) - I should be set to the value of the sum of I and register x', () => {
     cpu.load({ data: [0xfa1e] })
     cpu.I = 0xe
     cpu.registers[0xa] = 0xf
@@ -395,37 +419,24 @@ describe('CPU tests', () => {
     expect(cpu.I).toBe(0xe + 0xf)
   })
 
-  test('32: Fx29 - LD_F_VX', () => {
+  test('32: LD_F_VX (Fx29) - CPU should halt if register x is not equal to 0 through F', () => {
     cpu.load({ data: [0xfa29] })
     cpu.registers[0xa] = 16
 
     expect(() => {
       cpu.step()
     }).toThrowError('Invalid digit.')
+  })
 
+  test('32: LD_F_VX (Fx29) - I should be set to the location of the sprite for digit in register x', () => {
     cpu.load({ data: [0xfa29] })
     cpu.registers[0xa] = 0xa
     cpu.step()
 
     expect(cpu.I).toBe(0xa * 5)
-
-    // todo print a to console for now
-    // cpu.load({ data: [ 0xfa29, 0xdab5 ] })
-    // cpu.registers[0xa] = 0xa
-    // cpu.step()
-    // cpu.step()
   })
 
-  test('33: Fx33 - LD_B_VX', () => {
-    cpu.load({ data: [0xfa33] })
-    cpu.registers[0xa] = 0x7b
-    cpu.I = 0x300
-    cpu.step()
-
-    expect(cpu.memory[0x300]).toBe(1)
-    expect(cpu.memory[0x301]).toBe(2)
-    expect(cpu.memory[0x302]).toBe(3)
-
+  test('33: LD_B_VX (Fx33) - CPU should halt if I is greater than 4093', () => {
     cpu.load({ data: [0xfa33] })
     cpu.registers[0xa] = 0x7b
     cpu.I = 4094
@@ -435,7 +446,27 @@ describe('CPU tests', () => {
     }).toThrowError('Memory out of bounds.')
   })
 
-  test('34: Fx55 - LD_I_VX', () => {
+  test('33: LD_B_VX (Fx33) - BCD representation of register x should be loaded into memory I, I+1, I+2 ', () => {
+    cpu.load({ data: [0xfa33] })
+    cpu.registers[0xa] = 0x7b
+    cpu.I = 0x300
+    cpu.step()
+
+    expect(cpu.memory[0x300]).toBe(1)
+    expect(cpu.memory[0x301]).toBe(2)
+    expect(cpu.memory[0x302]).toBe(3)
+  })
+
+  test('34: LD_I_VX (Fx55) - CPU should halt if memory will exceed 4095', () => {
+    cpu.load({ data: [0xfb55] })
+    cpu.I = 4085
+
+    expect(() => {
+      cpu.step()
+    }).toThrowError('Memory out of bounds.')
+  })
+
+  test('34: LD_I_VX (Fx55) - Memory should be set to register 0 through register x starting at location I', () => {
     cpu.load({ data: [0xfb55] })
     cpu.I = 0x400
 
@@ -447,17 +478,20 @@ describe('CPU tests', () => {
     for (let i = 0; i <= 0xb; i++) {
       expect(cpu.memory[cpu.I + i]).toBe(i)
     }
-    expect(cpu.memory[cpu.I + 0xc]).toBe(0)
 
-    cpu.load({ data: [0xfb55] })
-    cpu.I = 4085
+    expect(cpu.memory[cpu.I + 0xc]).toBe(0)
+  })
+
+  test('35: LD_VX_I (Fx65) - CPU should halt if memory will exceed 4095', () => {
+    cpu.load({ data: [0xfa65] })
+    cpu.I = 4086
 
     expect(() => {
       cpu.step()
     }).toThrowError('Memory out of bounds.')
   })
 
-  test('35: Fx65 - LD_VX_I', () => {
+  test('35: LD_VX_I (Fx65) - Registers 0 through x should be set to the value of memory starting at location I', () => {
     cpu.load({ data: [0xfa65] })
     cpu.I = 0x400
 
@@ -470,16 +504,9 @@ describe('CPU tests', () => {
       expect(cpu.registers[i]).toBe(i)
     }
     expect(cpu.registers[0xb]).toBe(0)
-
-    cpu.load({ data: [0xfa65] })
-    cpu.I = 4086
-
-    expect(() => {
-      cpu.step()
-    }).toThrowError('Memory out of bounds.')
   })
 
-  test('DW', () => {
+  test('36: DW (Data Word) - CPU should halt if instruction is a data word', () => {
     cpu.load({ data: [0x5154] })
 
     expect(() => {
