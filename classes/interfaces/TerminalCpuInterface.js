@@ -70,8 +70,6 @@ class TerminalCpuInterface extends CpuInterface {
     return collision
   }
 
-  showDisplay() {}
-
   enableSound() {}
 
   disableSound() {}

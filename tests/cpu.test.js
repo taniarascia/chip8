@@ -292,7 +292,7 @@ describe('CPU tests', () => {
     cpu.registers[0x1] = 1
     cpu.registers[0x2] = 1
     cpu.step()
-    cpu.interface.showDisplay()
+    cpu.interface.render()
     expect(cpuInterface.display[1][1]).toBe(1)
     expect(cpuInterface.display[2][1]).toBe(1)
     expect(cpuInterface.display[3][1]).toBe(1)
@@ -322,7 +322,7 @@ describe('CPU tests', () => {
     cpu.registers[0x1] = 1
     cpu.registers[0x2] = 1
     cpu.step()
-    cpu.interface.showDisplay()
+    cpu.interface.render()
     expect(cpuInterface.display[1][1]).toBe(0)
     expect(cpuInterface.display[2][1]).toBe(0)
     expect(cpuInterface.display[3][1]).toBe(0)

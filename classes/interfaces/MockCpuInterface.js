@@ -18,7 +18,7 @@ class MockCpuInterface extends CpuInterface {
     }
   }
 
-  showDisplay() {
+  render() {
     // Mock display
     let grid = ''
     this.display.forEach((row, x) => {
