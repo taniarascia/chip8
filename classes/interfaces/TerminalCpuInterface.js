@@ -11,8 +11,6 @@ class TerminalCpuInterface extends CpuInterface {
 
     this.screen.title = 'Chip8.js'
 
-    this.display = this.blessed.box(this.createDisplay())
-
     this.screenRepresentation = []
     for (let i = 0; i < DISPLAY_WIDTH; i++) {
       this.screenRepresentation.push([])
@@ -21,7 +19,18 @@ class TerminalCpuInterface extends CpuInterface {
       }
     }
 
+    this.display = this.blessed.box(this.createDisplay())
+
+    this.keys = 0
     this.soundEnabled = false
+
+    this.screen.on('keypress', (_, key) => {
+      console.log(key)
+    })
+
+    this.screen.key(['escape', 'q', 'C-c'], () => {
+      process.exit(0)
+    })
   }
 
   createDisplay() {
@@ -38,14 +47,32 @@ class TerminalCpuInterface extends CpuInterface {
     }
   }
 
+  renderDisplay() {
+    this.clearDisplay()
+
+    this.screenRepresentation.forEach((row, x) => {
+      row.forEach((col, y) => {
+        this.blessed.box({
+          parent: this.display,
+          top: y,
+          left: x,
+          width: 1,
+          height: 1,
+          style: {
+            fg: this.screenRepresentation[y][x] ? 'green' : 'black',
+            bg: this.screenRepresentation[y][x] ? 'green' : 'black',
+          },
+        })
+      })
+    })
+
+    this.screen.render()
+  }
+
   clearDisplay() {
     this.display.detach()
     this.display = this.blessed.box(this.createDisplay())
   }
-
-  waitKey() {}
-
-  getKeys() {}
 
   drawPixel(x, y, value) {
     // If collision, will return true
@@ -53,22 +80,12 @@ class TerminalCpuInterface extends CpuInterface {
     // Will XOR value to position x, y
     this.screenRepresentation[y][x] ^= value
 
-    this.blessed.box({
-      parent: this.display,
-      top: x,
-      left: y,
-      width: this.screenRepresentation[y][x],
-      height: this.screenRepresentation[y][x],
-      style: {
-        fg: 'green',
-        bg: 'green',
-      },
-    })
-
-    this.screen.render()
-
     return collision
   }
+
+  waitKey() {}
+
+  getKeys() {}
 
   enableSound() {}
 

@@ -9,6 +9,10 @@ class CpuInterface {
     throw new TypeError('Must be implemented on the inherited class.')
   }
 
+  renderDisplay() {
+    throw new TypeError('Must be implemented on the inherited class.')
+  }
+
   waitKey() {
     throw new TypeError('Must be implemented on the inherited class.')
   }

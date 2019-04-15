@@ -18,7 +18,11 @@ class MockCpuInterface extends CpuInterface {
     }
   }
 
-  render() {
+  clearDisplay() {
+    console.log('Screen is cleared')
+  }
+
+  renderDisplay() {
     // Mock display
     let grid = ''
     this.display.forEach((row, x) => {
@@ -29,10 +33,6 @@ class MockCpuInterface extends CpuInterface {
     })
 
     console.log(grid)
-  }
-
-  clearDisplay() {
-    console.log('Screen is cleared')
   }
 
   waitKey() {

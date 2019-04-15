@@ -8,6 +8,7 @@ const cpu = new CPU(cpuInterface)
 const romBuffer = new RomBuffer(filename)
 
 cpu.load(romBuffer)
+
 setInterval(() => {
   cpu.step()
 }, 3)

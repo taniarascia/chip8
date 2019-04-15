@@ -11,7 +11,7 @@
   "repository": "github:taniarascia/chip8",
   "bugs": "https://github.com/taniarascia/chip8/issues",
   "scripts": {
-    "start": "node scrips/play",
+    "play": "node scripts/play",
     "hexdump": "node scripts/hexdump",
     "example": "node scripts/play roms/CONNECT4",
     "test": "jest --verbose"
