@@ -7,11 +7,6 @@ class RomBuffer {
     // Read the raw data buffer from the file
     const buffer = fs.readFileSync(filename)
 
-    // If the buffer does not contain an even number of bytes, it cannot be a valid ROM
-    if (buffer.length % 2 !== 0) {
-      throw new Error('Invalid input')
-    }
-
     // Create 16-bit big endian opcodes from the buffer
     for (let i = 0; i < buffer.length; i += 2) {
       this.data.push((buffer[i] << 8) | (buffer[i + 1] << 0))
