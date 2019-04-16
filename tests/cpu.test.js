@@ -384,7 +384,7 @@ describe('CPU tests', () => {
     expect(cpu.registers[0xa]).toBe(0xf)
   })
 
-  test('28: LD_VX_K (Fx0A) - ', () => {
+  test('28: LD_VX_N (Fx0A) - ', () => {
     // todo tick
     cpu.load({ data: [0xfb0a] })
     cpu.step()

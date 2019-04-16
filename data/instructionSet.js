@@ -213,7 +213,7 @@ const INSTRUCTION_SET = [
   },
   {
     key: 28,
-    id: 'LD_VX_K',
+    id: 'LD_VX_N',
     name: 'LD',
     mask: 0xf00f,
     pattern: 0xf00a,

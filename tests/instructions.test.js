@@ -176,8 +176,8 @@ describe('Instruction set tests', () => {
     expect(Disassembler.disassemble(0xfa07).args[1]).toBe(0)
   })
 
-  test('28: Expect disassembler to match opcode Fx0A to instruction LD_VX_K', () => {
-    expect(Disassembler.disassemble(0xfb0a).instruction).toHaveProperty('id', 'LD_VX_K')
+  test('28: Expect disassembler to match opcode Fx0A to instruction LD_VX_N', () => {
+    expect(Disassembler.disassemble(0xfb0a).instruction).toHaveProperty('id', 'LD_VX_N')
     expect(Disassembler.disassemble(0xfb0a).args).toHaveLength(2)
     expect(Disassembler.disassemble(0xfb0a).args[0]).toBe(0xb)
     expect(Disassembler.disassemble(0xfb0a).args[1]).toBe(0)

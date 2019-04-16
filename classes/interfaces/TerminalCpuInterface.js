@@ -95,20 +95,10 @@ class TerminalCpuInterface extends CpuInterface {
   }
 
   waitKey() {
-    // return new Promise(resolve => {
-    //   this.screen.on('keypress', (_, key) => {
-    //     let keyMask
-    //     if (keyMap.includes(key.full)) {
-    //       keyMask = 1 << keyMap.indexOf(key.full)
-    //       this.keys = this.keys | keyMask
-    //       this.currentKey = keyMap.indexOf(key.full)
-    //     } else {
-    //       this.keys = 0
-    //       this.currentKey = null
-    //     }
-    //     resolve(this.currentKey)
-    //   })
-    // })
+    return new Promise(resolve => {
+      // need to figure this generator out, probably
+      resolve(this.currentKey)
+    })
   }
 
   getKeys() {
