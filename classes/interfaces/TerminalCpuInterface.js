@@ -34,13 +34,10 @@ class TerminalCpuInterface extends CpuInterface {
 
   mapKey(_, key) {
     let keyMask
-    // Key exists in keymap
-    if (keyMap[key.full]) {
-      // Key pressed matches a key (name)
-      if (key.full === Object.keys(keyMap)[Object.values(keyMap).indexOf(keyMap[key.full])]) {
-        keyMask = 1 << keyMap[key.full]
-        this.keys = this.keys | keyMask
-      }
+
+    if (keyMap.includes(key.full)) {
+      let key = (keyMask = 1 << keyMap.indexOf(key.full))
+      this.keys = this.keys | keyMask
     }
   }
 
@@ -94,9 +91,7 @@ class TerminalCpuInterface extends CpuInterface {
     return collision
   }
 
-  waitKey() {
-    return 4
-  }
+  waitKey() {}
 
   getKeys() {
     return this.keys
