@@ -35,7 +35,7 @@ class TerminalCpuInterface extends CpuInterface {
 
     setInterval(() => {
       this.keys = 0
-    }, 250)
+    }, 50)
   }
 
   mapKey(key) {
