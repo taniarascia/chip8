@@ -351,7 +351,6 @@ class CPU {
 
       case 'LD_VX_N':
         // Wait for a key press, store the value of the key in Vx.
-        this._debug(instruction, opcode)
         this.registers[args[0]] = await this.interface.waitKey()
         this._nextInstruction()
         break

@@ -9,10 +9,16 @@ const romBuffer = new RomBuffer(filename)
 
 cpu.load(romBuffer)
 
-setInterval(async () => {
-  await cpu.step()
-}, 3)
+let busy = false
 
 setInterval(async () => {
-  await cpu.tick()
+  if (busy) return
+  busy = true
+
+  await cpu.step()
+  busy = false
+}, 3)
+
+setInterval(() => {
+  cpu.tick()
 }, 16)

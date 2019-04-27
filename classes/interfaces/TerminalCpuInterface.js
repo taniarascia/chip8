@@ -21,26 +21,35 @@ class TerminalCpuInterface extends CpuInterface {
     }
 
     this.display = this.blessed.box(this.createDisplay())
-
     this.soundEnabled = false
-    this.currentKey = null
     this.keys = null
+    this.resolveKey = null
 
     this.screen.key(['escape', 'C-c'], () => {
       process.exit(0)
     })
 
-    this.screen.on('keypress', this.mapKey)
+    this.screen.on('keypress', (_, key) => {
+      this.mapKey(key)
+    })
+
+    setInterval(() => {
+      this.keys = 0
+    }, 250)
   }
 
-  mapKey(_, key) {
+  mapKey(key) {
     let keyMask
 
     if (keyMap.includes(key.full)) {
       keyMask = 1 << keyMap.indexOf(key.full)
 
       this.keys = this.keys | keyMask
-      this.currentKey = keyMap.indexOf(key.full)
+
+      if (this.resolveKey) {
+        this.resolveKey(keyMap.indexOf(key.full))
+        this.resolveKey = null
+      }
     }
   }
 
@@ -96,8 +105,7 @@ class TerminalCpuInterface extends CpuInterface {
 
   waitKey() {
     return new Promise(resolve => {
-      // need to figure this generator out, probably
-      resolve(this.currentKey)
+      this.resolveKey = resolve
     })
   }
 
