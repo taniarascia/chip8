@@ -92,7 +92,7 @@ class TerminalCpuInterface extends CpuInterface {
     this.display = this.blessed.box(this.createDisplay())
   }
 
-  clearDisplat() {
+  clearDisplay() {
     this.clearScreen()
     this.screenRepresentation = []
     for (let i = 0; i < DISPLAY_WIDTH; i++) {
