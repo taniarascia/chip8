@@ -213,12 +213,11 @@ test('6: SE_VX_NN (3xnn) - Program counter should increment by four bytes if reg
 
 ## Todos
 
-- [ ] test 24, 25, 26, 28, 29, 30
-- [ ] blessed I/O
-- [ ] web I/O
-- [ ] libui I/O
-- [ ] convert to TypeScript
-- [ ] write an assembler
+- [ ] Fix speed and timers
+- [ ] Web I/O
+- [ ] Libui I/O
+- [ ] Convert to TypeScript
+- [ ] Write an assembler
 
 ## Acknowledgements
 
