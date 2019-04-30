@@ -195,17 +195,17 @@ In this example, the instruction can either be skipped or not skipped depending 
 ```js
 // tests/cpu.test.js
 
-test('6: SE_VX_NN (3xnn) - Program counter should increment by two bytes if register x is not equal to nn argument', () => {
+test('6: SE_VX_NN (3xnn) - Program counter should increment by two bytes if register x is not equal to nn argument', async () => {
   cpu.load({ data: [0x3abb] })
-  cpu.step()
+  await cpu.step()
 
   expect(cpu.PC).toBe(0x202)
 })
 
-test('6: SE_VX_NN (3xnn) - Program counter should increment by four bytes if register x is equal to nn argument', () => {
+test('6: SE_VX_NN (3xnn) - Program counter should increment by four bytes if register x is equal to nn argument', async () => {
   cpu.load({ data: [0x3abb] })
   cpu.registers[0xa] = 0xbb
-  cpu.step()
+  await cpu.step()
 
   expect(cpu.PC).toBe(0x204)
 })
