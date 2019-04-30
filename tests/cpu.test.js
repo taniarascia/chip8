@@ -545,7 +545,7 @@ describe('CPU tests', async () => {
     cpu.I = 0x400
 
     for (let i = 0; i <= 0xa; i++) {
-      cpu.registers[i] = i
+      cpu.memory[cpu.I + i] = i
     }
     await cpu.step()
 
