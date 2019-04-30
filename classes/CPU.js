@@ -86,11 +86,11 @@ class CPU {
     // Decode the opcode and get an object with the instruction and arguments
     const instruction = this._decode(opcode)
 
-    console.log(
-      'PC: ' + this.PC.toString(16).padStart(4, '0') + ' ' + Disassembler.format(instruction),
-      opcode.toString(16).padStart(4, '0'),
-      instruction.instruction.id
-    )
+    // console.log(
+    //   'PC: ' + this.PC.toString(16).padStart(4, '0') + ' ' + Disassembler.format(instruction),
+    //   opcode.toString(16).padStart(4, '0'),
+    //   instruction.instruction.id
+    // )
 
     // Execute code based on the instruction set
     await this._execute(instruction, opcode) // will remove opcode after debugging
