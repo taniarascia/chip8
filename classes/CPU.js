@@ -86,12 +86,6 @@ class CPU {
     // Decode the opcode and get an object with the instruction and arguments
     const instruction = this._decode(opcode)
 
-    // console.log(
-    //   'PC: ' + this.PC.toString(16).padStart(4, '0') + ' ' + Disassembler.format(instruction),
-    //   opcode.toString(16).padStart(4, '0'),
-    //   instruction.instruction.id
-    // )
-
     // Execute code based on the instruction set
     await this._execute(instruction, opcode) // will remove opcode after debugging
   }
@@ -159,8 +153,8 @@ class CPU {
           throw new Error('Stack overflow.')
         }
 
-        this.SP++
         this.stack[this.SP] = this.PC + 2
+        this.SP++
         this.PC = args[0]
         break
 
@@ -199,7 +193,11 @@ class CPU {
 
       case 'ADD_VX_NN':
         // 7xnn - Set Vx = Vx + nn.
-        this.registers[args[0]] = this.registers[args[0]] + args[1]
+        let v = this.registers[args[0]] + args[1]
+        if (v > 255) {
+          v -= 256
+        }
+        this.registers[args[0]] = v
         this._nextInstruction()
         break
 
@@ -229,24 +227,24 @@ class CPU {
 
       case 'ADD_VX_VY':
         // 8xy4 - Set Vx = Vx + Vy, set VF = carry.
+        this.registers[args[0]] += this.registers[args[1]]
         this.registers[0xf] = this.registers[args[0]] + this.registers[args[1]] > 0xff ? 1 : 0
 
-        this.registers[args[0]] = this.registers[args[0]] + this.registers[args[1]]
         this._nextInstruction()
         break
 
       case 'SUB_VX_VY':
         // 8xy5 - Set Vx = Vx - Vy, set VF = NOT borrow.
         this.registers[0xf] = this.registers[args[0]] > this.registers[args[1]] ? 1 : 0
+        this.registers[args[0]] -= this.registers[args[1]]
 
-        this.registers[args[0]] = this.registers[args[0]] - this.registers[args[1]]
         this._nextInstruction()
         break
 
       case 'SHR_VX_VY':
         // 8xy6 - Set Vx = Vx SHR 1.
         this.registers[0xf] = this.registers[args[0]] & 1
-        this.registers[args[0]] = this.registers[args[1]] >> 1
+        this.registers[args[0]] >>= 1
         this._nextInstruction()
         break
 
@@ -262,7 +260,7 @@ class CPU {
         // 8xyE - Set Vx = Vx SHL 1.
         this.registers[0xf] = this.registers[args[0]] >> 7
 
-        this.registers[args[0]] = this.registers[args[1]] << 1
+        this.registers[args[0]] <<= 1
         this._nextInstruction()
         break
 
@@ -288,7 +286,7 @@ class CPU {
 
       case 'RND_VX_NN':
         // Cxnn - Set Vx = random byte AND nn.
-        let random = Math.floor(Math.random() * 256)
+        let random = Math.floor(Math.random() * 0xff)
         this.registers[args[0]] = random & args[1]
         this._nextInstruction()
         break
@@ -422,8 +420,6 @@ class CPU {
           this.memory[this.I + i] = this.registers[i]
         }
 
-        this.I = this.I + args[1] + 1
-
         this._nextInstruction()
         break
 
@@ -434,11 +430,9 @@ class CPU {
           throw new Error('Memory out of bounds.')
         }
 
-        for (let i = 0; i <= args[1]; i++) {
+        for (let i = 0; i <= args[0]; i++) {
           this.registers[i] = this.memory[this.I + i]
         }
-
-        this.I = this.I + args[1] + 1
 
         this._nextInstruction()
         break
