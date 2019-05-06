@@ -1,5 +1,5 @@
 describe('Instruction set tests', () => {
-  const { Disassembler } = require('../classes/Disassembler')
+  const Disassembler = require('../classes/Disassembler')
 
   test('2: Expect disassembler to match opcode 00E0 to instruction CLS', () => {
     expect(Disassembler.disassemble(0x00e0).instruction).toHaveProperty('id', 'CLS')
