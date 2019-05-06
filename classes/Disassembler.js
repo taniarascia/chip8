@@ -1,7 +1,7 @@
 const { INSTRUCTION_SET } = require('../data/instructionSet')
 
-class Disassembler {
-  static disassemble(opcode) {
+const Disassembler = {
+  disassemble(opcode) {
     // Find the instruction in which the opcode & mask equals the pattern
     // For example, the opcode 0x1234 with the mask of 0xf000 applied would return 0x1000.
     // This matches the JP_ADDR mask and pattern
@@ -16,7 +16,7 @@ class Disassembler {
 
     // Return an object containing the instruction argument object and an array of arguments
     return { instruction, args }
-  }
+  },
 
   /**
    * A - Address
@@ -31,7 +31,7 @@ class Disassembler {
    * B - BCD
    * DW - Data Word
    */
-  static format(decodedInstruction) {
+  format(decodedInstruction) {
     // Print out formatted instructions from the disassembled instructions
     const types = decodedInstruction.instruction.arguments.map(arg => arg.type)
     const rawArgs = decodedInstruction.args
@@ -71,9 +71,9 @@ class Disassembler {
     }
 
     return formattedInstruction
-  }
+  },
 
-  static dump(data) {
+  dump(data) {
     const lines = data.map((code, i) => {
       const address = (i * 2).toString(16).padStart(6, '0')
       const opcode = code.toString(16).padStart(4, '0')
@@ -83,9 +83,7 @@ class Disassembler {
     })
 
     return lines.join('\n')
-  }
+  },
 }
 
-module.exports = {
-  Disassembler,
-}
+module.exports = Disassembler
