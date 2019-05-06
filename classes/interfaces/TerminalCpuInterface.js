@@ -8,8 +8,7 @@ class TerminalCpuInterface extends CpuInterface {
     super()
 
     this.blessed = blessed
-    this.screen = blessed.screen()
-
+    this.screen = blessed.screen({ smartCSR: true })
     this.screen.title = 'Chip8.js'
 
     this.screenRepresentation = []
@@ -20,7 +19,6 @@ class TerminalCpuInterface extends CpuInterface {
       }
     }
 
-    this.display = this.blessed.box(this.createDisplay())
     this.soundEnabled = false
     this.keys = null
     this.resolveKey = null
@@ -33,6 +31,7 @@ class TerminalCpuInterface extends CpuInterface {
       this.mapKey(key)
     })
 
+    // Hack a keyup event
     setInterval(() => {
       this.keys = 0
     }, 50)
@@ -53,47 +52,7 @@ class TerminalCpuInterface extends CpuInterface {
     }
   }
 
-  createDisplay() {
-    return {
-      parent: this.screen,
-      top: 'center',
-      left: 'center',
-      width: DISPLAY_WIDTH,
-      height: DISPLAY_HEIGHT,
-      style: {
-        bg: 'black',
-      },
-    }
-  }
-
-  renderDisplay() {
-    this.clearScreen()
-
-    this.screenRepresentation.forEach((row, x) => {
-      row.forEach((col, y) => {
-        this.blessed.box({
-          parent: this.display,
-          top: y,
-          left: x,
-          width: 1,
-          height: 1,
-          style: {
-            bg: this.screenRepresentation[y][x] ? 'green' : 'black',
-          },
-        })
-      })
-    })
-
-    this.screen.render()
-  }
-
-  clearScreen() {
-    this.display.detach()
-    this.display = this.blessed.box(this.createDisplay())
-  }
-
   clearDisplay() {
-    this.clearScreen()
     this.screenRepresentation = []
     for (let i = 0; i < DISPLAY_WIDTH; i++) {
       this.screenRepresentation.push([])
@@ -101,6 +60,7 @@ class TerminalCpuInterface extends CpuInterface {
         this.screenRepresentation[i].push(0)
       }
     }
+    this.screen.clearRegion(0, DISPLAY_WIDTH, 0, DISPLAY_HEIGHT)
   }
 
   drawPixel(x, y, value) {
@@ -108,6 +68,14 @@ class TerminalCpuInterface extends CpuInterface {
     const collision = this.screenRepresentation[y][x] & value
     // Will XOR value to position x, y
     this.screenRepresentation[y][x] ^= value
+
+    if (this.screenRepresentation[y][x]) {
+      this.screen.fillRegion(blessed.helpers.attrToBinary({ fg: 'green' }), '█', x, x + 1, y, y + 1)
+    } else {
+      this.screen.clearRegion(x, x + 1, y, y + 1)
+    }
+
+    this.screen.render()
 
     return collision
   }
