@@ -409,7 +409,7 @@ describe('CPU tests', async () => {
     expect(cpu.registers[0xa]).toBe(0xf)
   })
 
-  test('28: LD_VX_N (Fx0A) - ', async () => {
+  test('28: LD_VX_N (Fx0A) - Register x should be set to the value of keypress', async () => {
     // todo tick
     cpu.load({ data: [0xfb0a] })
     await cpu.step()
@@ -417,7 +417,7 @@ describe('CPU tests', async () => {
     expect(cpu.registers[0xb]).toBe(5)
   })
 
-  test('29: LD_DT_VX (Fx15) - ', async () => {
+  test('29: LD_DT_VX (Fx15) - Delay timer should be set to the value of register x', async () => {
     // todo tick
     cpu.load({ data: [0xfb15] })
     cpu.registers[0xb] = 0xf
@@ -426,7 +426,7 @@ describe('CPU tests', async () => {
     expect(cpu.DT).toBe(0xf)
   })
 
-  test('30: LD_ST_VX (Fx18) - ', async () => {
+  test('30: LD_ST_VX (Fx18) - Sound timer should be set to the value of register x', async () => {
     // todo tick
     cpu.load({ data: [0xfa18] })
     cpu.registers[0xa] = 0xf
