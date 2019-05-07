@@ -1,6 +1,6 @@
 {
   "name": "chip8js",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "A Chip-8 emulator written in JavaScript (Node.js).",
   "author": {
     "name": "Tania Rascia",
