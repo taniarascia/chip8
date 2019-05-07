@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Chip8.js</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+  <main>
+    <pre> ██████╗██╗  ██╗██╗██████╗  █████╗         ██╗███████╗
+██╔════╝██║  ██║██║██╔══██╗██╔══██╗        ██║██╔════╝
+██║     ███████║██║██████╔╝╚█████╔╝        ██║███████╗
+██║     ██╔══██║██║██╔═══╝ ██╔══██╗   ██   ██║╚════██║
+╚██████╗██║  ██║██║██║     ╚█████╔╝██╗╚█████╔╝███████║
+  ╚═════╝╚═╝  ╚═╝╚═╝╚═╝      ╚════╝ ╚═╝ ╚════╝ ╚══════╝</pre>
+
+    <select>
+      <option disabled selected>Load ROM...</option>
+      <option value="CONNECT4">CONNECT4</option>
+      <option value="PONG">PONG</option>
+      <option value="INVADERS">INVADERS</option>
+      <option value="TETRIS">TETRIS</option>
+    </select>
+
+    <canvas></canvas>
+
+    <p><small>Tania Rascia</small></p>
+  </main>
+
+  <script src="./bundle.js"></script>
+  <script>
+    const loadRom = async rom => {
+      const response = await fetch(`./roms/${rom}`)
+      const arrayBuffer = await response.arrayBuffer()
+      const uint8View = new Uint8Array(arrayBuffer);
+      const romBuffer = new RomBuffer(uint8View)
+
+      cpu.interface.clearDisplay()
+      cpu.load(romBuffer)
+
+      let timer = 0
+      async function cycle() {
+        timer++
+        if (timer % 5 === 0) cpu.tick()
+
+        await cpu.step()
+
+        setTimeout(cycle, 3)
+      }
+
+      cycle()
+    }
+
+    const select = document.querySelector('select')
+    select.addEventListener('change', event => {
+      const rom = event.target.value
+      loadRom(rom)
+    })
+
+  </script>
+
+</body>
+
+</html>
