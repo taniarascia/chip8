@@ -20,7 +20,7 @@ A Chip-8 emulator written in JavaScript (Node.js).
 
 ## Motivation
 
-Chip8.js is an ongoing project to write a Chip-8 emulator in JavaScript. The main motivation is to learn lower level programming concepts and to increase familiarity with the Node.js environment.
+Chip8.js is a project to write a Chip-8 emulator in JavaScript. The main motivation is to learn lower level programming concepts and to increase familiarity with the Node.js environment.
 
 Here are some of the concepts I learned while writing this program:
 
@@ -39,6 +39,12 @@ And here are some articles I wrote based on those concepts:
 - [Understanding Bits, Bytes, Bases, and Writing a Hex Dump in JavaScript (Node)](https://www.taniarascia.com/bits-bytes-bases-and-a-hex-dump-javascript/)
 - In progress: bitwise operators, masking, testing, and setting values.
 
+## View Demo
+
+Play the browser version.
+
+- [Play](https://taniarascia.github.io/chip8/)
+
 ## Installation
 
 > This guide assumes you already have [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/en/) installed.
@@ -47,7 +53,7 @@ You can add the module directly from the [chip8js](https://www.npmjs.com/package
 
 ```bash
 yarn add chip8js
-# npm i chip8js
+npm i chip8js
 ```
 
 And require the `RomBuffer` and `CPU` classes.
@@ -65,16 +71,16 @@ cd chip8
 yarn
 ```
 
-## Usage
+## Usage (Terminal)
 
-Chip-8 compatible ROMs can be saved in the `roms/` directory. A copy of _Connect 4_ is shipped with Chip8.js (at `roms/CONNECT4`) for example and testing purposes.
+Chip-8 compatible ROMs can be saved in the `roms/` directory.
 
 ### Load ROM
 
 Create a ROM buffer of a ROM and load the data into the CPU. Execute the program.
 
 ```bash
-yarn start roms/<ROM>
+yarn play roms/<ROM>
 ```
 
 ### View hex dump
@@ -93,12 +99,6 @@ The output will look something like this (using `CONNECT4` as an example).
 000020 f655 6900 6801 6b00 6d0f 6e1f a2a5 600d
 000030 6132 6200 d02f d12f 720f 321e 1234 d021
 ...
-```
-
-### Run example ROM
-
-```
-yarn example
 ```
 
 ## Automated Testing
@@ -213,10 +213,7 @@ test('6: SE_VX_NN (3xnn) - Program counter should increment by four bytes if reg
 
 ## Todos
 
-- [ ] Fix speed and timers
-- [ ] Web I/O
 - [ ] Libui I/O
-- [ ] Convert to TypeScript
 - [ ] Write an assembler
 
 ## Acknowledgements
