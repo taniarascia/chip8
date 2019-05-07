@@ -13,7 +13,10 @@ cpu.load(romBuffer)
 let timer = 0
 async function cycle() {
   timer++
-  if (timer % 5 === 0) cpu.tick()
+  if (timer % 5 === 0) {
+    cpu.tick()
+    timer = 0
+  }
 
   await cpu.step()
 
