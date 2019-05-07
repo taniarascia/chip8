@@ -1,6 +1,6 @@
 const blessed = require('blessed')
 const { CpuInterface } = require('./CpuInterface')
-const { DISPLAY_HEIGHT, DISPLAY_WIDTH } = require('../../data/constants')
+const { DISPLAY_HEIGHT, DISPLAY_WIDTH, COLOR } = require('../../data/constants')
 const keyMap = require('../../data/keyMap')
 
 class TerminalCpuInterface extends CpuInterface {
@@ -10,15 +10,8 @@ class TerminalCpuInterface extends CpuInterface {
     this.blessed = blessed
     this.screen = blessed.screen({ smartCSR: true })
     this.screen.title = 'Chip8.js'
-
-    this.screenRepresentation = []
-    for (let i = 0; i < DISPLAY_WIDTH; i++) {
-      this.screenRepresentation.push([])
-      for (let j = 0; j < DISPLAY_HEIGHT; j++) {
-        this.screenRepresentation[i].push(0)
-      }
-    }
-
+    this.color = blessed.helpers.attrToBinary({ fg: COLOR })
+    this.frameBuffer = this.createFrameBuffer()
     this.soundEnabled = false
     this.keys = null
     this.resolveKey = null
@@ -34,7 +27,7 @@ class TerminalCpuInterface extends CpuInterface {
     // Hack a keyup event
     setInterval(() => {
       this.keys = 0
-    }, 50)
+    }, 100)
   }
 
   mapKey(key) {
@@ -52,25 +45,30 @@ class TerminalCpuInterface extends CpuInterface {
     }
   }
 
-  clearDisplay() {
-    this.screenRepresentation = []
+  createFrameBuffer() {
+    let frameBuffer = []
     for (let i = 0; i < DISPLAY_WIDTH; i++) {
-      this.screenRepresentation.push([])
+      frameBuffer.push([])
       for (let j = 0; j < DISPLAY_HEIGHT; j++) {
-        this.screenRepresentation[i].push(0)
+        frameBuffer[i].push(0)
       }
     }
+    return frameBuffer
+  }
+
+  clearDisplay() {
+    this.frameBuffer = createFrameBuffer()
     this.screen.clearRegion(0, DISPLAY_WIDTH, 0, DISPLAY_HEIGHT)
   }
 
   drawPixel(x, y, value) {
     // If collision, will return true
-    const collision = this.screenRepresentation[y][x] & value
+    const collision = this.frameBuffer[y][x] & value
     // Will XOR value to position x, y
-    this.screenRepresentation[y][x] ^= value
+    this.frameBuffer[y][x] ^= value
 
-    if (this.screenRepresentation[y][x]) {
-      this.screen.fillRegion(blessed.helpers.attrToBinary({ fg: 'green' }), '█', x, x + 1, y, y + 1)
+    if (this.frameBuffer[y][x]) {
+      this.screen.fillRegion(this.color, '█', x, x + 1, y, y + 1)
     } else {
       this.screen.clearRegion(x, x + 1, y, y + 1)
     }
@@ -90,13 +88,9 @@ class TerminalCpuInterface extends CpuInterface {
     return this.keys
   }
 
-  enableSound() {
-    // sound enabled
-  }
+  enableSound() {}
 
-  disableSound() {
-    // sound disabled
-  }
+  disableSound() {}
 }
 
 module.exports = {
