@@ -81,6 +81,4 @@ const FONT_SET = [
   0x80,
 ]
 
-module.exports = {
-  FONT_SET,
-}
+module.exports = FONT_SET

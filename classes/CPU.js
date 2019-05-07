@@ -1,5 +1,5 @@
 const Disassembler = require('./Disassembler')
-const { FONT_SET } = require('../data/fontSet')
+const FONT_SET = require('../data/fontSet')
 const { DISPLAY_HEIGHT, DISPLAY_WIDTH } = require('../data/constants')
 
 class CPU {

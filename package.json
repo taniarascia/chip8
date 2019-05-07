@@ -1,7 +1,7 @@
 {
   "name": "chip8js",
   "version": "0.1.7",
-  "description": "A Chip-8 emulator written in JavaScript (Node.js).",
+  "description": "A Chip-8 emulator written in JavaScript (Node.js and Browser).",
   "author": {
     "name": "Tania Rascia",
     "email": "me@taniarascia.com",
@@ -14,7 +14,9 @@
     "play": "node scripts/play",
     "hexdump": "node scripts/hexdump",
     "example": "node scripts/play roms/CONNECT4",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "web": "browserify -t brfs scripts/browser.js  > web/bundle.js",
+    "watch": "nodemon --ignore 'web/*' --exec yarn web"
   },
   "devDependencies": {
     "jest": "^23.6.0"
@@ -29,6 +31,9 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "blessed": "^0.1.81"
+    "blessed": "^0.1.81",
+    "brfs": "^2.0.2",
+    "browserify": "^16.2.3",
+    "nodemon": "^1.19.0"
   }
 }

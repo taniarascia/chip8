@@ -1,48 +1,55 @@
-const blessed = require('blessed')
 const { CpuInterface } = require('./CpuInterface')
 const { DISPLAY_HEIGHT, DISPLAY_WIDTH, COLOR } = require('../../data/constants')
 const keyMap = require('../../data/keyMap')
 
-class TerminalCpuInterface extends CpuInterface {
+class DOMCpuInterface extends CpuInterface {
   constructor() {
     super()
 
-    this.blessed = blessed
-    this.screen = blessed.screen({ smartCSR: true })
-    this.screen.title = 'Chip8.js'
-    this.color = blessed.helpers.attrToBinary({ fg: COLOR })
     this.frameBuffer = this.createFrameBuffer()
+
+    this.canvas = document.querySelector('canvas')
+    this.multiplier = 10
+    this.canvas.width = DISPLAY_WIDTH * this.multiplier
+    this.canvas.height = DISPLAY_HEIGHT * this.multiplier
+
+    this.context = this.canvas.getContext('2d')
+
+    this.context.fillStyle = 'black'
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
+
     this.soundEnabled = false
     this.keys = 0
     this.resolveKey = null
 
-    this.screen.key(['escape', 'C-c'], () => {
-      process.exit(0)
+    document.addEventListener('keydown', event => {
+      this.mapKey(event.key)
     })
 
-    this.screen.on('keypress', (_, key) => {
-      this.mapKey(key)
-    })
-
-    // Hack a keyup event
-    setInterval(() => {
+    document.addEventListener('keyup', event => {
       this.keys = 0
-    }, 100)
+    })
   }
 
   mapKey(key) {
     let keyMask
 
-    if (keyMap.includes(key.full)) {
-      keyMask = 1 << keyMap.indexOf(key.full)
+    if (keyMap.includes(key)) {
+      keyMask = 1 << keyMap.indexOf(key)
 
       this.keys = this.keys | keyMask
 
       if (this.resolveKey) {
-        this.resolveKey(keyMap.indexOf(key.full))
+        this.resolveKey(keyMap.indexOf(key))
         this.resolveKey = null
       }
     }
+  }
+
+  clearDisplay() {
+    this.frameBuffer = this.createFrameBuffer()
+    this.context.fillStyle = 'black'
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
   createFrameBuffer() {
@@ -56,11 +63,6 @@ class TerminalCpuInterface extends CpuInterface {
     return frameBuffer
   }
 
-  clearDisplay() {
-    this.frameBuffer = this.createFrameBuffer()
-    this.screen.clearRegion(0, DISPLAY_WIDTH, 0, DISPLAY_HEIGHT)
-  }
-
   drawPixel(x, y, value) {
     // If collision, will return true
     const collision = this.frameBuffer[y][x] & value
@@ -68,12 +70,22 @@ class TerminalCpuInterface extends CpuInterface {
     this.frameBuffer[y][x] ^= value
 
     if (this.frameBuffer[y][x]) {
-      this.screen.fillRegion(this.color, '█', x, x + 1, y, y + 1)
+      this.context.fillStyle = COLOR
+      this.context.fillRect(
+        x * this.multiplier,
+        y * this.multiplier,
+        this.multiplier,
+        this.multiplier
+      )
     } else {
-      this.screen.clearRegion(x, x + 1, y, y + 1)
+      this.context.fillStyle = 'black'
+      this.context.fillRect(
+        x * this.multiplier,
+        y * this.multiplier,
+        this.multiplier,
+        this.multiplier
+      )
     }
-
-    this.screen.render()
 
     return collision
   }
@@ -98,5 +110,5 @@ class TerminalCpuInterface extends CpuInterface {
 }
 
 module.exports = {
-  TerminalCpuInterface,
+  DOMCpuInterface,
 }

@@ -1,11 +1,12 @@
-const fs = require('fs')
-
 class RomBuffer {
-  constructor(filename) {
+  /**
+   * @param {binary} fileContents ROM binary
+   */
+  constructor(fileContents) {
     this.data = []
 
     // Read the raw data buffer from the file
-    const buffer = fs.readFileSync(filename)
+    const buffer = fileContents
 
     // Create 16-bit big endian opcodes from the buffer
     for (let i = 0; i < buffer.length; i += 2) {

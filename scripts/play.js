@@ -1,11 +1,12 @@
-const filename = process.argv.slice(2)[0]
+const fs = require('fs')
+const fileContents = fs.readFileSync(process.argv.slice(2)[0])
 const { CPU } = require('../classes/CPU')
 const { RomBuffer } = require('../classes/RomBuffer')
 const { TerminalCpuInterface } = require('../classes/interfaces/TerminalCpuInterface')
 const cpuInterface = new TerminalCpuInterface()
 
 const cpu = new CPU(cpuInterface)
-const romBuffer = new RomBuffer(filename)
+const romBuffer = new RomBuffer(fileContents)
 
 cpu.load(romBuffer)
 
