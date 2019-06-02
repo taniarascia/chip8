@@ -1,4 +1,4 @@
-# Chip8.js [![chip8js on NPM](https://img.shields.io/npm/v/chip8js.svg?color=red&label=chip8js)](https://www.npmjs.com/package/chip8js) [![Build Status](https://travis-ci.org/taniarascia/chip8.svg?branch=master)](https://travis-ci.org/taniarascia/chip8) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+# Chip8.js [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![chip8js on NPM](https://img.shields.io/npm/v/chip8js.svg?color=green&label=chip8js)](https://www.npmjs.com/package/chip8js) [![Build Status](https://travis-ci.org/taniarascia/chip8.svg?branch=master)](https://travis-ci.org/taniarascia/chip8) 
 
 A Chip-8 emulator written in JavaScript (Node.js).
 
