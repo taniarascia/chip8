@@ -35,6 +35,9 @@ class CPU {
     this.PC = 0x200
     this.halted = false
     this.soundEnabled = false
+    this.forceHalt = new Promise(resolve => {
+      this.haltExecution = resolve
+    })
   }
 
   load(romBuffer) {
@@ -79,6 +82,12 @@ class CPU {
     }
   }
 
+  halt() {
+    if (this.haltExecution) {
+      this.haltExecution(0)
+    }
+  }
+
   async step() {
     if (this.halted) {
       throw new Error(
@@ -93,7 +102,7 @@ class CPU {
     const instruction = this._decode(opcode)
 
     // Execute code based on the instruction set
-    await this._execute(instruction) // will remove opcode after debugging
+    await this._execute(instruction, opcode)
   }
 
   _nextInstruction() {
@@ -124,7 +133,7 @@ class CPU {
     return Disassembler.disassemble(opcode)
   }
 
-  async _execute(instruction) {
+  async _execute(instruction, opcode) {
     const id = instruction.instruction.id
     const args = instruction.args
 
@@ -352,8 +361,9 @@ class CPU {
         break
 
       case 'LD_VX_N':
+        // this._debug(instruction, opcode)
         // Fx0A - Wait for a key press, store the value of the key in Vx.
-        this.registers[args[0]] = await this.interface.waitKey()
+        this.registers[args[0]] = await Promise.race([this.interface.waitKey(), this.forceHalt])
         this._nextInstruction()
         break
 
@@ -445,6 +455,13 @@ class CPU {
         this.halted = true
         throw new Error('Illegal instruction.')
     }
+  }
+  _debug(instruction, opcode) {
+    console.log(
+      'PC: ' + this.PC.toString(16).padStart(4, '0') + ' ' + Disassembler.format(instruction),
+      opcode.toString(16).padStart(4, '0'),
+      instruction.instruction.id
+    )
   }
 }
 
