@@ -85,6 +85,7 @@ class CPU {
   async halt() {
     if (this.haltExecution) {
       this.haltExecution(-1)
+      this.halted = true
 
       return 'CPU has halted'
     }
@@ -366,9 +367,7 @@ class CPU {
         // Fx0A - Wait for a key press, store the value of the key in Vx.
         const response = await Promise.race([this.interface.waitKey(), this.requestHalt])
 
-        if (response === -1) {
-          this.halted = true
-        } else {
+        if (response !== -1) {
           this.registers[args[0]] = response
         }
 
