@@ -23,7 +23,24 @@ describe('CPU tests', async () => {
     )
   })
 
-  // test.skip('2: CLS', () => {})
+  test('CPU should halt if prompted externally', async () => {
+    cpu.load({ data: [0xfb0a] })
+    const response = await cpu.halt()
+
+    let error
+    try {
+      await cpu.step()
+    } catch (e) {
+      error = e
+    }
+
+    expect(response).toEqual('CPU has halted')
+    expect(error).toEqual(
+      new Error(
+        'A problem has been detected and Chip-8 has been shut down to prevent damage to your computer.'
+      )
+    )
+  })
 
   test('3: RET (00ee) - Program counter should be set to stack pointer, then decrement stack pointer', async () => {
     cpu.load({ data: [0x00ee] })
@@ -410,7 +427,6 @@ describe('CPU tests', async () => {
   })
 
   test('28: LD_VX_N (Fx0A) - Register x should be set to the value of keypress', async () => {
-    // todo tick
     cpu.load({ data: [0xfb0a] })
     await cpu.step()
 
