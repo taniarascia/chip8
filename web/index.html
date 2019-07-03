@@ -38,6 +38,19 @@
   <script src="./bundle.js"></script>
   <script>
     let timeout
+    let timer = 0
+
+    async function cycle() {
+      timer++
+      if (timer % 5 === 0) {
+        cpu.tick()
+        timer = 0
+      }
+
+      await cpu.step()
+
+      timeout = setTimeout(cycle, 3)
+    }
 
     const loadRom = async rom => {
       const response = await fetch(`./roms/${rom}`)
@@ -48,26 +61,15 @@
       cpu.interface.clearDisplay()
       cpu.load(romBuffer)
 
-      let timer = 0
-      async function cycle() {
-        timer++
-        if (timer % 5 === 0) {
-          cpu.tick()
-          timer = 0
-        }
-
-        await cpu.step()
-
-        timeout = setTimeout(cycle, 3)
-      }
-
       cycle()
     }
 
     const select = document.querySelector('select')
+
     select.addEventListener('change', event => {
       const rom = event.target.value
-      clearTimeout(timeout);
+      clearTimeout(timeout)
+      cpu.halt()
       loadRom(rom)
     })
 
