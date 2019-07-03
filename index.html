@@ -22,58 +22,26 @@
 ╚██████╗██║  ██║██║██║     ╚█████╔╝██╗╚█████╔╝███████║
   ╚═════╝╚═╝  ╚═╝╚═╝╚═╝      ╚════╝ ╚═╝ ╚════╝ ╚══════╝</pre>
 
-    <select>
-      <option disabled selected>Load ROM...</option>
-      <option value="CONNECT4">CONNECT4</option>
-      <option value="PONG">PONG</option>
-      <option value="INVADERS">INVADERS</option>
-      <option value="TETRIS">TETRIS</option>
-    </select>
-
-    <canvas></canvas>
+    <section>
+      <div>
+        <canvas></canvas>
+      </div>
+      <aside>
+        <select>
+          <option disabled selected>Load ROM...</option>
+          <option value="CONNECT4">Connect4</option>
+          <option value="PONG">Pong</option>
+          <option value="INVADERS">Invaders</option>
+          <option value="TETRIS">Tetris</option>
+        </select>
+      </aside>
+    </section>
 
     <p><small>Tania Rascia</small></p>
   </main>
 
   <script src="./bundle.js"></script>
-  <script>
-    let timeout
-    let timer = 0
-
-    async function cycle() {
-      timer++
-      if (timer % 5 === 0) {
-        cpu.tick()
-        timer = 0
-      }
-
-      await cpu.step()
-
-      timeout = setTimeout(cycle, 3)
-    }
-
-    const loadRom = async rom => {
-      const response = await fetch(`./roms/${rom}`)
-      const arrayBuffer = await response.arrayBuffer()
-      const uint8View = new Uint8Array(arrayBuffer);
-      const romBuffer = new RomBuffer(uint8View)
-
-      cpu.interface.clearDisplay()
-      cpu.load(romBuffer)
-
-      cycle()
-    }
-
-    const select = document.querySelector('select')
-
-    select.addEventListener('change', event => {
-      const rom = event.target.value
-      clearTimeout(timeout)
-      cpu.halt()
-      loadRom(rom)
-    })
-
-  </script>
+  <script src="./web.js"></script>
 
 </body>
 
