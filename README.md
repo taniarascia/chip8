@@ -63,6 +63,14 @@ cd web && http-server # spin up server
 yarn web # build for web
 ```
 
+#### Deploy
+
+```
+# remove web/bundle.js
+git add web && git commit -m "update web version"
+git subtree push --prefix web origin gh-pages
+```
+
 ### Terminal
 
 Chip-8 compatible ROMs can be saved in the `roms/` directory. Create a ROM buffer of a ROM and load the data into the CPU. Execute the program.
