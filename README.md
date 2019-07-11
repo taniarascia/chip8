@@ -57,16 +57,16 @@ Chip8.js is available via Node.js in the terminal, or in the browser.
 #### Development
 
 ```bash
-yarn watch # watch for changes and rebuild
+yarn watch            # watch for changes and rebuild
 cd web && http-server # spin up server
 
-yarn web # build for web
+yarn web              # build for web
 ```
 
 #### Deploy
 
 ```bash
-# remove web/bundle.js
+# remove web/bundle.js from .gitignore
 git add web && git commit -m "update web version"
 git subtree push --prefix web origin gh-pages
 ```
