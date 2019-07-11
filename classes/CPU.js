@@ -82,12 +82,11 @@ class CPU {
     }
   }
 
-  async halt() {
+  halt() {
     if (this.haltExecution) {
       this.haltExecution(-1)
-      this.halted = true
 
-      return 'CPU has halted'
+      return
     }
   }
 
@@ -367,11 +366,13 @@ class CPU {
         // Fx0A - Wait for a key press, store the value of the key in Vx.
         const response = await Promise.race([this.interface.waitKey(), this.requestHalt])
 
-        if (response !== -1) {
+        if (response === -1) {
+          this.halted = true
+        } else {
           this.registers[args[0]] = response
+          this._nextInstruction()
         }
 
-        this._nextInstruction()
         break
 
       case 'LD_DT_VX':
