@@ -1,4 +1,4 @@
-let timeout
+let timeout = null
 let timer = 0
 
 const cycle = async () => {
@@ -9,7 +9,6 @@ const cycle = async () => {
   }
 
   await cpu.step()
-
   timeout = setTimeout(cycle, 3)
 }
 
@@ -25,10 +24,10 @@ const loadRom = async rom => {
   cycle()
 }
 
-const changeRom = async event => {
+const changeRom = event => {
   const rom = event.target.value
 
-  await cpu.halt()
+  cpu.halt()
   clearTimeout(timeout)
 
   loadRom(rom)
