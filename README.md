@@ -54,6 +54,15 @@ Chip8.js is available via Node.js in the terminal, or in the browser.
 
 - [Open Chip8.js Emulator](https://taniarascia.github.io/chip8/)
 
+#### Development
+
+```bash
+yarn watch # watch for changes and rebuild
+cd web && http-server # spin up server
+
+yarn web # build for web
+```
+
 ### Terminal
 
 Chip-8 compatible ROMs can be saved in the `roms/` directory. Create a ROM buffer of a ROM and load the data into the CPU. Execute the program.
