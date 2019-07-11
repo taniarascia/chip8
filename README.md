@@ -65,7 +65,7 @@ yarn web # build for web
 
 #### Deploy
 
-```
+```bash
 # remove web/bundle.js
 git add web && git commit -m "update web version"
 git subtree push --prefix web origin gh-pages
