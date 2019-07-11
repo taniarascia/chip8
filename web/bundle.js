@@ -89,6 +89,7 @@ class CPU {
 
   halt() {
     this.haltExecution(null)
+    this.halted = true
   }
 
   async step() {
@@ -368,13 +369,12 @@ class CPU {
         const response = await Promise.race([this.interface.waitKey(), this.requestHalt])
 
         if (response === null) {
-          this.halted = true
+          break
         } else {
           this.registers[args[0]] = response
           this._nextInstruction()
+          break
         }
-
-        break
 
       case 'LD_DT_VX':
         // Fx15 - Set delay timer = Vx.
