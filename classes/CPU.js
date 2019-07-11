@@ -369,11 +369,11 @@ class CPU {
 
         if (response === null) {
           break
-        } else {
-          this.registers[args[0]] = response
-          this._nextInstruction()
-          break
         }
+
+        this.registers[args[0]] = response
+        this._nextInstruction()
+        break
 
       case 'LD_DT_VX':
         // Fx15 - Set delay timer = Vx.
