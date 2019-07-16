@@ -14,11 +14,13 @@
     "play": "node scripts/play",
     "hexdump": "node scripts/hexdump",
     "example": "node scripts/play roms/CONNECT4",
-    "test": "jest --verbose",
+    "test": "jest",
     "web": "browserify -t brfs scripts/browser.js  > web/bundle.js",
-    "watch": "nodemon --ignore 'web/*' --exec yarn web"
+    "watch": "nodemon --ignore 'web/*' --exec yarn web",
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "devDependencies": {
+    "coveralls": "^3.0.5",
     "jest": "^23.6.0"
   },
   "keywords": [

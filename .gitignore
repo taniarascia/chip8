@@ -2,3 +2,4 @@
 /node_modules
 /coverage
 /web/bundle.js
+.coveralls.yml
