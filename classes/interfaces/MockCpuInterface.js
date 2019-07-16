@@ -22,14 +22,11 @@ class MockCpuInterface extends CpuInterface {
   }
 
   mapKey() {
-    if (this.resolveKey) {
-      this.resolveKey(5)
-      this.resolveKey = null
-    }
+    this.resolveKey(5)
   }
 
   clearDisplay() {
-    console.log('Screen is cleared')
+    return 'Screen is cleared'
   }
 
   renderDisplay() {
@@ -77,4 +74,5 @@ class MockCpuInterface extends CpuInterface {
 
 module.exports = {
   MockCpuInterface,
+  CpuInterface,
 }

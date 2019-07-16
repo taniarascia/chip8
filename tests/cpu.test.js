@@ -1,9 +1,9 @@
-describe('CPU tests', async () => {
-  const { CPU } = require('../classes/CPU')
-  const { MockCpuInterface } = require('../classes/interfaces/MockCpuInterface')
-  const cpuInterface = new MockCpuInterface()
-  const cpu = new CPU(cpuInterface)
+const { CPU } = require('../classes/CPU')
+const { MockCpuInterface, CpuInterface } = require('../classes/interfaces/MockCpuInterface')
+const cpuInterface = new MockCpuInterface()
+const cpu = new CPU(cpuInterface)
 
+describe('CPU tests', async () => {
   test('CPU should not execute after halting', async () => {
     cpu.load({ data: 0x0000 })
     cpu.halted = true
@@ -39,6 +39,22 @@ describe('CPU tests', async () => {
         'A problem has been detected and Chip-8 has been shut down to prevent damage to your computer.'
       )
     )
+  })
+
+  test('Tick should disable sound if sound is enabled and sound timer is zero', async () => {
+    cpu.load({ data: [0x00e0] })
+    await cpu.step()
+    cpu.soundEnabled = true
+    await cpu.tick()
+
+    expect(cpu.soundEnabled).toBe(false)
+  })
+
+  test('3: CLS (00e0) - Program should clear the display', async () => {
+    cpu.load({ data: [0x00e0] })
+    const mockClearDisplay = cpu.interface.clearDisplay()
+
+    expect(mockClearDisplay).toBe('Screen is cleared')
   })
 
   test('3: RET (00ee) - Program counter should be set to stack pointer, then decrement stack pointer', async () => {
@@ -426,10 +442,28 @@ describe('CPU tests', async () => {
   })
 
   test('28: LD_VX_N (Fx0A) - Register x should be set to the value of keypress', async () => {
-    cpu.load({ data: [0xfb0a] })
+    cpu.load({ data: [0xfb0a, 0xfa07] })
     await cpu.step()
 
     expect(cpu.registers[0xb]).toBe(5)
+  })
+
+  test('28: LD_VX_N (Fx0A) - Error should be thrown if CPU is halted during waitKey', async () => {
+    cpu.load({ data: [0xfb0a] })
+    let error
+    try {
+      if (!cpu.halted) {
+        cpu.halt()
+        await cpu.step()
+      }
+    } catch (e) {
+      error = e
+    }
+    expect(error).toEqual(
+      new Error(
+        'A problem has been detected and Chip-8 has been shut down to prevent damage to your computer.'
+      )
+    )
   })
 
   test('29: LD_DT_VX (Fx15) - Delay timer should be set to the value of register x', async () => {
@@ -582,5 +616,108 @@ describe('CPU tests', async () => {
 
     // BSOD on halted program
     expect(error).toEqual(new Error('Illegal instruction.'))
+  })
+})
+
+describe('CPU abstract class', () => {
+  class ChildCpuInterface extends CpuInterface {
+    constructor() {
+      super()
+    }
+  }
+
+  test('CPU interface should throw an error if it is instantiated directly', () => {
+    let error
+    try {
+      new CpuInterface()
+    } catch (e) {
+      error = e
+    }
+    // BSOD on halted program
+    expect(error).toEqual(new Error('Cannot instantiate abstract class'))
+  })
+
+  test('CPU interface must have clearDisplay method', () => {
+    let error
+    try {
+      const childCpuInterface = new ChildCpuInterface()
+      childCpuInterface.clearDisplay()
+    } catch (e) {
+      error = e
+    }
+    // BSOD on halted program
+    expect(error).toEqual(new Error('Must be implemented on the inherited class.'))
+  })
+
+  test('CPU interface must have renderDisplay method', () => {
+    let error
+    try {
+      const childCpuInterface = new ChildCpuInterface()
+      childCpuInterface.renderDisplay()
+    } catch (e) {
+      error = e
+    }
+    // BSOD on halted program
+    expect(error).toEqual(new Error('Must be implemented on the inherited class.'))
+  })
+
+  test('CPU interface must have waitKey method', () => {
+    let error
+    try {
+      const childCpuInterface = new ChildCpuInterface()
+      childCpuInterface.waitKey()
+    } catch (e) {
+      error = e
+    }
+    // BSOD on halted program
+    expect(error).toEqual(new Error('Must be implemented on the inherited class.'))
+  })
+
+  test('CPU interface must have getKeys method', () => {
+    let error
+    try {
+      const childCpuInterface = new ChildCpuInterface()
+      childCpuInterface.getKeys()
+    } catch (e) {
+      error = e
+    }
+    // BSOD on halted program
+    expect(error).toEqual(new Error('Must be implemented on the inherited class.'))
+  })
+
+  test('CPU interface must have drawPixel method', () => {
+    let error
+    try {
+      const childCpuInterface = new ChildCpuInterface()
+      childCpuInterface.drawPixel()
+    } catch (e) {
+      error = e
+    }
+    // BSOD on halted program
+    expect(error).toEqual(new Error('Must be implemented on the inherited class.'))
+  })
+
+  test('CPU interface must have enableSound method', () => {
+    let error
+    try {
+      const childCpuInterface = new ChildCpuInterface()
+      childCpuInterface.enableSound()
+    } catch (e) {
+      error = e
+    }
+    // BSOD on halted program
+    expect(error).toEqual(new Error('Must be implemented on the inherited class.'))
+  })
+
+  test('CPU interface must have disableSound method', () => {
+    let error
+    try {
+      const childCpuInterface = new ChildCpuInterface()
+      childCpuInterface.disableSound()
+    } catch (e) {
+      error = e
+    }
+    // BSOD on halted program
+    expect(error).toEqual(new Error('Must be implemented on the inherited class.'))
   })
 })

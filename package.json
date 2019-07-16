@@ -35,7 +35,7 @@
       "data/*.js",
       "classes/*.js",
       "classes/interfaces/*.js",
-      "classes/*.js",
+      "!data/keyMap.js",
       "!/node_modules/",
       "!classes/interfaces/DOMCpuInterface.js",
       "!classes/interfaces/TerminalCpuInterface.js"
