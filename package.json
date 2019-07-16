@@ -16,7 +16,7 @@
     "example": "node scripts/play roms/CONNECT4",
     "test": "jest",
     "web": "browserify -t brfs scripts/browser.js  > web/bundle.js",
-    "watch": "nodemon --ignore 'web/*' --exec yarn web",
+    "watch": "nodemon --ignore 'web/*' --exec npm run web",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "devDependencies": {

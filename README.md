@@ -22,12 +22,11 @@ A Chip-8 emulator written in JavaScript (Node.js).
 
 ## Installation
 
-> This guide assumes you already have [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/en/) installed.
+> This guide assumes you already have [Node.js](https://nodejs.org/en/) and npm installed.
 
 You can add the module directly from the [chip8js](https://www.npmjs.com/package/chip8js) npm package.
 
 ```bash
-yarn add chip8js
 npm i chip8js
 ```
 
@@ -38,12 +37,12 @@ And require the `RomBuffer` and `CPU` classes.
 const { RomBuffer, CPU } = require('chip8js')
 ```
 
-Or you can clone the repo. The only dependency of Chip8.js is [jest](https://jestjs.io/) for testing. Run `yarn` to install.
+Or you can clone the repo. The only dependency of Chip8.js is [jest](https://jestjs.io/) for testing. Run `npm i` to install.
 
 ```bash
 git clone git@github.com:taniarascia/chip8.git
 cd chip8
-yarn
+npm i
 ```
 
 ## Usage
@@ -57,10 +56,10 @@ Chip8.js is available via Node.js in the terminal, or in the browser.
 #### Development
 
 ```bash
-yarn watch            # watch for changes and rebuild
+npm run watch            # watch for changes and rebuild
 cd web && http-server # spin up server
 
-yarn web              # build for web
+npm run web              # build for web
 ```
 
 #### Deploy
@@ -76,7 +75,7 @@ git subtree push --prefix web origin gh-pages
 Chip-8 compatible ROMs can be saved in the `roms/` directory. Create a ROM buffer of a ROM and load the data into the CPU. Execute the program.
 
 ```bash
-yarn play roms/<ROM>
+npm run play roms/<ROM>
 ```
 
 ## Automated Testing
@@ -85,10 +84,10 @@ The unit tests for Chip8.js use the Jest testing framework. You can run all test
 
 ```bash
 # Run test suites
-yarn test
+npm run test
 
 # Run test suites and view coverage
-yarn test --coverage
+npm run test --coverage
 ```
 
 Chip8.js has two suites of unit tests:

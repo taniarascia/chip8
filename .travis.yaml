@@ -2,6 +2,6 @@ language: node_js
 node_js:
   - "11"
 install:
-  - "yarn"
+  - "npm install"
 script:
-  - yarn coveralls
+  - npm run coveralls
