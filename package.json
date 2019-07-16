@@ -30,6 +30,14 @@
     "node",
     "javascript"
   ],
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!/node_modules/",
+      "!classes/interfaces/DOMCpuInterface.js",
+      "!classes/interfaces/TerminalCpuInterface.js"
+    ]
+  },
   "license": "MIT",
   "private": false,
   "dependencies": {
