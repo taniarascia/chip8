@@ -5,7 +5,7 @@ A Chip-8 emulator written in JavaScript (Node.js).
 
 > [Chip-8](https://en.wikipedia.org/wiki/CHIP-8) is a simple, interpreted, programming language which was first used on some do-it-yourself computer systems in the late 1970s and early 1980s.
 
-- [Chip8.js Emulator](https://taniarascia.github.io/chip8/)
+### [View the demo](https://taniarascia.github.io/chip8/)
 
 ## Table of Contents
 
@@ -212,9 +212,9 @@ And here are some articles I wrote based on those concepts:
 
 ## Acknowledgements
 
-- Inspiration, guidance, and mentorship from [Vanya Sergeev](https://sergeev.io)
-- [Cowgod's Chip-8 Technical Reference](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#8xy3), made by Thomas P. Greene
-- [CHIP-8 - Wikipedia](https://en.wikipedia.org/wiki/CHIP-8)
+- Inspiration, guidance, and mentorship from [Vanya Sergeev](https://sergeev.io).
+- [Cowgod's Chip-8 Technical Reference](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#8xy3), made by Thomas P. Greene.
+- [CHIP-8 - Wikipedia](https://en.wikipedia.org/wiki/CHIP-8).
 
 ## Author
 
