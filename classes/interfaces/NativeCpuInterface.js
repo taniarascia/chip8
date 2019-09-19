@@ -1,7 +1,7 @@
 const r = require('raylib')
 const { CpuInterface } = require('./CpuInterface')
 const { DISPLAY_HEIGHT, DISPLAY_WIDTH } = require('../../data/constants')
-const keyMap = require('../../data/keyMap')
+const keyMap = require('../../data/nativeKeyMap')
 
 class NativeCpuInterface extends CpuInterface {
   constructor() {
@@ -9,22 +9,22 @@ class NativeCpuInterface extends CpuInterface {
 
     this.frameBuffer = this.createFrameBuffer()
     this.multiplier = 10
-
     this.screen = r
     this.screenWidth = DISPLAY_WIDTH * this.multiplier
     this.screenHeight = DISPLAY_HEIGHT * this.multiplier
 
     this.screen.InitWindow(this.screenWidth, this.screenHeight, 'Chip8.js')
     this.screen.SetTargetFPS(60)
-    this.screen.ClearBackground(r.BLACK)
+    this.screen.ClearBackground(this.screen.BLACK)
 
     this.soundEnabled = false
     this.keys = 0
     this.resolveKey = null
 
-    // this.screen.IsKeyPressed(key => {
-    //   this.mapKey(key)
-    // })
+    // need a key event
+    if (keyMap.find(key => this.screen.GetKeyPressed() === key)) {
+      this.mapKey(this.screen.GetKeyPressed())
+    }
   }
 
   keyUp() {
@@ -59,12 +59,10 @@ class NativeCpuInterface extends CpuInterface {
 
   clearDisplay() {
     this.frameBuffer = this.createFrameBuffer()
-    this.screen.ClearBackground(r.BLACK)
+    this.screen.ClearBackground(this.screen.BLACK)
   }
 
   drawPixel(x, y, value) {
-    r.BeginDrawing()
-
     // If collision, will return true
     const collision = this.frameBuffer[y][x] & value
     // Will XOR value to position x, y
@@ -78,7 +76,7 @@ class NativeCpuInterface extends CpuInterface {
           width: this.multiplier,
           height: this.multiplier,
         },
-        r.GREEN
+        this.screen.GREEN
       )
     } else {
       this.screen.DrawRectangleRec(
@@ -88,11 +86,9 @@ class NativeCpuInterface extends CpuInterface {
           width: this.multiplier,
           height: this.multiplier,
         },
-        r.BLACK
+        this.screen.BLACK
       )
     }
-
-    r.EndDrawing()
 
     return collision
   }

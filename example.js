@@ -35,6 +35,12 @@ while (!r.WindowShouldClose()) {
 
   r.ClearBackground(r.RAYWHITE)
 
+  console.log('hello')
+
+  r.GetKeyPressed()
+  console.log(r.IsKeyDown(r.KEY_ONE))
+
+  // console.log(r.GetKeyPressed())
   r.DrawText('some basic shapes available on raylib', 20, 20, 20, r.DARKGRAY)
 
   var position = {
