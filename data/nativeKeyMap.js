@@ -1,5 +1,4 @@
 const r = require('raylib')
-
 /**
  1 2 3 4
  Q W E R
@@ -7,23 +6,24 @@ const r = require('raylib')
  Z X C V 
 */
 
+// these are totally wrong!?
 const keyMap = [
-  r.ONE,
-  r.TWO,
-  r.THREE,
-  r.FOUR,
-  r.Q,
-  r.W,
-  r.E,
-  r.R,
-  r.A,
-  r.S,
-  r.D,
-  r.F,
-  r.Z,
-  r.X,
-  r.C,
-  r.V,
+  r.KEY_ONE,
+  r.KEY_TWO,
+  r.KEY_THREE,
+  r.KEY_FOUR,
+  113,
+  r.KEY_W,
+  r.KEY_E,
+  r.KEY_R,
+  r.KEY_A,
+  r.KEY_S,
+  r.KEY_D,
+  r.KEY_F,
+  r.KEY_Z,
+  r.KEY_X,
+  r.KEY_C,
+  r.KEY_V,
 ]
 
 module.exports = keyMap
