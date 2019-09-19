@@ -38,8 +38,6 @@ class MockCpuInterface extends CpuInterface {
       })
       grid += '\n'
     })
-
-    console.log(grid)
   }
 
   waitKey() {

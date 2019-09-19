@@ -3,7 +3,7 @@ const { MockCpuInterface, CpuInterface } = require('../classes/interfaces/MockCp
 const cpuInterface = new MockCpuInterface()
 const cpu = new CPU(cpuInterface)
 
-describe('CPU tests', async () => {
+describe('CPU tests', () => {
   test('CPU should not execute after halting', async () => {
     cpu.load({ data: 0x0000 })
     cpu.halted = true
