@@ -14,14 +14,14 @@ class TerminalCpuInterface extends CpuInterface {
     this.frameBuffer = this.createFrameBuffer()
     this.soundEnabled = false
     this.keys = 0
-    this.resolveKey = null
+    this.keyPressed = undefined
 
     this.screen.key(['escape', 'C-c'], () => {
       process.exit(0)
     })
 
     this.screen.on('keypress', (_, key) => {
-      this.mapKey(key)
+      this.keyPressed = this.mapKey(key)
     })
 
     // Hack a keyup event
@@ -38,10 +38,7 @@ class TerminalCpuInterface extends CpuInterface {
 
       this.keys = this.keys | keyMask
 
-      if (this.resolveKey) {
-        this.resolveKey(keyMap.indexOf(key.full))
-        this.resolveKey = null
-      }
+      return keyMap.indexOf(key.full)
     }
   }
 
@@ -79,9 +76,11 @@ class TerminalCpuInterface extends CpuInterface {
   }
 
   waitKey() {
-    return new Promise(resolve => {
-      this.resolveKey = resolve
-    })
+    return this.keyPressed
+  }
+
+  resetKey() {
+    this.keyPressed = undefined
   }
 
   getKeys() {

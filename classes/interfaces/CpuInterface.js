@@ -17,6 +17,10 @@ class CpuInterface {
     throw new TypeError('Must be implemented on the inherited class.')
   }
 
+  resetKey() {
+    throw new TypeError('Must be implemented on the inherited class.')
+  }
+
   getKeys() {
     throw new TypeError('Must be implemented on the inherited class.')
   }
