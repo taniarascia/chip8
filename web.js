@@ -1,7 +1,7 @@
 let timer = 0
 let cpuStep
 
-async function cycle() {
+function cycle() {
   timer++
   if (timer % 5 === 0) {
     cpu.tick()
@@ -10,7 +10,7 @@ async function cycle() {
 
   if (!cpu.halted) {
     cpuStep = cpu.step()
-    await cpuStep
+    cpuStep
   }
 
   setTimeout(cycle, 3)
@@ -25,7 +25,7 @@ async function loadRom() {
 
   if (!cpu.halted) {
     cpu.halt()
-    await cpuStep
+    cpuStep
   }
   cpu.interface.clearDisplay()
   cpu.load(romBuffer)
