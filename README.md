@@ -1,4 +1,4 @@
-# Chip8.js 
+# Chip8.js
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![chip8js on NPM](https://img.shields.io/npm/v/chip8js.svg?color=green&label=chip8js)](https://www.npmjs.com/package/chip8js) [![Build Status](https://travis-ci.org/taniarascia/chip8.svg?branch=master)](https://travis-ci.org/taniarascia/chip8) [![Coverage Status](https://coveralls.io/repos/github/taniarascia/chip8/badge.svg?branch=master&service=github)](https://coveralls.io/github/taniarascia/chip8?branch=master)
 
@@ -174,17 +174,18 @@ In this example, the instruction can either be skipped or not skipped depending 
 ```js
 // tests/cpu.test.js
 
-test('6: SE_VX_NN (3xnn) - Program counter should increment by two bytes if register x is not equal to nn argument', async () => {
+test('6: SE_VX_NN (3xnn) - Program counter should increment by two bytes if register x is not equal to nn argument', () => {
   cpu.load({ data: [0x3abb] })
-  await cpu.step()
+  cpu.step()
 
   expect(cpu.PC).toBe(0x202)
 })
 
-test('6: SE_VX_NN (3xnn) - Program counter should increment by four bytes if register x is equal to nn argument', async () => {
+test('6: SE_VX_NN (3xnn) - Program counter should increment by four bytes if register x is equal to nn argument', () => {
   cpu.load({ data: [0x3abb] })
   cpu.registers[0xa] = 0xbb
-  await cpu.step()
+
+  cpu.step()
 
   expect(cpu.PC).toBe(0x204)
 })
