@@ -23,25 +23,15 @@ class DOMCpuInterface extends CpuInterface {
     this.keyPressed = undefined
 
     document.addEventListener('keydown', event => {
-      this.keyPressed = this.mapKey(event.key)
+      const keyIndex = keyMap.indexOf(event.key)
+
+      this.keyPressed = keyIndex
+      this.setKeys(event.key, keyIndex)
     })
 
     document.addEventListener('keyup', event => {
       this.clearKeys()
     })
-  }
-
-  mapKey(key) {
-    let keyMask
-    const keyIndex = keyMap.indexOf(key)
-
-    if (keyMap.includes(key)) {
-      keyMask = 1 << keyIndex
-
-      this.keys = this.keys | keyMask
-
-      return keyIndex
-    }
   }
 
   clearDisplay() {
@@ -89,11 +79,19 @@ class DOMCpuInterface extends CpuInterface {
   }
 
   waitKey() {
-    return this.keyPressed
+    const keyPressed = this.keyPressed
+    this.keyPressed = undefined
+    return keyPressed
   }
 
-  resetKey() {
-    this.keyPressed = undefined
+  setKeys(key, index) {
+    let keyMask
+
+    if (keyMap.includes(key)) {
+      keyMask = 1 << index
+
+      this.keys = this.keys | keyMask
+    }
   }
 
   getKeys() {

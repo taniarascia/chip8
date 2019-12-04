@@ -368,7 +368,6 @@ class CPU {
         }
 
         this.registers[args[0]] = keyPress
-        this.interface.resetKey()
         this._nextInstruction()
         break
 
