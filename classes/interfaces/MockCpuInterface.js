@@ -7,9 +7,6 @@ class MockCpuInterface extends CpuInterface {
 
     this.soundEnabled = false
     this.display = []
-    this.resolveKey = setTimeout(() => {
-      this.mapKey()
-    }, 1000)
 
     // Create a two-dimensional array of 0s for display
     // 0 represents pixel off, 1 represents pixel on
@@ -22,7 +19,7 @@ class MockCpuInterface extends CpuInterface {
   }
 
   mapKey() {
-    this.resolveKey(5)
+    return 5
   }
 
   clearDisplay() {
@@ -44,10 +41,10 @@ class MockCpuInterface extends CpuInterface {
 
   waitKey() {
     // Will wait until key press and return one key
-    return new Promise(resolve => {
-      this.resolveKey = resolve
-    })
+    return this.mapKey()
   }
+
+  resetKey() {}
 
   getKeys() {
     // Will return bitmask of all keys set
