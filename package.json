@@ -12,11 +12,12 @@
   "bugs": "https://github.com/taniarascia/chip8/issues",
   "scripts": {
     "play": "node scripts/play",
+    "native": "node scripts/native",
     "hexdump": "node scripts/hexdump",
     "example:terminal": "node scripts/play roms/CONNECT4",
     "example:native": "node scripts/native roms/PONG",
     "test": "jest",
-    "web": "browserify -t brfs scripts/browser.js  > web/bundle.js",
+    "build:web": "browserify -t brfs scripts/browser.js  > web/bundle.js",
     "watch": "nodemon --ignore 'web/*' --exec npm run web",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },

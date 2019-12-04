@@ -59,9 +59,9 @@ Chip8.js is available via Node.js in the terminal, or in the browser.
 
 ```bash
 npm run watch            # watch for changes and rebuild
-cd web && http-server # spin up server
+cd web && http-server    # spin up server on localhost:8080
 
-npm run web              # build for web
+npm run build:web        # build for web
 ```
 
 #### Deploy
@@ -79,6 +79,16 @@ Chip-8 compatible ROMs can be saved in the `roms/` directory. Create a ROM buffe
 ```bash
 npm run play roms/<ROM>
 ```
+
+### Native
+
+You can run it natively with raylib.
+
+```bash
+npm run native roms/<ROM>
+```
+
+> Note: You must `brew install cmake` to install raylib.
 
 ## Automated Testing
 
