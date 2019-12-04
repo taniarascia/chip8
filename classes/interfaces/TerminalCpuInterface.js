@@ -26,19 +26,20 @@ class TerminalCpuInterface extends CpuInterface {
 
     // Hack a keyup event
     setInterval(() => {
-      this.keys = 0
+      this.clearKeys()
     }, 100)
   }
 
   mapKey(key) {
     let keyMask
+    const keyIndex = keyMap.indexOf(key.full)
 
     if (keyMap.includes(key.full)) {
-      keyMask = 1 << keyMap.indexOf(key.full)
+      keyMask = 1 << keyIndex
 
       this.keys = this.keys | keyMask
 
-      return keyMap.indexOf(key.full)
+      return keyIndex
     }
   }
 
@@ -85,6 +86,10 @@ class TerminalCpuInterface extends CpuInterface {
 
   getKeys() {
     return this.keys
+  }
+
+  clearKeys() {
+    this.keys = 0
   }
 
   enableSound() {

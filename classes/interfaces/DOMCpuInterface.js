@@ -27,19 +27,20 @@ class DOMCpuInterface extends CpuInterface {
     })
 
     document.addEventListener('keyup', event => {
-      this.keys = 0
+      this.clearKeys()
     })
   }
 
   mapKey(key) {
     let keyMask
+    const keyIndex = keyMap.indexOf(key)
 
     if (keyMap.includes(key)) {
-      keyMask = 1 << keyMap.indexOf(key)
+      keyMask = 1 << keyIndex
 
       this.keys = this.keys | keyMask
 
-      return keyMap.indexOf(key)
+      return keyIndexs
     }
   }
 
@@ -97,6 +98,10 @@ class DOMCpuInterface extends CpuInterface {
 
   getKeys() {
     return this.keys
+  }
+
+  clearKeys() {
+    this.keys = 0
   }
 
   enableSound() {

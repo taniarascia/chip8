@@ -49,6 +49,10 @@ class MockCpuInterface extends CpuInterface {
     return 0b0000000000011101 // 0, 2, 3, 4 example
   }
 
+  clearKeys() {
+    this.keys = 0
+  }
+
   drawPixel(x, y, value) {
     // If collision, will return true
     const collision = this.display[y][x] & value
