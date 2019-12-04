@@ -40,7 +40,7 @@ class DOMCpuInterface extends CpuInterface {
 
       this.keys = this.keys | keyMask
 
-      return keyIndexs
+      return keyIndex
     }
   }
 
