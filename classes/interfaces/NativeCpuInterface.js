@@ -11,7 +11,7 @@ class NativeCpuInterface extends CpuInterface {
     this.screen = r
     this.soundEnabled = false
     this.keys = 0
-    this.resolveKey = null
+    this.keyPressed = undefined
   }
 
   mapKey(key) {
@@ -22,10 +22,7 @@ class NativeCpuInterface extends CpuInterface {
 
       this.keys = this.keys | keyMask
 
-      if (this.resolveKey) {
-        this.resolveKey(nativeKeyMap.indexOf(key))
-        this.resolveKey = null
-      }
+      return nativeKeyMap.indexOf(key)
     }
   }
 
@@ -55,9 +52,11 @@ class NativeCpuInterface extends CpuInterface {
   }
 
   waitKey() {
-    return new Promise(resolve => {
-      this.resolveKey = resolve
-    })
+    return this.keyPressed
+  }
+
+  resetKey() {
+    this.keyPressed = undefined
   }
 
   getKeys() {

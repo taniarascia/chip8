@@ -6,24 +6,6 @@ const r = require('raylib')
  Z X C V 
 */
 
-// these are totally wrong!?
-const keyMap = [
-  r.KEY_ONE,
-  r.KEY_TWO,
-  r.KEY_THREE,
-  r.KEY_FOUR,
-  113,
-  r.KEY_W,
-  r.KEY_E,
-  r.KEY_R,
-  r.KEY_A,
-  r.KEY_S,
-  r.KEY_D,
-  r.KEY_F,
-  r.KEY_Z,
-  r.KEY_X,
-  r.KEY_C,
-  r.KEY_V,
-]
+const keyMap = [49, 50, 51, 52, 113, 119, 101, 114, 97, 115, 100, 102, 122, 120, 99, 118]
 
 module.exports = keyMap
