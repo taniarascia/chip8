@@ -1,5 +1,4 @@
 let timer = 0
-let cpuStep
 
 function cycle() {
   timer++
@@ -9,8 +8,7 @@ function cycle() {
   }
 
   if (!cpu.halted) {
-    cpuStep = cpu.step()
-    cpuStep
+    cpu.step()
   }
 
   setTimeout(cycle, 3)
@@ -23,13 +21,10 @@ async function loadRom() {
   const uint8View = new Uint8Array(arrayBuffer)
   const romBuffer = new RomBuffer(uint8View)
 
-  if (!cpu.halted) {
-    cpu.halt()
-    cpuStep
-  }
   cpu.interface.clearDisplay()
   cpu.load(romBuffer)
 }
 
 document.querySelector('select').addEventListener('change', loadRom)
+
 cycle()
