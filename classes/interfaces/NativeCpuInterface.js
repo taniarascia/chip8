@@ -1,46 +1,55 @@
 const r = require('raylib')
+
 const { CpuInterface } = require('./CpuInterface')
 const { DISPLAY_HEIGHT, DISPLAY_WIDTH } = require('../../data/constants')
-const nativeKeyMap = require('../../data/nativeKeyMap')
 
 class NativeCpuInterface extends CpuInterface {
   constructor() {
     super()
 
-    this.frameBuffer = this.createFrameBuffer()
+    // Screen
+    this.frameBuffer = this._createFrameBuffer()
     this.screen = r
-    this.soundEnabled = false
+
+    // Keys
     this.keys = 0
     this.keyPressed = undefined
+
+    // Sound
+    this.soundEnabled = false
   }
 
-  mapKey(key) {
-    let keyMask
-    const keyIndex = nativeKeyMap.indexOf(key)
-
-    if (nativeKeyMap.includes(key)) {
-      keyMask = 1 << keyIndex
-
-      this.keys = this.keys | keyMask
-    }
-
-    return keyIndex
-  }
-
-  createFrameBuffer() {
+  _createFrameBuffer() {
     let frameBuffer = []
+
     for (let i = 0; i < DISPLAY_WIDTH; i++) {
       frameBuffer.push([])
       for (let j = 0; j < DISPLAY_HEIGHT; j++) {
         frameBuffer[i].push(0)
       }
     }
+
     return frameBuffer
   }
 
-  clearDisplay() {
-    this.frameBuffer = this.createFrameBuffer()
-    this.screen.ClearBackground(this.screen.BLACK)
+  setKeys(keyIndex) {
+    let keyMask = 1 << keyIndex
+
+    this.keys = this.keys | keyMask
+    this.keyPressed = keyIndex
+  }
+
+  resetKeys() {
+    this.keys = 0
+    this.keyPressed = undefined
+  }
+
+  waitKey() {
+    return this.keyPressed
+  }
+
+  getKeys() {
+    return this.keys
   }
 
   drawPixel(x, y, value) {
@@ -52,20 +61,9 @@ class NativeCpuInterface extends CpuInterface {
     return collision
   }
 
-  waitKey() {
-    return this.keyPressed
-  }
-
-  resetKey() {
-    this.keyPressed = undefined
-  }
-
-  getKeys() {
-    return this.keys
-  }
-
-  clearKeys() {
-    this.keys = 0
+  clearDisplay() {
+    this.frameBuffer = this._createFrameBuffer()
+    this.screen.ClearBackground(this.screen.BLACK)
   }
 
   enableSound() {

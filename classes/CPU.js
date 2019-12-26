@@ -454,6 +454,7 @@ class CPU {
 
         this._nextInstruction()
         break
+
       default:
         // Data word
         this.halted = true

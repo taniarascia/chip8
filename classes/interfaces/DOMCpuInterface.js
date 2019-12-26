@@ -6,49 +6,79 @@ class DOMCpuInterface extends CpuInterface {
   constructor() {
     super()
 
-    this.frameBuffer = this.createFrameBuffer()
-
-    this.canvas = document.querySelector('canvas')
+    // Screen
+    this.frameBuffer = this._createFrameBuffer()
+    this.screen = document.querySelector('canvas')
     this.multiplier = 10
-    this.canvas.width = DISPLAY_WIDTH * this.multiplier
-    this.canvas.height = DISPLAY_HEIGHT * this.multiplier
-
-    this.context = this.canvas.getContext('2d')
-
+    this.screen.width = DISPLAY_WIDTH * this.multiplier
+    this.screen.height = DISPLAY_HEIGHT * this.multiplier
+    this.context = this.screen.getContext('2d')
     this.context.fillStyle = 'black'
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
+    this.context.fillRect(0, 0, this.screen.width, this.screen.height)
 
-    this.soundEnabled = false
+    // Keys
     this.keys = 0
     this.keyPressed = undefined
+
+    // Sound
+    this.soundEnabled = false
+
+    // =========================================================================
+    // Key Down Event
+    // =========================================================================
 
     document.addEventListener('keydown', event => {
       const keyIndex = keyMap.indexOf(event.key)
 
-      this.keyPressed = keyIndex
-      this.setKeys(event.key, keyIndex)
+      if (keyIndex) {
+        this._setKeys(keyIndex)
+      }
     })
+
+    // =========================================================================
+    // Key Up Event
+    // =========================================================================
 
     document.addEventListener('keyup', event => {
-      this.clearKeys()
+      this._resetKeys()
     })
   }
 
-  clearDisplay() {
-    this.frameBuffer = this.createFrameBuffer()
-    this.context.fillStyle = 'black'
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
-  }
-
-  createFrameBuffer() {
+  _createFrameBuffer() {
     let frameBuffer = []
+
     for (let i = 0; i < DISPLAY_WIDTH; i++) {
       frameBuffer.push([])
       for (let j = 0; j < DISPLAY_HEIGHT; j++) {
         frameBuffer[i].push(0)
       }
     }
+
     return frameBuffer
+  }
+
+  _setKeys(keyIndex) {
+    let keyMask = 1 << keyIndex
+
+    this.keys = this.keys | keyMask
+    this.keyPressed = keyIndex
+  }
+
+  _resetKeys() {
+    this.keys = 0
+    this.keyPressed = undefined
+  }
+
+  waitKey() {
+    // Get and reset key
+    const keyPressed = this.keyPressed
+    this.keyPressed = undefined
+
+    return keyPressed
+  }
+
+  getKeys() {
+    return this.keys
   }
 
   drawPixel(x, y, value) {
@@ -78,28 +108,10 @@ class DOMCpuInterface extends CpuInterface {
     return collision
   }
 
-  waitKey() {
-    const keyPressed = this.keyPressed
-    this.keyPressed = undefined
-    return keyPressed
-  }
-
-  setKeys(key, index) {
-    let keyMask
-
-    if (keyMap.includes(key)) {
-      keyMask = 1 << index
-
-      this.keys = this.keys | keyMask
-    }
-  }
-
-  getKeys() {
-    return this.keys
-  }
-
-  clearKeys() {
-    this.keys = 0
+  clearDisplay() {
+    this.frameBuffer = this._createFrameBuffer()
+    this.context.fillStyle = 'black'
+    this.context.fillRect(0, 0, this.screen.width, this.screen.height)
   }
 
   enableSound() {
