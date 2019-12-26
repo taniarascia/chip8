@@ -361,14 +361,14 @@ class CPU {
 
       case 'LD_VX_N':
         // Fx0A - Wait for a key press, store the value of the key in Vx.
-        const response = this.interface.waitKey()
+        const keyPress = this.interface.waitKey()
 
-        if (response) {
-          this.registers[args[0]] = response
-          this.interface.resetKey()
-          this._nextInstruction()
+        if (!keyPress) {
+          return
         }
 
+        this.registers[args[0]] = keyPress
+        this._nextInstruction()
         break
 
       case 'LD_DT_VX':
@@ -454,6 +454,7 @@ class CPU {
 
         this._nextInstruction()
         break
+
       default:
         // Data word
         this.halted = true

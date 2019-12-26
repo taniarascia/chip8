@@ -1,29 +1,30 @@
-const { CpuInterface } = require('./CpuInterface')
+const r = require('raylib')
 
-class MockCpuInterface extends CpuInterface {
-  // Mock derived CPU interface for testing
+const { CpuInterface } = require('./CpuInterface')
+const { DISPLAY_HEIGHT, DISPLAY_WIDTH } = require('../../data/constants')
+
+class NativeCpuInterface extends CpuInterface {
   constructor() {
     super()
 
     // Screen
     this.frameBuffer = this._createFrameBuffer()
+    this.screen = r
 
     // Keys
-    this.keys = 0b0000000000011101 // 0, 2, 3, 4 example
-    this.keyPressed = 5
+    this.keys = 0
+    this.keyPressed = undefined
 
     // Sound
     this.soundEnabled = false
   }
 
   _createFrameBuffer() {
-    // Create a two-dimensional array of 0s for display
-    // 0 represents pixel off, 1 represents pixel on
     let frameBuffer = []
 
-    for (let i = 0; i < 32; i++) {
+    for (let i = 0; i < DISPLAY_WIDTH; i++) {
       frameBuffer.push([])
-      for (let j = 0; j < 64; j++) {
+      for (let j = 0; j < DISPLAY_HEIGHT; j++) {
         frameBuffer[i].push(0)
       }
     }
@@ -31,13 +32,23 @@ class MockCpuInterface extends CpuInterface {
     return frameBuffer
   }
 
+  setKeys(keyIndex) {
+    let keyMask = 1 << keyIndex
+
+    this.keys = this.keys | keyMask
+    this.keyPressed = keyIndex
+  }
+
+  resetKeys() {
+    this.keys = 0
+    this.keyPressed = undefined
+  }
+
   waitKey() {
-    // Will wait until key press and return one key
     return this.keyPressed
   }
 
   getKeys() {
-    // Will return bitmask of all keys set
     return this.keys
   }
 
@@ -51,19 +62,8 @@ class MockCpuInterface extends CpuInterface {
   }
 
   clearDisplay() {
-    return 'Screen is cleared'
-  }
-
-  // Mock display only
-  renderDisplay() {
-    let grid = ''
-    this.frameBuffer.forEach((row, x) => {
-      row.forEach((col, y) => {
-        grid += this.frameBuffer[x][y]
-      })
-      grid += '\n'
-    })
-    console.log(grid)
+    this.frameBuffer = this._createFrameBuffer()
+    this.screen.ClearBackground(this.screen.BLACK)
   }
 
   enableSound() {
@@ -76,6 +76,5 @@ class MockCpuInterface extends CpuInterface {
 }
 
 module.exports = {
-  MockCpuInterface,
-  CpuInterface,
+  NativeCpuInterface,
 }

@@ -1,4 +1,5 @@
 const blessed = require('blessed')
+
 const { CpuInterface } = require('./CpuInterface')
 const { DISPLAY_HEIGHT, DISPLAY_WIDTH, COLOR } = require('../../data/constants')
 const keyMap = require('../../data/keyMap')
@@ -8,54 +9,82 @@ class TerminalCpuInterface extends CpuInterface {
     super()
 
     this.blessed = blessed
+
+    // Screen
+    this.frameBuffer = this._createFrameBuffer()
     this.screen = blessed.screen({ smartCSR: true })
     this.screen.title = 'Chip8.js'
     this.color = blessed.helpers.attrToBinary({ fg: COLOR })
-    this.frameBuffer = this.createFrameBuffer()
-    this.soundEnabled = false
+
+    // Keys
     this.keys = 0
     this.keyPressed = undefined
 
+    // Sound
+    this.soundEnabled = false
+
+    // Exit game
     this.screen.key(['escape', 'C-c'], () => {
       process.exit(0)
     })
 
+    // =========================================================================
+    // Key Down Event
+    // =========================================================================
+
     this.screen.on('keypress', (_, key) => {
-      this.keyPressed = this.mapKey(key)
+      const keyIndex = keyMap.indexOf(key.full)
+
+      if (keyIndex) {
+        this._setKeys(keyIndex)
+      }
     })
 
-    // Hack a keyup event
+    // =========================================================================
+    // Key Up Event
+    // =========================================================================
+
     setInterval(() => {
-      this.keys = 0
+      // Emulate a keyup event to clear all pressed keys
+      this._resetKeys()
     }, 100)
   }
 
-  mapKey(key) {
-    let keyMask
-
-    if (keyMap.includes(key.full)) {
-      keyMask = 1 << keyMap.indexOf(key.full)
-
-      this.keys = this.keys | keyMask
-
-      return keyMap.indexOf(key.full)
-    }
-  }
-
-  createFrameBuffer() {
+  _createFrameBuffer() {
     let frameBuffer = []
+
     for (let i = 0; i < DISPLAY_WIDTH; i++) {
       frameBuffer.push([])
       for (let j = 0; j < DISPLAY_HEIGHT; j++) {
         frameBuffer[i].push(0)
       }
     }
+
     return frameBuffer
   }
 
-  clearDisplay() {
-    this.frameBuffer = this.createFrameBuffer()
-    this.screen.clearRegion(0, DISPLAY_WIDTH, 0, DISPLAY_HEIGHT)
+  _setKeys(keyIndex) {
+    let keyMask = 1 << keyIndex
+
+    this.keys = this.keys | keyMask
+    this.keyPressed = keyIndex
+  }
+
+  _resetKeys() {
+    this.keys = 0
+    this.keyPressed = undefined
+  }
+
+  waitKey() {
+    // Get and reset key
+    const keyPressed = this.keyPressed
+    this.keyPressed = undefined
+
+    return keyPressed
+  }
+
+  getKeys() {
+    return this.keys
   }
 
   drawPixel(x, y, value) {
@@ -75,16 +104,9 @@ class TerminalCpuInterface extends CpuInterface {
     return collision
   }
 
-  waitKey() {
-    return this.keyPressed
-  }
-
-  resetKey() {
-    this.keyPressed = undefined
-  }
-
-  getKeys() {
-    return this.keys
+  clearDisplay() {
+    this.frameBuffer = this._createFrameBuffer()
+    this.screen.clearRegion(0, DISPLAY_WIDTH, 0, DISPLAY_HEIGHT)
   }
 
   enableSound() {
