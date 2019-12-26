@@ -1,41 +1,51 @@
+// Imports
 const r = require('raylib')
 const fs = require('fs')
 const fileContents = fs.readFileSync(process.argv.slice(2)[0])
+
+// Classes
 const { CPU } = require('../classes/CPU')
 const { RomBuffer } = require('../classes/RomBuffer')
 const { NativeCpuInterface } = require('../classes/interfaces/NativeCpuInterface')
-const cpuInterface = new NativeCpuInterface()
+
+// Constants
 const { DISPLAY_HEIGHT, DISPLAY_WIDTH } = require('../data/constants')
 const nativeKeyMap = require('../data/nativeKeyMap')
-
-const cpu = new CPU(cpuInterface)
-const romBuffer = new RomBuffer(fileContents)
-
-cpu.load(romBuffer)
 
 const multiplier = 10
 const screenWidth = DISPLAY_WIDTH * multiplier
 const screenHeight = DISPLAY_HEIGHT * multiplier
 
+// Instantiation
+const cpu = new CPU(cpuInterface)
+const romBuffer = new RomBuffer(fileContents)
+const cpuInterface = new NativeCpuInterface()
+
+cpu.load(romBuffer)
+
 r.InitWindow(screenWidth, screenHeight, 'Chip8.js')
 r.SetTargetFPS(60)
 r.ClearBackground(r.BLACK)
 
-while (!r.WindowShouldClose()) {
-  let timer = 0
+let timer = 0
 
+while (!r.WindowShouldClose()) {
+  timer++
   if (timer % 5 === 0) {
     cpu.tick()
     timer = 0
   }
 
+  // Interpret key data
   const rawKeyPressed = r.GetKeyPressed()
-  const keyPressed = nativeKeyMap.find(key => rawKeyPressed === key)
+  const keyIndex = nativeKeyMap.findIndex(key => rawKeyPressed === key)
 
-  if (keyPressed) {
-    cpu.interface.keyPressed = cpu.interface.mapKey(keyPressed)
+  // Keydown event
+  if (keyIndex) {
+    cpu.interface.setKeys(keyIndex)
   } else {
-    cpu.interface.clearKeys()
+    // Keyup event
+    cpu.interface.resetKeys()
   }
 
   cpu.step()
