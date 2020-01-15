@@ -26,6 +26,12 @@ A Chip-8 emulator written in JavaScript (Node.js).
 
 > This guide assumes you already have [Node.js](https://nodejs.org/en/) and npm installed.
 
+Prior to installing Chip8, you must have cmake installed.
+
+```bash
+brew install cmake
+```
+
 You can add the module directly from the [chip8js](https://www.npmjs.com/package/chip8js) npm package.
 
 ```bash
@@ -87,8 +93,6 @@ You can run it natively with raylib.
 ```bash
 npm run native roms/<ROM>
 ```
-
-> Note: You must `brew install cmake` to install raylib.
 
 ## Automated Testing
 
