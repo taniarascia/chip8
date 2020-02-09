@@ -7,6 +7,20 @@ html {
   -webkit-font-smoothing: antialiased;
 }
 
+a {
+  color: #33ff66;
+  padding: 2px 5px;
+  text-decoration: underline;
+}
+
+a:hover,
+a:active,
+a:focus {
+  background: #33ff66;
+  color: black;
+  text-decoration: none;
+}
+
 body {
   margin: 0;
   background: #141414;
@@ -21,10 +35,20 @@ main {
 }
 
 pre {
-  margin: 30px 0;
-  font-size: 10px;
+  font-size: 14px;
   font-family: 'Courier New', Monospace;
   white-space: pre;
+  font-weight: 600;
+}
+
+pre.logo {
+  font-size: 12px;
+  margin: 30px 0;
+  font-weight: 400;
+}
+
+pre.instructions {
+  text-align: left;
 }
 
 select {
@@ -52,12 +76,12 @@ canvas {
 
 p {
   margin: 30px 0;
-  text-align: right;
 }
 
 h2 {
   margin: 30px 0;
   font-size: 16px;
+  text-align: left;
 }
 
 small {

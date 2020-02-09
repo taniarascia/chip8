@@ -1,48 +1,66 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chip8.js</title>
 
-  <title>Chip8.js</title>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
 
-  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css">
-</head>
-
-<body>
-
-  <main>
-    <pre> ██████╗██╗  ██╗██╗██████╗  █████╗         ██╗███████╗
+  <body>
+    <main>
+      <pre class="logo">
+ ██████╗██╗  ██╗██╗██████╗  █████╗         ██╗███████╗
 ██╔════╝██║  ██║██║██╔══██╗██╔══██╗        ██║██╔════╝
 ██║     ███████║██║██████╔╝╚█████╔╝        ██║███████╗
 ██║     ██╔══██║██║██╔═══╝ ██╔══██╗   ██   ██║╚════██║
 ╚██████╗██║  ██║██║██║     ╚█████╔╝██╗╚█████╔╝███████║
-  ╚═════╝╚═╝  ╚═╝╚═╝╚═╝      ╚════╝ ╚═╝ ╚════╝ ╚══════╝</pre>
+  ╚═════╝╚═╝  ╚═╝╚═╝╚═╝      ╚════╝ ╚═╝ ╚════╝ ╚══════╝</pre
+      >
 
-    <section>
-      <div>
-        <canvas></canvas>
-      </div>
-      <aside>
-        <select>
-          <option disabled selected>Load ROM...</option>
-          <option value="CONNECT4">Connect4</option>
-          <option value="PONG">Pong</option>
-          <option value="INVADERS">Invaders</option>
-          <option value="TETRIS">Tetris</option>
-        </select>
-      </aside>
-    </section>
+      <section>
+        <div>
+          <canvas></canvas>
+        </div>
+        <aside>
+          <select>
+            <option disabled selected>Load ROM...</option>
+            <option value="CONNECT4">Connect4</option>
+            <option value="PONG">Pong</option>
+            <option value="INVADERS">Invaders</option>
+            <option value="TETRIS">Tetris</option>
+          </select>
+          <div>
+            <h2>Instructions</h2>
+            <pre class="instructions">
+Chip8 games use a hex keyboard
+ranging from 1-4 at the top
+to z-v at the bottom
 
-    <p><small>Tania Rascia</small></p>
-  </main>
+Key layout:
 
-  <script src="./bundle.js"></script>
-  <script src="./web.js"></script>
+1 2 3 4
+Q W E R
+A S D F
+Z X C V</pre
+            >
+          </div>
+        </aside>
+      </section>
 
-</body>
+      <p>
+        <small
+          >Made by <a href="https://www.taniarascia.com">Tania Rascia</a> |
+          <a href="https://github.com/taniarascia/chip8">View Source</a></small
+        >
+      </p>
+    </main>
 
+    <script src="./bundle.js"></script>
+    <script src="./web.js"></script>
+  </body>
 </html>
