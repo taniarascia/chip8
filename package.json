@@ -11,7 +11,7 @@
     "play:terminal": "node scripts/terminal",
     "play:native": "node scripts/native",
     "build:web": "browserify -t brfs scripts/browser.js > web/bundle.js",
-    "watch:web": "nodemon --ignore 'web/*' --exec npm run web",
+    "watch:web": "nodemon --ignore 'web/*' --exec npm run build:web",
     "hexdump": "node scripts/hexdump",
     "test": "jest",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
