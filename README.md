@@ -15,10 +15,10 @@ A Chip-8 emulator written in JavaScript.
   - [Web](#web)
   - [Terminal](#terminal)
   - [Native](#native)
-- [Automated Testing](#automated-testing)
+- [Motivation](#motivation)
+- [Testing](#testing)
   - [Instruction tests](#instruction-tests)
   - [CPU tests](#cpu-tests)
-- [Motivation](#motivation)
 - [Acknowlegdements](#acknowledgements)
 - [License](#license)
 
@@ -89,7 +89,28 @@ Run Chip8.js natively with [raylib](https://www.npmjs.com/package/raylib) (exper
 npm run play:native roms/<ROM>
 ```
 
-## Automated Testing
+## Motivation
+
+Chip8.js is a project to write a Chip-8 emulator in JavaScript. The main motivation is to learn lower level programming concepts and to increase familiarity with the Node.js environment.
+
+Here are some of the concepts I learned while writing this program:
+
+- The base system: specifically base 2 (binary), base 10 (decimal), base 16 (hexadecimal), how they interact with each other and the concept of abstract numbers in programming
+- Bits, nibbles, bytes, ASCII encoding, and big and little endian values
+- Bitwise operators - AND (`&`), OR (`|`), XOR (`^`), left shift (`<<`), right shift (`>>`) and how to use them for masking, setting, and testing values
+- Using the Node built-in file system ([fs](https://www.npmjs.com/package/fs))
+- The concept of a raw data buffer and how to work with it, how to convert an 8-bit buffer to a 16-bit big endian array
+- Writing and understanding a 8-bit and 16-bit hex dump
+- How to disassemble and decode an opcode into instructions a CPU can use
+- How a CPU can utilize memory, stack, program counters, stack pointers, memory addresses, and registers
+- How a CPU implements fetch, decode, and execute
+
+And here are some articles I wrote based on those concepts:
+
+- [Understanding Bits, Bytes, Bases, and Writing a Hex Dump in JavaScript (Node)](https://www.taniarascia.com/bits-bytes-bases-and-a-hex-dump-javascript/)
+- In progress: bitwise operators, masking, testing, and setting values.
+
+## Testing
 
 The unit tests for Chip8.js use the Jest testing framework. You can run all test suites with or without displaying coverage.
 
@@ -199,27 +220,6 @@ test('6: SE_VX_NN (3xnn) - Program counter should increment by four bytes if reg
   expect(cpu.PC).toBe(0x204)
 })
 ```
-
-## Motivation
-
-Chip8.js is a project to write a Chip-8 emulator in JavaScript. The main motivation is to learn lower level programming concepts and to increase familiarity with the Node.js environment.
-
-Here are some of the concepts I learned while writing this program:
-
-- The base system: specifically base 2 (binary), base 10 (decimal), base 16 (hexadecimal), how they interact with each other and the concept of abstract numbers in programming
-- Bits, nibbles, bytes, ASCII encoding, and big and little endian values
-- Bitwise operators - AND (`&`), OR (`|`), XOR (`^`), left shift (`<<`), right shift (`>>`) and how to use them for masking, setting, and testing values
-- Using the Node built-in file system ([fs](https://www.npmjs.com/package/fs))
-- The concept of a raw data buffer and how to work with it, how to convert an 8-bit buffer to a 16-bit big endian array
-- Writing and understanding a 8-bit and 16-bit hex dump
-- How to disassemble and decode an opcode into instructions a CPU can use
-- How a CPU can utilize memory, stack, program counters, stack pointers, memory addresses, and registers
-- How a CPU implements fetch, decode, and execute
-
-And here are some articles I wrote based on those concepts:
-
-- [Understanding Bits, Bytes, Bases, and Writing a Hex Dump in JavaScript (Node)](https://www.taniarascia.com/bits-bytes-bases-and-a-hex-dump-javascript/)
-- In progress: bitwise operators, masking, testing, and setting values.
 
 ## Acknowledgements
 
