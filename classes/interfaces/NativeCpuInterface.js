@@ -3,6 +3,11 @@ const r = require('raylib')
 const { CpuInterface } = require('./CpuInterface')
 const { DISPLAY_HEIGHT, DISPLAY_WIDTH } = require('../../data/constants')
 
+/**
+ * NativeCpuInterface
+ *
+ * A CPU interface designed for creating a native program.
+ */
 class NativeCpuInterface extends CpuInterface {
   constructor() {
     super()

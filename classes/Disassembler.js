@@ -1,5 +1,10 @@
 const { INSTRUCTION_SET } = require('../data/instructionSet')
 
+/**
+ * Disassembler
+ *
+ * Decode 16-bit (2 byte) opcodes to get instructions for the CPU.
+ */
 const Disassembler = {
   disassemble(opcode) {
     // Find the instruction in which the opcode & mask equals the pattern

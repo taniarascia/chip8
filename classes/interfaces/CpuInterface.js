@@ -1,3 +1,8 @@
+/**
+ * CpuInterface
+ *
+ * An abstract class that all other CPU interfaces will extend from.
+ */
 class CpuInterface {
   constructor() {
     if (new.target === CpuInterface) {

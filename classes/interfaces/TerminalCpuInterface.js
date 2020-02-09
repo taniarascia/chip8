@@ -4,6 +4,11 @@ const { CpuInterface } = require('./CpuInterface')
 const { DISPLAY_HEIGHT, DISPLAY_WIDTH, COLOR } = require('../../data/constants')
 const keyMap = require('../../data/keyMap')
 
+/**
+ * TerminalCpuInterface
+ *
+ * A CPU interface with the terminal.
+ */
 class TerminalCpuInterface extends CpuInterface {
   constructor() {
     super()

@@ -1,3 +1,8 @@
+/**
+ * RomBuffer
+ *
+ * Produce ROM data from a raw binary.
+ */
 class RomBuffer {
   /**
    * @param {binary} fileContents ROM binary

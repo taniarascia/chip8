@@ -1,22 +1,19 @@
-// Imports
 const r = require('raylib')
 const fs = require('fs')
-const fileContents = fs.readFileSync(process.argv.slice(2)[0])
 
-// Classes
 const { CPU } = require('../classes/CPU')
 const { RomBuffer } = require('../classes/RomBuffer')
 const { NativeCpuInterface } = require('../classes/interfaces/NativeCpuInterface')
-
-// Constants
 const { DISPLAY_HEIGHT, DISPLAY_WIDTH } = require('../data/constants')
 const nativeKeyMap = require('../data/nativeKeyMap')
+
+const fileContents = fs.readFileSync(process.argv.slice(2)[0])
+if (!fileContents) throw new Error('File not found.')
 
 const multiplier = 10
 const screenWidth = DISPLAY_WIDTH * multiplier
 const screenHeight = DISPLAY_HEIGHT * multiplier
 
-// Instantiation
 const cpu = new CPU(cpuInterface)
 const romBuffer = new RomBuffer(fileContents)
 const cpuInterface = new NativeCpuInterface()

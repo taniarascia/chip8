@@ -2,6 +2,12 @@ const Disassembler = require('./Disassembler')
 const FONT_SET = require('../data/fontSet')
 const { DISPLAY_HEIGHT, DISPLAY_WIDTH } = require('../data/constants')
 
+/**
+ * CPU
+ *
+ * The main Chip8.js CPU. All game related logic and instructions live within
+ * the CPU. The CPU can be instantiated with an interface of choice.
+ */
 class CPU {
   /**
    * @param { class } cpuInterface I/O for Chip8
@@ -23,8 +29,6 @@ class CPU {
    * DT - Delay Timer (8-bit)
    * PC - Program Counter (8-bit) stores currently executing address
    * SP - Stack Pointer (8-bit) points at topost level of stack
-   *
-   * Any time an error would cause program execution to halt, halted is set to true
    */
   reset() {
     this.memory = new Uint8Array(4096)

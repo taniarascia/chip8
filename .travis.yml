@@ -1,7 +1,10 @@
 language: node_js
 node_js:
-  - "11"
+  - '12'
+compiler:
+  - gcc
+before_install: sudo apt-get install xorg-dev libglu1-mesa-dev
 install:
-  - "npm i"
+  - 'npm ci'
 script:
   - npm run coveralls

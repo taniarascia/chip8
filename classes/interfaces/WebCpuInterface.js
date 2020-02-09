@@ -2,7 +2,12 @@ const { CpuInterface } = require('./CpuInterface')
 const { DISPLAY_HEIGHT, DISPLAY_WIDTH, COLOR } = require('../../data/constants')
 const keyMap = require('../../data/keyMap')
 
-class DOMCpuInterface extends CpuInterface {
+/**
+ * CpuInterface
+ *
+ * A CPU interface for the web using DOM events and HTML5 canvas.
+ */
+class WebCpuInterface extends CpuInterface {
   constructor() {
     super()
 
@@ -124,5 +129,5 @@ class DOMCpuInterface extends CpuInterface {
 }
 
 module.exports = {
-  DOMCpuInterface,
+  WebCpuInterface,
 }

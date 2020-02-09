@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![chip8js on NPM](https://img.shields.io/npm/v/chip8js.svg?color=green&label=chip8js)](https://www.npmjs.com/package/chip8js) [![Build Status](https://travis-ci.org/taniarascia/chip8.svg?branch=master)](https://travis-ci.org/taniarascia/chip8) [![Coverage Status](https://coveralls.io/repos/github/taniarascia/chip8/badge.svg?branch=master&service=github)](https://coveralls.io/github/taniarascia/chip8?branch=master)
 
-A Chip-8 emulator written in JavaScript (Node.js).
+A Chip-8 emulator written in JavaScript.
 
 > [Chip-8](https://en.wikipedia.org/wiki/CHIP-8) is a simple, interpreted, programming language which was first used on some do-it-yourself computer systems in the late 1970s and early 1980s.
 
@@ -26,26 +26,13 @@ A Chip-8 emulator written in JavaScript (Node.js).
 
 > This guide assumes you already have [Node.js](https://nodejs.org/en/) and npm installed.
 
-Prior to installing Chip8, you must have cmake installed.
+Prior to installing Chip8.js, you must have CMake installed.
 
 ```bash
 brew install cmake
 ```
 
-You can add the module directly from the [chip8js](https://www.npmjs.com/package/chip8js) npm package.
-
-```bash
-npm i chip8js
-```
-
-And require the `RomBuffer` and `CPU` classes.
-
-```js
-// index.js
-const { RomBuffer, CPU } = require('chip8js')
-```
-
-Or you can clone the repo. The only dependency of Chip8.js is [jest](https://jestjs.io/) for testing. Run `npm i` to install.
+Clone the repository and install.
 
 ```bash
 git clone git@github.com:taniarascia/chip8.git
@@ -55,22 +42,30 @@ npm i
 
 ## Usage
 
-Chip8.js is available via Node.js in the terminal, or in the browser.
+Chip8.js can be run on the web, in a terminal, or using native keybindings.
 
-### Browser
+### Web
 
-- [Open Chip8.js Emulator](https://taniarascia.github.io/chip8/)
+- [Chip8.js emulator for the web](https://taniarascia.github.io/chip8/)
 
 #### Development
 
-```bash
-npm run watch            # watch for changes and rebuild
-cd web && http-server    # spin up server on localhost:8080
+Spin up a local server during development.
 
-npm run build:web        # build for web
+```bash
+npm run watch:web     # watch for changes and rebuild
+cd web && http-server # spin up server on localhost:8080
 ```
 
-#### Deploy
+#### Deployment
+
+Build and bundle the code for the web.
+
+```bash
+npm run build:web
+```
+
+Deploy to GitHub.
 
 ```bash
 # remove web/bundle.js from .gitignore
@@ -80,18 +75,18 @@ git subtree push --prefix web origin gh-pages
 
 ### Terminal
 
-Chip-8 compatible ROMs can be saved in the `roms/` directory. Create a ROM buffer of a ROM and load the data into the CPU. Execute the program.
+Run Chip8.js in the terminal by selecting a ROM.
 
 ```bash
-npm run play roms/<ROM>
+npm run play:terminal roms/<ROM>
 ```
 
 ### Native
 
-You can run it natively with raylib.
+Run Chip8.js natively with [raylib](https://www.npmjs.com/package/raylib) (experimental).
 
 ```bash
-npm run native roms/<ROM>
+npm run play:native roms/<ROM>
 ```
 
 ## Automated Testing

@@ -1,13 +1,12 @@
-// Imports
 const fs = require('fs')
-const fileContents = fs.readFileSync(process.argv.slice(2)[0])
 
-// Classes
 const { CPU } = require('../classes/CPU')
 const { RomBuffer } = require('../classes/RomBuffer')
 const { TerminalCpuInterface } = require('../classes/interfaces/TerminalCpuInterface')
 
-// Instantiation
+const fileContents = fs.readFileSync(process.argv.slice(2)[0])
+if (!fileContents) throw new Error('File not found')
+
 const cpuInterface = new TerminalCpuInterface()
 const cpu = new CPU(cpuInterface)
 const romBuffer = new RomBuffer(fileContents)

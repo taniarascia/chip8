@@ -1,24 +1,19 @@
 {
   "name": "chip8js",
   "version": "1.0.3",
-  "description": "A Chip-8 emulator written in JavaScript (Node.js and Browser).",
-  "author": {
-    "name": "Tania Rascia",
-    "email": "me@taniarascia.com",
-    "url": "https://www.taniarascia.com"
-  },
+  "description": "A Chip-8 emulator written in JavaScript (for Node.js and the web).",
+  "license": "MIT",
+  "author": "Tania Rascia",
   "main": "index.js",
-  "repository": "github:taniarascia/chip8",
+  "repository": "git@github.com:taniarascia/chip8",
   "bugs": "https://github.com/taniarascia/chip8/issues",
   "scripts": {
-    "play": "node scripts/play",
+    "play:terminal": "node scripts/terminal",
     "play:native": "node scripts/native",
+    "build:web": "browserify -t brfs scripts/browser.js > web/bundle.js",
+    "watch:web": "nodemon --ignore 'web/*' --exec npm run web",
     "hexdump": "node scripts/hexdump",
-    "example:terminal": "node scripts/play roms/CONNECT4",
-    "example:native": "node scripts/native roms/PONG",
     "test": "jest",
-    "build:web": "browserify -t brfs scripts/browser.js  > web/bundle.js",
-    "watch": "nodemon --ignore 'web/*' --exec npm run web",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "devDependencies": {
@@ -28,21 +23,18 @@
   "keywords": [
     "chip8",
     "chip8-emulator",
+    "emulator",
     "node",
+    "nodejs",
     "javascript"
   ],
   "jest": {
     "collectCoverageFrom": [
       "data/*.js",
       "classes/*.js",
-      "classes/interfaces/*.js",
-      "!data/keyMap.js",
-      "!/node_modules/",
-      "!classes/interfaces/DOMCpuInterface.js",
-      "!classes/interfaces/TerminalCpuInterface.js"
+      "!**/node_modules/**"
     ]
   },
-  "license": "MIT",
   "private": false,
   "dependencies": {
     "blessed": "^0.1.81",
