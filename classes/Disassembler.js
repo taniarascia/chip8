@@ -78,6 +78,7 @@ const Disassembler = {
     return formattedInstruction
   },
 
+  // For debugging
   dump(data) {
     const lines = data.map((code, i) => {
       const address = (i * 2).toString(16).padStart(6, '0')

@@ -19,6 +19,7 @@ class RomBuffer {
     }
   }
 
+  // Hex dump for debugging
   dump() {
     let lines = []
 

@@ -1,7 +1,7 @@
 /**
  * CpuInterface
  *
- * An abstract class that all other CPU interfaces will extend from.
+ * An abstract class that all other CPU interfaces extend from.
  */
 class CpuInterface {
   constructor() {
@@ -10,6 +10,7 @@ class CpuInterface {
     }
   }
 
+  // All interfaces
   clearDisplay() {
     throw new TypeError('Must be implemented on the inherited class.')
   }
@@ -44,6 +45,4 @@ class CpuInterface {
   }
 }
 
-module.exports = {
-  CpuInterface,
-}
+module.exports = { CpuInterface }

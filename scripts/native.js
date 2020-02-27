@@ -5,7 +5,7 @@ const { CPU } = require('../classes/CPU')
 const { RomBuffer } = require('../classes/RomBuffer')
 const { NativeCpuInterface } = require('../classes/interfaces/NativeCpuInterface')
 const { DISPLAY_HEIGHT, DISPLAY_WIDTH } = require('../data/constants')
-const nativeKeyMap = require('../data/nativeKeyMap')
+const getNativeKeyMap = require('../data/nativeKeyMap')
 
 const fileContents = fs.readFileSync(process.argv.slice(2)[0])
 if (!fileContents) throw new Error('File not found.')
@@ -14,9 +14,9 @@ const multiplier = 10
 const screenWidth = DISPLAY_WIDTH * multiplier
 const screenHeight = DISPLAY_HEIGHT * multiplier
 
+const cpuInterface = new NativeCpuInterface()
 const cpu = new CPU(cpuInterface)
 const romBuffer = new RomBuffer(fileContents)
-const cpuInterface = new NativeCpuInterface()
 
 cpu.load(romBuffer)
 
@@ -24,6 +24,7 @@ r.InitWindow(screenWidth, screenHeight, 'Chip8.js')
 r.SetTargetFPS(60)
 r.ClearBackground(r.BLACK)
 
+const nativeKeyMap = getNativeKeyMap(r)
 let timer = 0
 
 while (!r.WindowShouldClose()) {
@@ -33,17 +34,30 @@ while (!r.WindowShouldClose()) {
     timer = 0
   }
 
-  // Interpret key data
-  const rawKeyPressed = r.GetKeyPressed()
-  const keyIndex = nativeKeyMap.findIndex(key => rawKeyPressed === key)
+  let keyDownIndices = 0
 
-  // Keydown event
-  if (keyIndex) {
-    cpu.interface.setKeys(keyIndex)
-  } else {
-    // Keyup event
-    cpu.interface.resetKeys()
+  // Run through all possible keys
+  for (let i = 0; i < nativeKeyMap.length; i++) {
+    const currentKey = nativeKeyMap[i]
+    // If key is already down, add index to key down map
+    // This will also lift up any keys that aren't pressed
+    if (r.IsKeyDown(currentKey)) {
+      keyDownIndices = keyDownIndices + (1 << i)
+    }
+
+    // Set the waitKey
+    if (r.IsKeyPressed(currentKey)) {
+      cpu.interface.setKey(i)
+    }
+
+    // Release the waitKey
+    if (r.IsKeyReleased(currentKey)) {
+      cpu.interface.releaseKey(i)
+    }
   }
+
+  // Set all pressed keys
+  cpu.interface.setKeys(keyDownIndices)
 
   cpu.step()
 

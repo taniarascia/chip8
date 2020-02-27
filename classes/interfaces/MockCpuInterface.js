@@ -6,7 +6,6 @@ const { CpuInterface } = require('./CpuInterface')
  * A CPU interface designed for unit tests with mocked values.
  */
 class MockCpuInterface extends CpuInterface {
-  // Mock derived CPU interface for testing
   constructor() {
     super()
 
@@ -80,7 +79,4 @@ class MockCpuInterface extends CpuInterface {
   }
 }
 
-module.exports = {
-  MockCpuInterface,
-  CpuInterface,
-}
+module.exports = { MockCpuInterface, CpuInterface }
