@@ -35,24 +35,13 @@ while (!r.WindowShouldClose()) {
   }
 
   let keyDownIndices = 0
-
   // Run through all possible keys
   for (let i = 0; i < nativeKeyMap.length; i++) {
     const currentKey = nativeKeyMap[i]
     // If key is already down, add index to key down map
     // This will also lift up any keys that aren't pressed
     if (r.IsKeyDown(currentKey)) {
-      keyDownIndices = keyDownIndices + (1 << i)
-    }
-
-    // Set the waitKey
-    if (r.IsKeyPressed(currentKey)) {
-      cpu.interface.setKey(i)
-    }
-
-    // Release the waitKey
-    if (r.IsKeyReleased(currentKey)) {
-      cpu.interface.releaseKey(i)
+      keyDownIndices |= 1 << i
     }
   }
 

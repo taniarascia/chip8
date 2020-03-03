@@ -38,15 +38,19 @@ class NativeCpuInterface extends CpuInterface {
   }
 
   setKeys(keyIndices) {
+    const prevKeys = this.keys
     this.keys = keyIndices
-  }
 
-  setKey(keyIndex) {
-    this.keyPressed = keyIndex
-  }
+    this.keyPressed = undefined
 
-  releaseKey(keyIndex) {
-    this.keyPressed = this.keyPressed === keyIndex ? 0 : keyIndex
+    // Check previous keys for the first new key and make that the
+    // waitKey pressed
+    for (let i = 0; i < 16; i++) {
+      if (!(prevKeys & (1 << i)) && this.keys & (1 << i)) {
+        this.keyPressed = i
+        break
+      }
+    }
   }
 
   resetKeys() {
