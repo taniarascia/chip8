@@ -70,6 +70,7 @@ Deploy to GitHub.
 ```bash
 # remove web/bundle.js from .gitignore
 git add web && git commit -m "update web version"
+# delete gh-pages branch from origin before push
 git subtree push --prefix web origin gh-pages
 ```
 
