@@ -35,7 +35,7 @@ class WebCpuInterface extends CpuInterface {
     document.addEventListener('keydown', event => {
       const keyIndex = keyMap.indexOf(event.key)
 
-      if (keyIndex) {
+      if (keyIndex > -1) {
         this._setKeys(keyIndex)
       }
     })
