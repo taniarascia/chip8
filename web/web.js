@@ -24,6 +24,7 @@ async function loadRom() {
   const romBuffer = new RomBuffer(uint8View)
 
   cpu.interface.clearDisplay()
+  cpu.interface.disableSound()
   cpu.load(romBuffer)
   displayInstructions(rom)
 }
