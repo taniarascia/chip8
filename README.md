@@ -6,7 +6,7 @@ A Chip-8 emulator written in JavaScript.
 
 > [Chip-8](https://en.wikipedia.org/wiki/CHIP-8) is a simple, interpreted, programming language which was first used on some do-it-yourself computer systems in the late 1970s and early 1980s.
 
-### [View the demo](https://taniarascia.github.io/chip8/)
+### [View the demo](https://taniarascia.github.io/chip8/) | [Read the article](https://www.taniarascia.com/writing-an-emulator-in-javascript-chip8/)
 
 ## Table of Contents
 
@@ -109,7 +109,7 @@ Here are some of the concepts I learned while writing this program:
 And here are some articles I wrote based on those concepts:
 
 - [Understanding Bits, Bytes, Bases, and Writing a Hex Dump in JavaScript (Node)](https://www.taniarascia.com/bits-bytes-bases-and-a-hex-dump-javascript/)
-- In progress: bitwise operators, masking, testing, and setting values.
+- [Writing an Emulator in JavaScript (with Multiple UIs)](https://www.taniarascia.com/writing-an-emulator-in-javascript-chip8/)
 
 ## Testing
 
