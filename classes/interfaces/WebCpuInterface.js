@@ -28,6 +28,59 @@ class WebCpuInterface extends CpuInterface {
     // Sound
     this.soundEnabled = false
 
+    if ('AudioContext' in window || 'webkitAudioContext' in window) {
+      this.audioContext = new (AudioContext || webkitAudioContext)()
+
+      this.masterGain = new GainNode(this.audioContext)
+      this.masterGain.gain.value = 0.3
+      this.masterGain.connect(this.audioContext.destination)
+
+      let soundEnabled = false
+      let oscillator
+      Object.defineProperties(this, {
+        soundEnabled: {
+          get: function() { return soundEnabled },
+          set: function(value) {
+            value = Boolean(value)
+            if (value !== soundEnabled) {
+              soundEnabled = value
+              if (soundEnabled) {
+                oscillator = new OscillatorNode(this.audioContext, {
+                  type: 'square'
+                })
+                oscillator.connect(this.masterGain)
+                oscillator.start()
+              } else {
+                oscillator.stop()
+              }
+            }
+          }
+        }
+      })
+
+      // Interface for muting sound
+      const muteInstructions = document.createElement('pre')
+      muteInstructions.classList.add('instructions')
+      muteInstructions.innerText = 'M = toggle sound '
+
+      const muteIcon = document.createElement('span')
+      muteIcon.innerText = '🔊'
+
+      muteInstructions.append(muteIcon)
+      document
+        .querySelector('.instructions')
+        .insertAdjacentElement('afterend', muteInstructions)
+
+      let muted = false
+      document.addEventListener('keydown', event => {
+        if (event.key.toLowerCase() === 'm') {
+          muted = !muted
+          muteIcon.innerText = muted ? '🔇' : '🔊'
+          this.masterGain.gain.value = muted ? 0 : 0.3
+        }
+      })
+    }
+
     // =========================================================================
     // Key Down Event
     // =========================================================================
@@ -35,7 +88,7 @@ class WebCpuInterface extends CpuInterface {
     document.addEventListener('keydown', event => {
       const keyIndex = keyMap.indexOf(event.key)
 
-      if (keyIndex) {
+      if (keyIndex > -1) {
         this._setKeys(keyIndex)
       }
     })

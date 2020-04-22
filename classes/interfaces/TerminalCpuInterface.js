@@ -40,7 +40,7 @@ class TerminalCpuInterface extends CpuInterface {
     this.screen.on('keypress', (_, key) => {
       const keyIndex = keyMap.indexOf(key.full)
 
-      if (keyIndex) {
+      if (keyIndex > -1) {
         this._setKeys(keyIndex)
       }
     })
