@@ -53,8 +53,11 @@ Chip8.js can be run on the web, in a terminal, or using native keybindings.
 Spin up a local server during development.
 
 ```bash
-npm run watch:web     # watch for changes and rebuild
-cd web && http-server # spin up server on localhost:8080
+# watch for changes and rebuild
+npm run watch:web
+
+# spin up server on localhost:8080
+cd web && http-server 
 ```
 
 #### Deployment
@@ -70,6 +73,7 @@ Deploy to GitHub.
 ```bash
 # remove web/bundle.js from .gitignore
 git add web && git commit -m "update web version"
+
 # delete gh-pages branch from origin before push
 git subtree push --prefix web origin gh-pages
 ```
