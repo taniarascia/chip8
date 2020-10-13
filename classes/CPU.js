@@ -245,8 +245,8 @@ class CPU {
 
       case 'ADD_VX_VY':
         // 8xy4 - Set Vx = Vx + Vy, set VF = carry
-        this.registers[args[0]] += this.registers[args[1]]
         this.registers[0xf] = this.registers[args[0]] + this.registers[args[1]] > 0xff ? 1 : 0
+        this.registers[args[0]] += this.registers[args[1]]
 
         this._nextInstruction()
         break
